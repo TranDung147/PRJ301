@@ -1,9 +1,5 @@
-<%-- 
-    Document   : hotelPage2Main
-    Created on : Jun 14, 2024, 6:56:33 PM
-    Author     : NOMNOM
---%>
 
+<%@page import="java.sql.*, Model.DatabaseInfo, Model.Hotel"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <main>  
     <div class="containerB ">
@@ -110,171 +106,64 @@
                     </div>
                 </div>
 
-                <div id="myModal" class="modal">
-                    <div class="modal-content">
-                        <h1>Hotel<span class="close" onclick="closeModal()">&times;</span></h1>
-                        <div id="modalInfo" class="modal-info"></div>
-                    </div>
-                </div>
-
                 <!-- Your product list -->
                 <div class="product-list">
-                    <!-- Nhà 13 -->
-                    <div class="cols product location13" onclick="showModal(this)" data-price="70" data-bedrooms="2" data-houseType="apartment" data-amenities="wifi,parking" data-img="img/hotel13.jpg" data-star="★★★☆☆">
-                        <div class="">
-                            <img class="image" src="img/hotel13.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 13</h4>
-                            <p>Giá: $70</p>
-                            <p>Đánh giá: <span>★★★☆☆</span></p>
-                        </div>
-                    </div>
+                    <%
+                        Connection conn = null;
+                        Statement stmt = null;
+                        ResultSet rs = null;
+                        
+                        try {
+                            Class.forName(DatabaseInfo.DRIVERNAME);
+                            conn = DriverManager.getConnection(DatabaseInfo.DBURL, DatabaseInfo.USERDB, DatabaseInfo.PASSDB);
+                            stmt = conn.createStatement();
+                            String sql = "SELECT * FROM Hotel ORDER BY HotelID OFFSET 12 ROWS FETCH NEXT 12 ROWS ONLY";// Lấy 12 ks tiếp theo
+                            rs = stmt.executeQuery(sql);
 
-                    <!-- Nhà 14 -->
-                    <div class="cols product location14" onclick="showModal(this)" data-price="90" data-bedrooms="3" data-houseType="villa" data-amenities="wifi,pool" data-img="img/hotel14.jpg" data-star="★★★★☆">
-                        <div class="">
-                            <img class="image" src="img/hotel14.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 14</h4>
-                            <p>Giá: $90</p>
-                            <p>Đánh giá: <span>★★★★☆</span></p>
-                        </div>
-                    </div>
+                            if (!rs.isBeforeFirst()) {
+                                out.println("<p>No hotels found.</p>");
+                            } else {
+                                while (rs.next()) {
+                                    String hotelId = rs.getString("HotelID");
+                                    String hotelName = rs.getString("HotelName");
+                                    String hotelAddress = rs.getString("HotelAddress");
+                                    String hotelDescription = rs.getString("Description");
+                                    String productImage = rs.getString("ProductImage");
+                                    String city = rs.getString("City");
+                                    String country = rs.getString("Country");
 
-                    <!-- Nhà 15 -->
-                    <div class="cols product location15" onclick="showModal(this)" data-price="110" data-bedrooms="4" data-houseType="townhouse" data-amenities="parking,pool" data-img="img/hotel15.jpg" data-star="★★★★★">
-                        <div class="">
-                            <img class="image" src="img/hotel15.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 15</h4>
-                            <p>Giá: $110</p>
-                            <p>Đánh giá: <span>★★★★★</span></p>
-                        </div>
+                                    Hotel hotel = new Hotel();
+                                    hotel.setHotelId(hotelId);
+                                    hotel.setHotelName(hotelName);
+                                    hotel.setHotelAddress(hotelAddress);
+                                    hotel.setHotelDescription(hotelDescription);
+                                    hotel.setProductImage(productImage);
+                                    hotel.setCity(city);
+                                    hotel.setCountry(country);
+                    %>
+                    <div class="cols product location">
+                        <img class="image images" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getHotelName() %>">
+                        <h4><%= hotel.getHotelName() %></h4>
+                        <p><span>Địa chỉ:</span> <%= hotel.getHotelAddress() %></p>
+                        <p><span>Mô tả:</span> <%= hotel.getHotelDescription() %></p>
+                        <p><span>Thành phố:</span> <%= hotel.getCity() %></p>
+                        <p><span>Quốc gia:</span> <%= hotel.getCountry() %></p>
                     </div>
-                    
-                    <!-- Nhà 16 -->
-                    <div class="cols product location16" onclick="showModal(this)" data-price="130" data-bedrooms="2" data-houseType="apartment" data-amenities="wifi,parking" data-img="img/hotel16.jpg" data-star="★★★☆☆">
-                        <div class="">
-                            <img class="image" src="img/hotel16.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 16</h4>
-                            <p>Giá: $130</p>
-                            <p>Đánh giá: <span>★★★☆☆</span></p>
-                        </div>
-                    </div>
+                    <%
+                                }
+                            }
+                        } catch (Exception e) {
+                            out.println("<p>Error: " + e.getMessage() + "</p>");
+                            e.printStackTrace();
+                        } finally {
+                            if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+                            if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+                        }
+                    %>
                 </div>
-
-                <div class="product-list row">
-                    
-
-                    <!-- Nhà 17 -->
-                    <div class="cols product location17" onclick="showModal(this)" data-price="150" data-bedrooms="3" data-houseType="villa" data-amenities="wifi,pool" data-img="img/hotel17.jpg" data-star="★★★★☆">
-                        <div class="">
-                            <img class="image" src="img/hotel17.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 17</h4>
-                            <p>Giá: $150</p>
-                            <p>Đánh giá: <span>★★★★☆</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Nhà 18 -->
-                    <div class="cols product location18" onclick="showModal(this)" data-price="170" data-bedrooms="4" data-houseType="townhouse" data-amenities="parking,pool" data-img="img/hotel18.jpg" data-star="★★★★★">
-                        <div class="">
-                            <img class="image" src="img/hotel18.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 18</h4>
-                            <p>Giá: $170</p>
-                            <p>Đánh giá: <span>★★★★★</span></p>
-                        </div>
-                    </div>
-                    
-                    <!-- Nhà 19 -->
-                    <div class="cols product location19" onclick="showModal(this)" data-price="190" data-bedrooms="2" data-houseType="apartment" data-amenities="wifi,parking" data-img="img/hotel19.jpg" data-star="★★★☆☆">
-                        <div class="">
-                            <img class="image" src="img/hotel19.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 19</h4>
-                            <p>Giá: $190</p>
-                            <p>Đánh giá: <span>★★★☆☆</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Nhà 20 -->
-                    <div class="cols product location20" onclick="showModal(this)" data-price="210" data-bedrooms="3" data-houseType="villa" data-amenities="wifi,pool" data-img="img/hotel20.jpg" data-star="★★★★☆">
-                        <div class="">
-                            <img class="image" src="img/hotel20.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 20</h4>
-                            <p>Giá: $210</p>
-                            <p>Đánh giá: <span>★★★★☆</span></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-list row">
-                    
-
-                    <!-- Nhà 21 -->
-                    <div class="cols product location21" onclick="showModal(this)" data-price="230" data-bedrooms="4" data-houseType="townhouse" data-amenities="parking,pool" data-img="img/hotel21.jpg" data-star="★★★★★">
-                        <div class="">
-                            <img class="image" src="img/hotel21.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 21</h4>
-                            <p>Giá: $230</p>
-                            <p>Đánh giá: <span>★★★★★</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Nhà 22 -->
-                    <div class="cols product location22" onclick="showModal(this)" data-price="250" data-bedrooms="2" data-houseType="apartment" data-amenities="wifi,parking" data-img="img/hotel22.jpg" data-star="★★★☆☆">
-                        <div class="">
-                            <img class="image" src="img/hotel22.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 22</h4>
-                            <p>Giá: $250</p>
-                            <p>Đánh giá: <span>★★★☆☆</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Nhà 23 -->
-                    <div class="cols product location23" onclick="showModal(this)" data-price="270" data-bedrooms="3" data-houseType="villa" data-amenities="wifi,pool" data-img="img/hotel23.jpg" data-star="★★★★☆">
-                        <div class="">
-                            <img class="image" src="img/hotel23.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 23</h4>
-                            <p>Giá: $270</p>
-                            <p>Đánh giá: <span>★★★★☆</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Nhà 24 -->
-                    <div class="cols product location24" onclick="showModal(this)" data-price="290" data-bedrooms="4" data-houseType="townhouse" data-amenities="parking,pool" data-img="img/hotel24.jpg" data-star="★★★★★">
-                        <div class="">
-                            <img class="image" src="img/hotel24.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 24</h4>
-                            <p>Giá: $290</p>
-                            <p>Đánh giá: <span>★★★★★</span></p>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
         </div>
-    </div>
-</div>
+    </div>  
 </main>
+

@@ -153,16 +153,32 @@ VALUES
 
 INSERT INTO Hotel (HotelID, HotelName, HotelAddress, Description, ProductImage, City, Country)
 VALUES 
-('HT0001', 'Hotel Sunshine', '123 Beach Rd, Miami', 'A beachside hotel with a stunning view.', 'sunshine.jpg', 'Miami', 'USA'),
-('HT0002', 'Mountain View Resort', '456 Alpine St, Denver', 'A luxurious resort in the mountains.', 'mountainview.jpg', 'Denver', 'USA'),
-('HT0003', 'City Lights Hotel', '789 Downtown Ave, New York', 'Experience the city life in our modern hotel.', 'citylights.jpg', 'New York', 'USA'),
-('HT0004', 'Tropical Paradise', '101 Ocean Blvd, Honolulu', 'An oasis in the heart of the city.', 'tropicalparadise.jpg', 'Honolulu', 'USA'),
-('HT0005', 'Historic Inn', '202 Main St, Boston', 'Stay at a piece of history.', 'histo	ricinn.jpg', 'Boston', 'USA'),
-('HT0006', 'Luxury Stay', '303 Royal Dr, Los Angeles', 'A royal experience in the city.', 'luxurystay.jpg', 'Los Angeles', 'USA'),
-('HT0007', 'Countryside Retreat', '404 Greenway Rd, Austin', 'Relax in our countryside retreat.', 'countryside.jpg', 'Austin', 'USA'),
-('HT0008', 'Urban Escape', '505 Skyline Blvd, San Francisco', 'Escape the hustle and bustle in our serene hotel.', 'urbanescape.jpg', 'San Francisco', 'USA'),
-('HT0009', 'Desert Oasis', '606 Desert St, Phoenix', 'An oasis in the desert.', 'desertoasis.jpg', 'Phoenix', 'USA'),
-('HT0010', 'Lakefront Lodge', '707 Lake Rd, Chicago', 'Stay by the lake in comfort and style.', 'lakefront.jpg', 'Chicago', 'USA');
+	('HT0001', 'Hotel Sunshine', '123 Beach Rd, Miami', 'A beachside hotel with a stunning view.', 'sunshine.jpg', 'Miami', 'USA'),
+	('HT0002', 'Mountain View Resort', '456 Alpine St, Denver', 'A luxurious resort in the mountains.', 'mountainview.jpg', 'Denver', 'USA'),
+	('HT0003', 'City Lights Hotel', '789 Downtown Ave, New York', 'Experience the city life in our modern hotel.', 'citylights.jpg', 'New York', 'USA'),
+	('HT0004', 'Tropical Paradise', '101 Ocean Blvd, Honolulu', 'An oasis in the heart of the city.', 'tropicalparadise.jpg', 'Honolulu', 'USA'),
+	('HT0005', 'Historic Inn', '202 Main St, Boston', 'Stay at a piece of history.', 'histo_ricinn.jpg', 'Boston', 'USA'),
+	('HT0006', 'Luxury Stay', '303 Royal Dr, Los Angeles', 'A royal experience in the city.', 'luxurystay.jpg', 'Los Angeles', 'USA'),
+	('HT0007', 'Countryside Retreat', '404 Greenway Rd, Austin', 'Relax in our countryside retreat.', 'countryside.jpg', 'Austin', 'USA'),
+	('HT0008', 'Urban Escape', '505 Skyline Blvd, San Francisco', 'Escape the hustle and bustle in our serene hotel.', 'urbanescape.jpg', 'San Francisco', 'USA'),
+	('HT0009', 'Desert Oasis', '606 Desert St, Phoenix', 'An oasis in the desert.', 'desertoasis.jpg', 'Phoenix', 'USA'),
+	('HT0010', 'Lakefront Lodge', '707 Lake Rd, Chicago', 'Stay by the lake in comfort and style.', 'lakefront.jpg', 'Chicago', 'USA'),
+	('HT0011', 'Coastal Comfort', '808 Seaside Dr, Seattle', 'Relax by the coast in our comfortable hotel.', 'coastalcomfort.jpg', 'Seattle', 'USA'),
+	('HT0012', 'Riverside Hotel', '909 Riverside Blvd, New Orleans', 'Enjoy the charm of the riverfront in our boutique hotel.', 'riversidehotel.jpg', 'New Orleans', 'USA'),
+
+	('HT0013', 'Forest Haven', '111 Pine St, Portland', 'A tranquil retreat in the woods.', 'foresthaven.jpg', 'Portland', 'USA'),
+	('HT0014', 'Golden Gate Inn', '222 Bay St, San Francisco', 'Charming inn with a view of the Golden Gate Bridge.', 'goldengateinn.jpg', 'San Francisco', 'USA'),
+	('HT0015', 'Desert Mirage', '333 Cactus Blvd, Las Vegas', 'Luxury and entertainment in the desert.', 'desertmirage.jpg', 'Las Vegas', 'USA'),
+	('HT0016', 'Beachfront Bliss', '444 Ocean Ave, Santa Monica', 'Experience the beach life in style.', 'beachfrontbliss.jpg', 'Santa Monica', 'USA'),
+	('HT0017', 'Snowy Peaks Lodge', '555 Snowy Ln, Aspen', 'A cozy lodge in the snowy mountains.', 'snowypeaks.jpg', 'Aspen', 'USA'),
+	('HT0018', 'Urban Chic Hotel', '666 Main St, Dallas', 'Modern elegance in the heart of the city.', 'urbanchic.jpg', 'Dallas', 'USA'),
+	('HT0019', 'Historic Charm Hotel', '777 Heritage Rd, Philadelphia', 'A hotel with historic charm and modern amenities.', 'historiccharm.jpg', 'Philadelphia', 'USA'),
+	('HT0020', 'Lakeview Resort', '888 Lakeview Dr, Lake Tahoe', 'Enjoy the beauty of the lake from our resort.', 'lakeview.jpg', 'Lake Tahoe', 'USA'),
+	('HT0021', 'City Center Hotel', '999 Downtown St, Atlanta', 'Conveniently located in the city center.', 'citycenter.jpg', 'Atlanta', 'USA'),
+	('HT0022', 'Seaside Sanctuary', '1010 Coastal Blvd, San Diego', 'A peaceful sanctuary by the sea.', 'seasidesanctuary.jpg', 'San Diego', 'USA'),
+	('HT0023', 'Mountain Lodge', '1111 Summit Rd, Salt Lake City', 'A perfect base for mountain adventures.', 'mountainlodge.jpg', 'Salt Lake City', 'USA'),
+	('HT0024', 'Urban Comfort', '1212 City Blvd, Houston', 'Comfort and convenience in the city.', 'urbancomfort.jpg', 'Houston', 'USA');
+
 
 
 INSERT INTO Flight (FlightID, PlaneID, DateStart, DateEnd, DepartureCity, ArrivalCity)
@@ -191,3 +207,9 @@ VALUES
 ('US0008', 'gharris', 'hashed_pwd8', 'gharris@example.com', 'Grace', 'Harris', '505 Maple St, Largetown', '8901234567', '1979-08-20', GETDATE(), 'User'),
 ('US0009', 'ikim', 'hashed_pwd9', 'ikim@example.com', 'Isaac', 'Kim', '606 Chestnut St, Riverside', '9012345678', '1991-09-25', GETDATE(), 'User'),
 ('US0010', 'jmiller', 'hashed_pwd10', 'jmiller@example.com', 'Jack', 'Miller', '707 Walnut St, Hilltown', '0123456789', '1987-10-30', GETDATE(), 'User');
+
+
+
+
+
+

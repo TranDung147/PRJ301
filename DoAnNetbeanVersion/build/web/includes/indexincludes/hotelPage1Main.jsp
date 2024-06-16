@@ -117,7 +117,7 @@
                             Class.forName(DatabaseInfo.DRIVERNAME);
                             conn = DriverManager.getConnection(DatabaseInfo.DBURL, DatabaseInfo.USERDB, DatabaseInfo.PASSDB);
                             stmt = conn.createStatement();
-                            String sql = "SELECT * FROM Hotel"; // Sử dụng tên bảng thực tế của bạn
+                             String sql = "SELECT * FROM Hotel ORDER BY HotelID OFFSET 0 ROWS FETCH NEXT 12 ROWS ONLY"; // Sử dụng tên bảng thực tế của bạn
                             rs = stmt.executeQuery(sql);
 
                             if (!rs.isBeforeFirst()) {
@@ -142,9 +142,9 @@
                                     hotel.setCountry(country);
                     %>
                     <div class="cols product location">
-                        <img class="image" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getHotelName() %>">
+                        <img class="image images" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getHotelName() %>">
                         <h4><%= hotel.getHotelName() %></h4>
-                        <p><span>Địa chỉ:</span><%= hotel.getHotelAddress() %></p>
+                        <p><span>Địa chỉ:</span> <%= hotel.getHotelAddress() %></p>
                         <p><span>Mô tả:</span> <%= hotel.getHotelDescription() %></p>
                         <p><span>Thành phố:</span> <%= hotel.getCity() %></p>
                         <p><span>Quốc gia:</span> <%= hotel.getCountry() %></p>
