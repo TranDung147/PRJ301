@@ -12,3 +12,4 @@ public interface DatabaseInfo {
 //DESKTOP-90RE3MD : luan
 //DUNGBRUMOUS : dung
 //LAPTOP-M8T0CN1T\SQLEXPRESS : Top1 Sever
+//nuaQ : quan
