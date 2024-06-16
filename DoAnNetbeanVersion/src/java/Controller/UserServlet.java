@@ -78,7 +78,7 @@ public class UserServlet extends HttpServlet {
                 Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
                 response.addCookie(userName);
                 response.addCookie(password);
-                String encodedURL = response.encodeRedirectURL("LoginSuccess.jsp");
+                String encodedURL = response.encodeRedirectURL("adminDBoard.jsp");
                 response.sendRedirect(encodedURL);
 
             } else if (a.getRole().equals("User")) {
