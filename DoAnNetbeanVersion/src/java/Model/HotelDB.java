@@ -167,7 +167,7 @@ public class HotelDB implements DatabaseInfo {
         }
     }
 
-    public Hotel getHotelById(String id) {
+    public static Hotel getHotelById(String id) {
         String sql = "select * from Hotel where HotelID = ?";
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement(sql);

@@ -24,6 +24,16 @@ public class Hotel implements Serializable {
         this.country = country;
     }
 
+    public Hotel(String hotelId, String hotelName, String hotelAddress, String hotelDescription, String productImage, String city, String country) {
+        this.hotelId = hotelId;
+        this.hotelName = hotelName;
+        this.hotelAddress = hotelAddress;
+        this.hotelDescription = hotelDescription;
+        this.productImage = productImage;
+        this.city = city;
+        this.country = country;
+    }
+
     public String getHotelId() {
         return hotelId;
     }

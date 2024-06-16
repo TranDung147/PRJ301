@@ -80,7 +80,7 @@
   <script src="assets/js/loginlogout.js"></script>
   <script src="assets/js/modal.js"></script>
   <script src="assets/js/scripts.js"></script>
-
+  <script src="assets/js/showHotel.js"></script>
 </body>
 
 </html>

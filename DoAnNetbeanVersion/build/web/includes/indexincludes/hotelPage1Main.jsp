@@ -1,5 +1,5 @@
 
-
+<%@page import="java.sql.*, Model.DatabaseInfo, Model.Hotel"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <main class="mainH">  
     <div class="containerB">
@@ -106,60 +106,64 @@
                     </div>
                 </div>
 
+                <!-- Your product list -->
+                <div class="product-list">
+                    <%
+                        Connection conn = null;
+                        Statement stmt = null;
+                        ResultSet rs = null;
+                        
+                        try {
+                            Class.forName(DatabaseInfo.DRIVERNAME);
+                            conn = DriverManager.getConnection(DatabaseInfo.DBURL, DatabaseInfo.USERDB, DatabaseInfo.PASSDB);
+                            stmt = conn.createStatement();
+                            String sql = "SELECT * FROM Hotel"; // Sử dụng tên bảng thực tế của bạn
+                            rs = stmt.executeQuery(sql);
 
-                 <!-- Modal -->
-            <div id="myModal" class="modal modals">
-              <div class="modal-content contents">
-                <h1><span class="close" onclick="closeModal()">&times;</span></h1>
-                <div id="modalInfo" class="modal-info infos"></div>
-              </div>
-            </div>
+                            if (!rs.isBeforeFirst()) {
+                                out.println("<p>No hotels found.</p>");
+                            } else {
+                                while (rs.next()) {
+                                    String hotelId = rs.getString("HotelID");
+                                    String hotelName = rs.getString("HotelName");
+                                    String hotelAddress = rs.getString("HotelAddress");
+                                    String hotelDescription = rs.getString("Description");
+                                    String productImage = rs.getString("ProductImage");
+                                    String city = rs.getString("City");
+                                    String country = rs.getString("Country");
 
-            <!-- Your product list -->
-            <div class="product-list">
-                <div class="cols product location1" onclick="showModal(this)" data-price="30" data-bedrooms="1" data-houseType="apartment" data-amenities="wifi,parking" data-img="img/hotel1.jpg" data-star="★★★☆☆">
-                    <div class="">
-                        <img class="image" src="img/hotel1.jpg" alt="">
+                                    Hotel hotel = new Hotel();
+                                    hotel.setHotelId(hotelId);
+                                    hotel.setHotelName(hotelName);
+                                    hotel.setHotelAddress(hotelAddress);
+                                    hotel.setHotelDescription(hotelDescription);
+                                    hotel.setProductImage(productImage);
+                                    hotel.setCity(city);
+                                    hotel.setCountry(country);
+                    %>
+                    <div class="cols product location">
+                        <img class="image" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getHotelName() %>">
+                        <h4><%= hotel.getHotelName() %></h4>
+                        <p><span>Địa chỉ:</span><%= hotel.getHotelAddress() %></p>
+                        <p><span>Mô tả:</span> <%= hotel.getHotelDescription() %></p>
+                        <p><span>Thành phố:</span> <%= hotel.getCity() %></p>
+                        <p><span>Quốc gia:</span> <%= hotel.getCountry() %></p>
                     </div>
-                    <div class="info">
-                        <h4>Nhà 1</h4>
-                        <p>Giá: $30</p>
-                        <p>Đánh giá: <span>★★★☆☆</span></p>
-                    </div>
-                </div>
-                <div class="cols product location2" onclick="showModal(this)" data-price="60" data-bedrooms="2" data-houseType="villa" data-amenities="wifi,pool" data-img="img/hotel2.jpg" data-star="★★★★☆">
-                    <div class="">
-                        <img class="image" src="img/hotel2.jpg" alt="">
-                    </div>
-                    <div class="info">
-                        <h4>Nhà 2</h4>
-                        <p>Giá: $60</p>
-                        <p>Đánh giá: <span>★★★★☆</span></p>
-                    </div>
-                </div>
-                <div class="cols product location3" onclick="showModal(this)" data-price="150" data-bedrooms="3" data-houseType="townhouse" data-amenities="parking,pool" data-img="img/hotel3.jpg" data-star="★★★★☆">
-                    <div class="">
-                        <img class="image" src="img/hotel3.jpg" alt="">
-                    </div>
-                    <div class="info">
-                        <h4>Nhà 3</h4>
-                        <p>Giá: $150</p>
-                        <p>Đánh giá: <span>★★★★☆</span></p>
-                    </div>
-                </div>
-                    <div class="cols product location3" onclick="showModal(this)" data-price="150" data-bedrooms="3" data-houseType="townhouse" data-amenities="parking,pool" data-img="img/hotel3.jpg" data-star="★★★★☆">
-                        <div class="">
-                            <img class="image" src="img/hotel3.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h4>Nhà 3</h4>
-                            <p>Giá: $150</p>
-                            <p>Đánh giá: <span>★★★★☆</span></p>
-                        </div>
-                    </div>
+                    <%
+                                }
+                            }
+                        } catch (Exception e) {
+                            out.println("<p>Error: " + e.getMessage() + "</p>");
+                            e.printStackTrace();
+                        } finally {
+                            if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+                            if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+                        }
+                    %>
                 </div>
             </div>
-        </div>  
-    </div>
+        </div>
+    </div>  
 </main>
 
