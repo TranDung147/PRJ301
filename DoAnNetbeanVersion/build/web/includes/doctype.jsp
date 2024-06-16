@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
 
   <link href="assets/css/index.css" rel="stylesheet" />
-  <link href="assets/css/body1.css" rel="stylesheet">
-  <link href="assets/css/sort.css" rel="stylesheet">
+  <link href="assets/css/sort.css" rel="stylesheet" />
 
 </head>
