@@ -273,27 +273,25 @@
             <div class="profile-details">
                 <img src="profile.jpg" alt="Profile Picture">
                 <%
-                      // Retrieve the User object from the request scope
-                      User user = (User) request.getAttribute("user");
+                    // Truy xuất đối tượng User từ request scope
+                    User user = (User) request.getAttribute("user");
 
-                      // Check if the User object exists and is not null
-                      if (user != null) {
+                    // Kiểm tra xem đối tượng User có tồn tại hay không
+                    if (user != null) {
                 %>
-                <!-- Display user information -->
+                <!-- Hiển thị thông tin người dùng -->
                 <h3><%= user.getUsername() %></h3>
                 <p><strong>Username:</strong> <%= user.getUsername() %></p>
-                <p><strong>Password:</strong> <%= user.getPassword() %></p>
                 <p><strong>Email:</strong> <%= user.getEmail() %></p>
                 <%
                     } else {
-                        // User object doesn't exist or is null
+                        // Không có đối tượng User trong request
                         out.println("<p>User not found</p>");
                     }
                 %>
-
-
             </div>
         </section>
+
     </main>
 </div>
 <script>

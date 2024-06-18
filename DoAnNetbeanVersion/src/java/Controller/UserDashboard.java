@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -31,17 +32,23 @@ public class UserDashboard extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         // Thiết lập định dạng nội dung và bộ ký tự
         response.setContentType("text/html;charset=UTF-8");
-        String username = (String) request.getSession().getAttribute("user");
-        // Retrieve user data from the database
-        UserDB userDB = new UserDB();
-        User user = userDB.getUser(username, null);
 
-        // Pass user data to JSP
+        // Lấy thông tin người dùng từ session hoặc từ cơ sở dữ liệu
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("user");
+        String password = (String) session.getAttribute("pass");
+
+        // Giả sử bạn có lớp UserDB để lấy thông tin người dùng
+        UserDB userDB = new UserDB();
+        User user = userDB.getUser(username, password);
+
+        // Đặt đối tượng User vào request scope
         request.setAttribute("user", user);
 
-        // Forward the request to the profile JSP
-        RequestDispatcher dispatcher = request.getRequestDispatcher("UserDashBoard.jsp");
+        // Chuyển tiếp yêu cầu tới trang JSP
+        RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
         dispatcher.forward(request, response);
     }
 
