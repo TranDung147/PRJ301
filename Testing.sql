@@ -1,4 +1,4 @@
-create database DoAnDatabase
+﻿create database DoAnDatabase
 use DoAnDatabase
 -- Create table Employee
 CREATE TABLE Employee (
@@ -23,13 +23,6 @@ CREATE TABLE Users (
     Phone VARCHAR(15),
     DateOfBirth DATE,
     CreatedAt DATE DEFAULT GETDATE()
-);
-
--- Create table Plane
-CREATE TABLE Plane (
-    PlaneID CHAR(6) PRIMARY KEY,
-    PlaneName NVARCHAR(50)		,
-    NoSeat INT CHECK (NoSeat > 0)
 );
 
 -- Create the Flight table
@@ -136,19 +129,43 @@ CREATE TABLE Transactions (
 	FOREIGN KEY (TicketBookingID) REFERENCES Booking_Ticket(TicketBookingID),
 	FOREIGN KEY (RoomBookingID) REFERENCES Booking_Room(RoomBookingID)
 );
+--Sửa lại plane
+CREATE TABLE Plane(
+    PlaneID CHAR(6) PRIMARY KEY,
+    PlaneName NVARCHAR(50),
+    Airline NVARCHAR(50),
+    ImageFileName NVARCHAR(100), -- Thay thế trường ImageUrl bằng ImageFileName
+    NoSeat INT CHECK (NoSeat > 0)
+);
 
-INSERT INTO Plane (PlaneID, PlaneName, NoSeat)
-VALUES 
-('PL0001', 'Boeing 737', 180),
-('PL0002', 'Airbus A320', 160),
-('PL0003', 'Boeing 777', 396),
-('PL0004', 'Airbus A380', 853),
-('PL0005', 'Boeing 747', 410),
-('PL0006', 'Embraer 190', 114),
-('PL0007', 'Bombardier CRJ900', 90),
-('PL0008', 'Cessna 172', 4),
-('PL0009', 'Gulfstream G650', 18),
-('PL0010', 'Boeing 787', 242);
+
+
+INSERT INTO Plane(PlaneID, PlaneName, Airline, ImageFileName, NoSeat)
+VALUES
+    ('PL0001', 'Boeing 737', 'Boeing', 'boeing737.jpg', 180),
+    ('PL0002', 'Airbus A320', 'Airbus', 'airbusa320.jpg', 160),
+    ('PL0003', 'Boeing 777', 'Boeing', 'boeing777.jpg', 396),
+    ('PL0004', 'Airbus A380', 'Airbus', 'airbusa380.jpg', 853),
+    ('PL0005', 'Boeing 747', 'Boeing', 'boeing747.jpg', 410),
+    ('PL0006', 'Embraer 190', 'Embraer', 'embraer190.jpg', 114),
+    ('PL0007', 'Bombardier CRJ900', 'Bombardier', 'bombardiercrj900.jpg', 90),
+    ('PL0008', 'Cessna 172', 'Cessna', 'cessna172.jpg', 4),
+    ('PL0009', 'Gulfstream G650', 'Gulfstream', 'gulfstreamg650.jpg', 18),
+    ('PL0010', 'Boeing 787', 'Boeing', 'boeing787.jpg', 242),
+    ('PL0011', 'Airbus A321', 'Airbus', 'airbusa321.jpg', 185),
+    ('PL0012', 'Boeing 767', 'Boeing', 'boeing767.jpg', 375),
+    ('PL0013', 'Airbus A330', 'Airbus', 'airbusa330.jpg', 335),
+    ('PL0014', 'Boeing 737 MAX', 'Boeing', 'boeing737max.jpg', 210),
+    ('PL0015', 'Bombardier Q400', 'Bombardier', 'bombardierq400.jpg', 76),
+    ('PL0016', 'Cessna Citation X', 'Cessna', 'cessnacitationx.jpg', 12),
+    ('PL0017', 'Embraer ERJ145', 'Embraer', 'embraererj145.jpg', 50),
+    ('PL0018', 'Airbus A350', 'Airbus', 'airbusa350.jpg', 325),
+    ('PL0019', 'Boeing 757', 'Boeing', 'boeing757.jpg', 295),
+    ('PL0020', 'Bombardier Global 7500', 'Bombardier', 'bombardierglobal7500.jpg', 19),
+    ('PL0021', 'Embraer E175', 'Embraer', 'embraere175.jpg', 88),
+    ('PL0022', 'Gulfstream G500', 'Gulfstream', 'gulfstreamg500.jpg', 19),
+    ('PL0023', 'Airbus A220', 'Airbus', 'airbusa220.jpg', 140),
+    ('PL0024', 'Boeing 787-10', 'Boeing', 'boeing78710.jpg', 318);
 
 
 INSERT INTO Hotel (HotelID, HotelName, HotelAddress, Description, ProductImage, City, Country)
