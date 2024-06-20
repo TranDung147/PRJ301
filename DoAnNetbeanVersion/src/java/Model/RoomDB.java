@@ -7,11 +7,12 @@ import static Model.DatabaseInfo.USERDB;
 import java.sql.*;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
+import java.util.List;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HotelDB implements DatabaseInfo {
+public class RoomDB implements DatabaseInfo {
 
     public static Connection getConnect() {
         try {
@@ -28,26 +29,64 @@ public class HotelDB implements DatabaseInfo {
         return null;
     }
 
-    public static Hotel getHotel(String id) {
-        Hotel s = null;
+//    public static Room getRoom(String id) {
+//        Room s = null;
+//        try (Connection con = getConnect()) {
+//            PreparedStatement stmt = con.prepareStatement("Select RoomID, RoomNumber, RoomType, IsAvailable from Room where HotelID=?");
+//            stmt.setString(1, id);
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                String rid = rs.getString(1);
+//                int number = rs.getInt(2);
+//                String type = rs.getString(3);
+//                int avai = rs.getInt(4);
+//                s = new Room(id, number,type,avai);
+//            }
+//            con.close();
+//        } catch (Exception ex) {
+//            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return s;
+//    }
+    
+    // Method to get room details by RoomID
+    public static Room getRoom(String roomID) {
+        Room room = null;
         try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("Select HotelName, HotelAddress, Description, City, Country from Hotel where HotelID=?");
-            stmt.setString(1, id);
+            String query = "SELECT RoomID, RoomNumber, RoomType, IsAvailable FROM Room WHERE RoomID=?";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, roomID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String name = rs.getString(1);
-                String address = rs.getString(2);
-                String description = rs.getString(3);
-                String city = rs.getString(4);
-                String country = rs.getString(5);
-                s = new Hotel(id, name, address, description, city, country);
+                room = new Room(rs.getString("RoomID"), rs.getInt("RoomNumber"), rs.getString("RoomType"), rs.getInt("IsAvailable"));
             }
-            con.close();
-        } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return s;
+        return room;
     }
+
+    // Method to get all rooms by HotelID
+    public static List<Room> getRoomsByHotel(String hotelID) {
+        List<Room> roomList = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT RoomID, RoomNumber, RoomType, IsAvailable FROM Room WHERE HotelID=?";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, hotelID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Room room = new Room(rs.getString("RoomID"), 
+                        rs.getInt("RoomNumber"), 
+                        rs.getString("RoomType"), 
+                        rs.getInt("IsAvailable"));
+                roomList.add(room);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return roomList;
+    }
+    
 //--------------------------------------------------------------------------------------------
 //
 //    public static int newHotel(Hotel s) {
@@ -86,7 +125,7 @@ public class HotelDB implements DatabaseInfo {
                 throw new RuntimeException("Failed to update hotel with ID: " + hotel.getHotelId());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException("Database error occurred while updating hotel");
         }
     }
@@ -114,7 +153,7 @@ public class HotelDB implements DatabaseInfo {
             con.close();
             return rc;
         } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -136,16 +175,16 @@ public class HotelDB implements DatabaseInfo {
         ArrayList<Hotel> list = new ArrayList<Hotel>();//vì cái trả về là một danh sách nên lưu và truyền nó ở dạng arraylist
 
         try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("Select HotelID, HotelName, HotelAddress, Description, productImage, City, Country from Hotel");
+            PreparedStatement stmt = con.prepareStatement("Select HotelID, HotelName, HotelAddress, Description, City, Country from Hotel");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(new Hotel(rs.getString(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)));
+                        rs.getString(4), rs.getString(5), rs.getString(6)));
             }
             con.close();
             return list;
         } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -163,7 +202,7 @@ public class HotelDB implements DatabaseInfo {
             stmt.setString(6, c.getCountry());
             stmt.executeUpdate();
         } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -186,7 +225,7 @@ public class HotelDB implements DatabaseInfo {
                 return c;
             }
         } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, "Error fetching hotel by ID", ex);
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error fetching hotel by ID", ex);
         }
         return null;
     }

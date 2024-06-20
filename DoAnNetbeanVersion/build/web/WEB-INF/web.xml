@@ -19,12 +19,16 @@
         <servlet-name>UserDashboard</servlet-name>
         <servlet-class>Controller.UserDashboard</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RoomServlet</servlet-name>
+        <servlet-class>Controller.RoomServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
     </servlet-mapping>
     <servlet>
-    <servlet-name>ShowHotelsServlet</servlet-name>
+        <servlet-name>ShowHotelsServlet</servlet-name>
         <servlet-class>Controller.ShowHotelsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>UserDashboard</servlet-name>
         <url-pattern>/UserDashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RoomServlet</servlet-name>
+        <url-pattern>/roomServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
