@@ -1,4 +1,4 @@
-<%-- Document : admin Created on : Jun 15, 2024, 9:16:54 PM Author : plmin --%>
+<%-- Document : admin Created on : Jun 15, 2024, 9:16:54 PM Author : plmin --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -255,7 +255,7 @@
             }
             .cardHeader-amdin h2 {
                 font-weight: 600;
-                color: var(--blue);
+                color: var (--blue);
             }
 
             .actions-admin a {
@@ -310,138 +310,133 @@
                 background: #8de02c;
                 color: var(--white);
                 border-radius: 4px;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 500;
             }
-            .status.processing {
+            .status.pending {
                 padding: 2px 4px;
-                background: #e9b10a;
+                background: #f9ca3f;
                 color: var(--white);
                 border-radius: 4px;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 500;
             }
-            .status.canceled {
+            .status.process {
+                padding: 2px 4px;
+                background: #1795ce;
+                color: var(--white);
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+            .status.cancel {
                 padding: 2px 4px;
                 background: #f00;
                 color: var(--white);
                 border-radius: 4px;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 500;
             }
 
-            .recentCustomers-admin {
+            .details-admin .recentCustomers-admin {
                 position: relative;
                 min-height: 500px;
-                padding: 20px;
                 background: var(--white);
+                padding: 20px;
                 box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
                 border-radius: 20px;
             }
-            .recentCustomers-admin .imgBx {
+
+            .details-admin .recentCustomers-admin .imgBx {
                 position: relative;
                 width: 40px;
                 height: 40px;
-                border-radius: 50px;
                 overflow: hidden;
+                border-radius: 50%;
             }
-            .recentCustomers-admin .imgBx img {
+
+            .details-admin .recentCustomers-admin img {
                 position: absolute;
-                top: 0;
-                left: 0;
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
-            .recentCustomers-admin table tr td {
-                padding: 12px 10px;
+
+            .details-admin .recentCustomers-admin table tr td {
+                padding: 12px;
             }
-            .recentCustomers-admin table tr td h4 {
+
+            .details-admin .recentCustomers-admin table tr:hover {
+                background: var(--gray);
+                color: var(--black1);
+            }
+
+            .details-admin .recentCustomers-admin table tr td h4 {
                 font-size: 16px;
                 font-weight: 500;
                 line-height: 1.2rem;
             }
-            .recentCustomers-admin table tr td h4 span {
+            .details-admin .recentCustomers-admin table tr td h4 span {
                 font-size: 14px;
                 color: var(--black2);
             }
-            .recentCustomers-admin table tr:hover {
-                background: var(--gray);
-                color: var(--black1);
-            }
-            .recentCustomers-admin table tr:hover td h4 span {
-                color: var(--black2);
-            }
 
-            /* ====================== Responsive Design ========================== */
             @media (max-width: 991px) {
-                .navigation {
+                .navigation-admin {
                     left: -300px;
                 }
-                .navigation.active {
+                .navigation-admin.active {
                     width: 300px;
                     left: 0;
                 }
-                .main {
+
+                .main-admin {
                     width: 100%;
                     left: 0;
                 }
-                .main.active {
+
+                .main-admin.active {
+                    width: calc(100% - 300px);
                     left: 300px;
                 }
-                .cardBox {
+                .cardBox-admin {
                     grid-template-columns: repeat(2, 1fr);
                 }
             }
 
             @media (max-width: 768px) {
-                .details {
-                    grid-template-columns: 1fr;
+                .cardBox-admin {
+                    grid-template-columns: repeat(1, 1fr);
                 }
-                .recentOrders {
-                    overflow-x: auto;
+
+                .chartsBx {
+                    grid-template-columns: repeat(1, 1fr);
                 }
-                .status.inProgress {
-                    white-space: nowrap;
+
+                .details-admin {
+                    grid-template-columns: repeat(1, 1fr);
                 }
             }
 
             @media (max-width: 480px) {
-                .cardBox {
-                    grid-template-columns: repeat(1, 1fr);
-                }
-                .cardHeader h2 {
-                    font-size: 20px;
-                }
-                .user {
-                    min-width: 40px;
-                }
-                .navigation {
-                    width: 100%;
-                    left: -100%;
-                    z-index: 1000;
-                }
-                .navigation.active {
-                    width: 100%;
-                    left: 0;
-                }
-                .toggle {
-                    z-index: 10001;
-                }
-                .main.active .toggle {
-                    color: #fff;
-                    position: fixed;
-                    right: 0;
-                    left: initial;
+                .navigation-admin ul li a {
+                    font-size: 0.75rem;
                 }
             }
         </style>
     </head>
     <body>
-        <!-- =============== Navigation ================ -->
         <div class="container">
             <div class="navigation-admin">
                 <ul>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="cube-outline"></ion-icon>
+                            </span>
+                            <span class="title">Brand Name</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="#">
                             <span class="icon">
@@ -450,53 +445,76 @@
                             <span class="title">Dashboard</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="customer.jsp">
+                        <a class="active" href="#">
                             <span class="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
-                            <span class="title">Customers</span> 
+                            <span class="title">Customers</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="order.jsp">
+                        <a href="#">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
-                            <span class="title">Orders</span>
+                            <span class="title">Messages</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="#">
                             <span class="icon">
                                 <ion-icon name="help-outline"></ion-icon>
                             </span>
-                            <span class="title">Messages</span>
+                            <span class="title">Help</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="settings-outline"></ion-icon>
+                            </span>
+                            <span class="title">Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="lock-closed-outline"></ion-icon>
+                            </span>
+                            <span class="title">Password</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="log-out-outline"></ion-icon>
+                            </span>
+                            <span class="title">Sign Out</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <!-- ========================= Main ==================== -->
             <div class="main-admin">
                 <div class="topbar-admin">
                     <div class="burger">
-                        <div class="line1"></div>
-                        <div class="line2"></div>
-                        <div class="line3"></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="user">
+                        <img src="https://via.placeholder.com/40" />
                     </div>
                 </div>
-                <!-- ======================= Cards ================== -->
+
+                <!-- ======================= Cards ======================= -->
                 <div class="cardBox-admin">
                     <div class="card">
                         <div>
                             <div class="numbers">1,504</div>
                             <div class="cardName">Daily Views</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="eye-outline"></ion-icon>
                         </div>
@@ -505,9 +523,8 @@
                     <div class="card">
                         <div>
                             <div class="numbers">80</div>
-                            <div class="cardName">Orders</div>
+                            <div class="cardName">Sales</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="cart-outline"></ion-icon>
                         </div>
@@ -518,7 +535,6 @@
                             <div class="numbers">284</div>
                             <div class="cardName">Comments</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="chatbubbles-outline"></ion-icon>
                         </div>
@@ -529,17 +545,10 @@
                             <div class="numbers">$7,842</div>
                             <div class="cardName">Earning</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="cash-outline"></ion-icon>
                         </div>
                     </div>
-                </div>
-
-                <!-- ================ Add Charts JS ================= -->
-                <div class="chartsBx">
-                    <div class="chart"><canvas id="chart-1"></canvas></div>
-                    <div class="chart"><canvas id="chart-2"></canvas></div>
                 </div>
 
                 <!-- ================ Order Details List ================= -->
@@ -549,138 +558,188 @@
                             <h2>Recent Orders</h2>
                             <a href="#" class="btn">View All</a>
                         </div>
-
                         <table>
                             <thead>
                                 <tr>
                                     <td>Name</td>
                                     <td>Price</td>
-                                    <td>Actions</td>
+                                    <td>Payment</td>
                                     <td>Status</td>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <tr>
-                                    <td>Phòng Tổng Thống</td>
-                                    <td>$1000</td>
-                                    <td class="actions-admin">
-                                        <a href="#">Edit</a>
-                                        <a href="#">Delete</a>
-                                    </td>
-                                    <td><span class="status done">Done</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Phòng VIP</td>
-                                    <td>$500</td>
-                                    <td class="actions-admin">
-                                        <a href="#">Edit</a>
-                                        <a href="#">Delete</a>
-                                    </td>
-                                    <td><span class="status processing">Processing</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Phòng Đôi Thường</td>
+                                    <td>Star Refrigerator</td>
                                     <td>$1200</td>
-                                    <td class="actions-admin">
-                                        <a href="#">Edit</a>
-                                        <a href="#">Delete</a>
-                                    </td>
-                                    <td><span class="status canceled">Canceled</span></td>
+                                    <td>Paid</td>
+                                    <td><span class="status done">Delivered</span></td>
                                 </tr>
                                 <tr>
-                                    <td>Phòng Đơn</td>
-                                    <td>$1200</td>
-                                    <td class="actions-admin">
-                                        <a href="#">Edit</a>
-                                        <a href="#">Delete</a>
-                                    </td>
-                                    <td><span class="status done">Done</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Phòng Tổng Thống</td>
+                                    <td>Dell Laptop</td>
                                     <td>$110</td>
-                                    <td class="actions-admin">
-                                        <a href="#">Edit</a>
-                                        <a href="#">Delete</a>
-                                    </td>
-                                    <td><span class="status processing">Processing</span></td>
+                                    <td>Due</td>
+                                    <td><span class="status pending">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Apple Watch</td>
+                                    <td>$1200</td>
+                                    <td>Paid</td>
+                                    <td><span class="status process">Processing</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Addidas Shoes</td>
+                                    <td>$620</td>
+                                    <td>Paid</td>
+                                    <td><span class="status done">Delivered</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Star Refrigerator</td>
+                                    <td>$1200</td>
+                                    <td>Paid</td>
+                                    <td><span class="status done">Delivered</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Dell Laptop</td>
+                                    <td>$110</td>
+                                    <td>Due</td>
+                                    <td><span class="status pending">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Apple Watch</td>
+                                    <td>$1200</td>
+                                    <td>Paid</td>
+                                    <td><span class="status process">Processing</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Addidas Shoes</td>
+                                    <td>$620</td>
+                                    <td>Paid</td>
+                                    <td><span class="status done">Delivered</span></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <!-- ================= New Customers ================ -->
+
+                    <!-- =========== New Customers List =============== -->
                     <div class="recentCustomers-admin">
                         <div class="cardHeader-admin">
                             <h2>Recent Customers</h2>
                         </div>
-
                         <table>
                             <tr>
                                 <td width="60px">
                                     <div class="imgBx">
-                                        <img src="assets/imgs/customer02.jpg" alt="" />
+                                        <img src="https://via.placeholder.com/40" />
                                     </div>
                                 </td>
                                 <td>
                                     <h4>
-                                        Huynh Dinh Thien <br />
-                                        <span>Phòng Tổng Thống</span>
-                                    </h4>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="assets/imgs/customer01.jpg" alt="" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Bui Le Viet Anh <br />
-                                        <span>Phòng Thường Đôi</span>
-                                    </h4>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="assets/imgs/customer02.jpg" alt="" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Dinh Nguyen Khanh Luan <br />
-                                        <span>Phòng Thường Đôi</span>
+                                        David
+                                        <br /><span>Italy</span>
                                     </h4>
                                 </td>
                             </tr>
                             <tr>
                                 <td width="60px">
                                     <div class="imgBx">
-                                        <img src="assets/imgs/customer02.jpg" alt="" />
+                                        <img src="https://via.placeholder.com/40" />
                                     </div>
                                 </td>
                                 <td>
                                     <h4>
-                                        Pham Le Minh Quan <br />
-                                        <span>Phòng VIP1</span>
+                                        Amit
+                                        <br /><span>India</span>
                                     </h4>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td width="60px">
                                     <div class="imgBx">
-                                        <img src="assets/imgs/customer01.jpg" alt="" />
+                                        <img src="https://via.placeholder.com/40" />
                                     </div>
                                 </td>
                                 <td>
                                     <h4>
-                                        Tran Trung Dung <br />
-                                        <span>Phòng VIP2</span>
+                                        Karim
+                                        <br /><span>Morocco</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="https://via.placeholder.com/40" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        David
+                                        <br /><span>Italy</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="https://via.placeholder.com/40" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Amit
+                                        <br /><span>India</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="https://via.placeholder.com/40" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Karim
+                                        <br /><span>Morocco</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="https://via.placeholder.com/40" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        David
+                                        <br /><span>Italy</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="https://via.placeholder.com/40" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Amit
+                                        <br /><span>India</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="https://via.placeholder.com/40" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Karim
+                                        <br /><span>Morocco</span>
                                     </h4>
                                 </td>
                             </tr>
@@ -689,8 +748,7 @@
                 </div>
             </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-        <script src="assets/js/chartsJS.js"></script>
     </body>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </html>

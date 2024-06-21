@@ -452,16 +452,16 @@
                     </li>
 
                     <li>
-                        <a href="#">
+                        <a href="customer.jsp">
                             <span class="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
-                            <span class="title">Customers</span>
+                            <span class="title">Customers</span> 
                         </a>
                     </li>
 
                     <li>
-                        <a href="#">
+                        <a href="order.jsp">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
