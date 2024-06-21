@@ -2,20 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/includes/indexincludes/hotelPage1Main.jsp</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/assets/css/sort.css</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Controller/UserServlet.java</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/hotelPage1.jsp</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/Plane.java</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/includes/indexincludes/planeMainPage.jsp</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/Hotel.java</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/assets/css/index.css</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/HotelDB.java</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Controller/UserDashboard.java</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/planePage.jsp</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/flight.jsp</file>
-            <file>file:/C:/Users/PHUONG%20ANH/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/PlaneDB.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

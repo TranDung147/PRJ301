@@ -226,7 +226,51 @@ VALUES
 ('US0010', 'jmiller', 'hashed_pwd10', 'jmiller@example.com', 'Jack', 'Miller', '707 Walnut St, Hilltown', '0123456789', '1987-10-30', GETDATE(), 'User');
 
 
+INSERT INTO Room (RoomID, HotelID, RoomNumber, RoomType, IsAvailable)
+VALUES
+    ('RM0001', 'HT0001', '101', 'Single', 1),
+    ('RM0002', 'HT0001', '102', 'Double', 1),
+    ('RM0003', 'HT0002', '201', 'Single', 1),
+    ('RM0004', 'HT0002', '202', 'Double', 1),
+    ('RM0005', 'HT0003', '301', 'Single', 1),
+    ('RM0006', 'HT0003', '302', 'Double', 1),
+    ('RM0007', 'HT0004', '401', 'Single', 1),
+    ('RM0008', 'HT0004', '402', 'Double', 1),
+    ('RM0009', 'HT0005', '501', 'Single', 1),
+    ('RM0010', 'HT0005', '502', 'Double', 1),
+    ('RM0011', 'HT0006', '601', 'Single', 1),
+    ('RM0012', 'HT0006', '602', 'Double', 1),
+    ('RM0013', 'HT0007', '701', 'Single', 1),
+    ('RM0014', 'HT0007', '702', 'Double', 1),
+    ('RM0015', 'HT0008', '801', 'Single', 1),
+    ('RM0016', 'HT0008', '802', 'Double', 1),
+    ('RM0017', 'HT0009', '901', 'Single', 1),
+    ('RM0018', 'HT0009', '902', 'Double', 1),
+    ('RM0019', 'HT0010', '1001', 'Single', 1),
+    ('RM0020', 'HT0010', '1002', 'Double', 1);
 
+INSERT INTO Seat (SeatID, PlaneID, SeatNumber, SeatType, IsAvailable)
+VALUES
+    ('ST0001', 'PL0001', 1, 'Normal', 1),
+    ('ST0002', 'PL0001', 2, 'Normal', 1),
+    ('ST0003', 'PL0002', 1, 'Normal', 1),
+    ('ST0004', 'PL0002', 2, 'Normal', 1),
+    ('ST0005', 'PL0003', 1, 'Normal', 1),
+    ('ST0006', 'PL0003', 2, 'Normal', 1),
+    ('ST0007', 'PL0004', 1, 'Normal', 1),
+    ('ST0008', 'PL0004', 2, 'Normal', 1),
+    ('ST0009', 'PL0005', 1, 'Normal', 1),
+    ('ST0010', 'PL0005', 2, 'Normal', 1),
+    ('ST0011', 'PL0006', 1, 'Normal', 1),
+    ('ST0012', 'PL0006', 2, 'Normal', 1),
+    ('ST0013', 'PL0007', 1, 'Normal', 1),
+    ('ST0014', 'PL0007', 2, 'Normal', 1),
+    ('ST0015', 'PL0008', 1, 'Normal', 1),
+    ('ST0016', 'PL0008', 2, 'Normal', 1),
+    ('ST0017', 'PL0009', 1, 'Normal', 1),
+    ('ST0018', 'PL0009', 2, 'Normal', 1),
+    ('ST0019', 'PL0010', 1, 'Normal', 1),
+    ('ST0020', 'PL0010', 2, 'Normal', 1);
 
 
 
