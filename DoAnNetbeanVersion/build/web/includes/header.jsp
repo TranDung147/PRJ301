@@ -79,7 +79,7 @@
                     <a class="nav-link active" href="index.jsp">Trang chủ</a>
                     <a class="nav-link" href="flight.jsp">Chuyến bay</a>
                     <a class="nav-link" href="hotel.jsp">Khách sạn</a>
-                    <a class="nav-link" href="#">Thuê xe</a>
+                    <a class="nav-link" href="planePage1.jsp">Thuê xe</a>
                     <a class="nav-link" href="#">Địa điểm tham quan</a>
                     <a class="nav-link" href="#">Taxi sân bay</a>
                 </nav>
