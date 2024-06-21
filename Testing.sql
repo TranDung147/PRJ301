@@ -25,6 +25,15 @@ CREATE TABLE Users (
     CreatedAt DATE DEFAULT GETDATE()
 );
 
+--Sửa lại plane
+CREATE TABLE Plane(
+    PlaneID CHAR(6) PRIMARY KEY,
+    PlaneName NVARCHAR(50),
+    Airline NVARCHAR(50),
+    ImageFileName NVARCHAR(100), -- Thay thế trường ImageUrl bằng ImageFileName
+    NoSeat INT CHECK (NoSeat > 0)
+);
+
 -- Create the Flight table
 CREATE TABLE Flight (
     FlightID CHAR(6) PRIMARY KEY,
@@ -128,14 +137,6 @@ CREATE TABLE Transactions (
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
 	FOREIGN KEY (TicketBookingID) REFERENCES Booking_Ticket(TicketBookingID),
 	FOREIGN KEY (RoomBookingID) REFERENCES Booking_Room(RoomBookingID)
-);
---Sửa lại plane
-CREATE TABLE Plane(
-    PlaneID CHAR(6) PRIMARY KEY,
-    PlaneName NVARCHAR(50),
-    Airline NVARCHAR(50),
-    ImageFileName NVARCHAR(100), -- Thay thế trường ImageUrl bằng ImageFileName
-    NoSeat INT CHECK (NoSeat > 0)
 );
 
 
