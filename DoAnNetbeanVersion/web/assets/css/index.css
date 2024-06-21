@@ -1,0 +1,613 @@
+/*--------------------HEADER--------------------*/
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #18131333;
+}
+
+.container-header {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px; /* Added padding to ensure no overflow */
+    padding-right: 15px; /* Added padding to ensure no overflow */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+
+header {
+    position: sticky;
+    padding-left: 3%;
+    padding-right: 3%;
+    top: 0;
+    background-color: #1b3661;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    z-index: 1000;
+}
+
+header h3 {
+    color: #fffdfde7;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 30px;
+}
+
+header input {
+    margin-right: 2%;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+}
+
+header .submitbut {
+    padding-bottom: 8px;
+    padding-top: 4px;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    border-radius: 15px;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+header .log{
+    padding: 0;
+    padding-left: 16%;
+}
+
+header .loginout {
+    vertical-align: middle;
+    height: 40px;
+    margin-top: -12px;
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: 15px;
+    border-radius: 15px;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+header button:hover {
+    background-color: #00000054;
+}
+
+.upfloor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Allows items to wrap and prevent overflow */
+    max-height: 50%;
+}
+
+.upfloor .search-bar {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    margin-left: 1.8%;
+}
+
+.upfloor .button {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap; /* Allows buttons to wrap and prevent overflow */
+}
+
+.botfloor {
+    text-decoration: none;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+.botfloor .nav {
+    display: flex;
+    justify-content: center;
+    width: auto;
+}
+
+.botfloor a {
+    color: #fffdfde7;
+    border: 2px solid white;
+    border-radius: 5px;
+    margin-left: 1%;
+    margin-bottom: 10px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    width: 180px;
+}
+
+.botfloor a:hover {
+    background-color: #fffdfd54;
+}
+
+/* Ensures no horizontal scrollbar on small screens */
+@media (max-width: 768px) {
+    .upfloor, .botfloor .nav {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .botfloor a {
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+    }
+}
+
+/*--------------------LOGIN LOGOUT--------------------*/
+
+.logmodal .topmodal {
+    display: flex; /* Apply Flexbox layout */
+    justify-content: space-between; /* Distribute space between the children */
+    align-items: center; /* Align items vertically centered */
+}
+
+.logmodal .topmodal h1 {
+    margin-left: 3%;
+    margin-top: 10px;
+}
+
+.logmodal input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+.logmodal button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.logmodal button:hover {
+    opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.logmodal .cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+.logmodal img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.logmodal .logcontainer {
+    padding: 16px;
+}
+
+.logmodal span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.logmodal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.logmodal .modal-content {
+    background-color: #fefefe;
+    margin: auto auto;
+    border: 1px solid #888;
+    width: 30%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.logmodal .close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.logmodal .close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    .logmodal span.psw {
+        display: block;
+        float: none;
+    }
+    .logmodal .cancelbtn {
+        width: 100%;
+    }
+}
+
+/*--------------------BODY--------------------*/
+
+.container-body {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 20Xx rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
+}
+/*--------------------1--------------------*/
+.carousel-item img {
+    height: 530px;
+    object-fit: cover;
+}
+
+/*--------------------2--------------------*/
+.offers{
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.offers .offer-card img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.offer-card.active {
+    display: block;
+    opacity: 1;
+}
+
+.offer-card a {
+    text-decoration: none; /* Remove underline */
+    color: black; /* Change text color to black */
+}
+
+.offer-card a:hover {
+    color: gray; /* Change color on hover */
+}
+
+/*--------------------3--------------------*/
+
+.explore {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.explores-nav {
+    margin-bottom: 0; /* Remove default margin-bottom */
+}
+
+.explore .card img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.explore-card a {
+    text-decoration: none;
+    color: black;
+}
+
+.explores-nav > li:first-child,
+.explores-nav > li:last-child {
+    flex: 0;
+}
+
+/*--------------------4--------------------*/
+
+.exploration {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.exploration .card img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.exploration .card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2%;
+}
+
+.exploration .card-body {
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)); /* Gradient fade from top to bottom */
+    color: #fffdfde7; /* Change text color to white */
+    padding: 10px; /* Adjust padding as needed */
+    text-align: left; /* Center-align text */
+    width: 100%; /* Ensure the text container spans the full width of the card */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+/* Offers and Explore Section Hover Styles */
+.explore-card:hover {
+    color: gray; /* Gray font color */
+}
+
+/*--------------------Section 5--------------------*/
+
+.willing {
+    padding-bottom: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+
+}
+
+.willing img{
+    height: 540px;
+    border-radius: 5px;
+}
+
+.willing form{
+    background-color: #1b3661;
+    flex: 1;
+    margin-left: 20px;
+    border-radius: 5px;
+    margin-right: 1%;
+}
+
+.willing form h1{
+    color: #fff;
+    font-size: 27px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.willing form select,input{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 35px;
+    padding-left: 12px;
+    outline: none;
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+}
+
+.willing form p{
+    text-align: left;
+    color: #6dBFE2;
+    margin: 8px 0 3px;
+}
+
+.willing form button{
+    width: 300px;
+    height: 50px;
+    background-color: #6dBFE2;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .3s ease;
+}
+
+.buttonlol{
+    text-align: center;
+    padding-top: 30px;
+}
+
+.willing form button:hover{
+    background-color: transparent;
+    border: 1px solid #6dBFE2;
+    color: #6dBFE2;
+}
+
+/*--------------------Section 6--------------------*/
+
+.favorite {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.fav {
+    margin-left: 0%;
+    margin-right: 0%;
+    padding: 5px 5px;
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.fav-link-group {
+    display: flex;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.fav-link-group a {
+    align-items: left;
+    text-decoration: none;
+    background-color: #f8f9fa;
+    color: #1b3661d3;
+    font-weight: bolder;
+    padding: 10px 15px;
+    margin: 0 10px;
+    border-radius: 80px;
+    transition: background-color 0.3s;
+}
+
+.fav-link-group a:hover {
+    background-color: #0056b3;
+    color: #f8f9fa;
+}
+
+.fav-item-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 130%;
+    padding: 11px 0 0;
+    margin-left: 11.5px;
+}
+
+.fl {
+    float: left;
+}
+
+.fav-item {
+    width: 20%;
+    margin-bottom: 25px;
+}
+
+.fav-detail {
+    display: block;
+    font-size: 87%;
+}
+
+.fav-item a {
+    font-weight: 500;
+    text-decoration: none;
+    color: #000;
+}
+
+.fav-item a:hover {
+    color: #5d6975;
+}
+
+/*--------------------Section 7--------------------*/
+.whytochoose {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: 3%;
+    margin-right: 3%;
+    padding: 0;
+}
+
+.whytochoose img {
+    align-items: center;
+    width: 100%;
+}
+
+.whytochoose h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.whytochoose p {
+    text-align: center;
+}
+
+.whytochoose .cont {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*--------------------FOOTER--------------------*/
+#footer {
+    padding: 70px 0;
+    background-color: #1b3661;
+    color: #ffffff;
+    text-align: left;
+}
+
+.footer-title {
+    font-size: 25px;
+    line-height: 117%;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.footer-linklists {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.footer-linklists li a {
+    color: #ffffffcc;
+    text-decoration: none;
+}
+
+.contact_footer,
+.policy-footer,
+.about-footer,
+.social-footer {
+    margin-bottom: 30px;
+}
+
+.about-footer p {
+    font-size: 16px;
+}
+
+.footer-social-links {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.footer-social-links li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.footer-social-links li:last-child {
+    margin-right: 0;
+}
+
+.footer-social-links img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10%;
+    background-color: #ffffff;
+    padding: 5px;
+}
+
+@media only screen and (max-width: 749px) {
+
+    
+    .main-footer {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .info {
+        padding: 20px 0;
+    }
+}
+
+@media (max-width: 480px) {
+
+    
+    .main-footer {
+        grid-template-columns: 1fr;
+    }
+
+    .sociallogos {
+        padding: 20px 0;
+    }
+
+    .com {
+        padding: 20px 0;
+    }
+
+}
+
+/*--------------------???--------------------*/
