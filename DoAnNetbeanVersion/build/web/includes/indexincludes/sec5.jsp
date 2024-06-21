@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- 5 - Searching willing tour -->
     <section class="willing">
-      <div class="container-body">
+          <div class="container-body">
         <div class="row content">
           <div id="myCarousel" class="col-md-8 carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
@@ -16,7 +16,7 @@
               </div>
             </div>
           </div>
-          <form class="col-md-4" action="">
+          <form class="form col-md-4" action="">
             <h1>Điểm đến cần tìm</h1>
             <p>Điểm đến:</p>
             <select name="" id="">

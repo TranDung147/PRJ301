@@ -235,15 +235,7 @@ header button:hover {
 }
 
 /* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-  .logmodal span.psw {
-     display: block;
-     float: none;
-  }
-  .logmodal .cancelbtn {
-     width: 100%;
-  }
-}
+
 
 /*--------------------BODY--------------------*/
 
@@ -364,6 +356,7 @@ header button:hover {
 }
 
 .willing form{
+    width: 100%;
     background-color: #1b3661; 
     flex: 1;
     margin-left: 20px;
