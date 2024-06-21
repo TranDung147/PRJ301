@@ -23,6 +23,10 @@
         <servlet-name>RoomServlet</servlet-name>
         <servlet-class>Controller.RoomServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <servlet-class>Controller.ChangePasswordServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
@@ -59,6 +63,10 @@
     <servlet-mapping>
         <servlet-name>RoomServlet</servlet-name>
         <url-pattern>/roomServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <url-pattern>/ChangePasswordServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
