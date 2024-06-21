@@ -435,6 +435,82 @@
                     left: initial;
                 }
             }
+            @media only screen and (max-width: 425px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            height: auto;
+        }
+
+        .main-content {
+            padding: 10px;
+        }
+
+        .main-content header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .main-content header input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .profile img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .cards {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .card {
+            margin: 10px 0;
+        }
+
+        .tour {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tour img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .profile-details {
+            padding: 10px;
+        }
+
+        .profile-details img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .profile-details p strong {
+            width: 100%;
+        }
+
+        .eye-button {
+            font-size: 14px;
+            padding: 2px;
+        }
+
+        .password-container {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .password-container p {
+            margin: 0 0 5px 0;
+        }
+    }
         </style>
     </head>
     <body>
