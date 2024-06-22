@@ -3,11 +3,14 @@ package Model;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private String userID;
-    private String username;
-    private String password;
-    private String email;
-    private String role;
+
+    public String userID;
+    public String username;
+    public String password;
+    public String email;
+    public String role;
+    public String fName;
+    public String lName;
 
     public User() {
     }
@@ -20,6 +23,16 @@ public class User implements Serializable {
         this.userID = userID;
     }
 
+    public User(String userID, String username, String password, String email, String fName, String lName) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.fName = fName;
+        this.lName = lName;
+    }
+    
+    
     public String getUsername() {
         return username;
     }
@@ -59,8 +72,20 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
-    
-    
+
+    public String getfName() {
+        return fName;
+    }
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
 }
