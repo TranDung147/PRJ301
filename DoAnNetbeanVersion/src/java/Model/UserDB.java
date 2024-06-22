@@ -151,73 +151,73 @@ public class UserDB implements DatabaseInfo {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-//    
-//    // Kiểm tra mật khẩu
-//    public boolean checkPassword(String username, String password) {
-//        Connection con = null;
-//        PreparedStatement ps = null;
-//        ResultSet rs = null;
-//        boolean isValid = false;
-//
-//        try {
-//            con = getConnect();
-//            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
-//            ps = con.prepareStatement(query);
-//            ps.setString(1, username);
-//            ps.setString(2, password);
-//            rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//                // Nếu có kết quả từ cơ sở dữ liệu, tức là mật khẩu đúng
-//                isValid = true;
-//            }
-//
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            try {
-//                if (rs != null) rs.close();
-//                if (ps != null) ps.close();
-//                if (con != null) con.close();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//        return isValid;
-//    }
-//
-//    // Hàm đổi mật khẩu
-//    public boolean changePassword(String username, String newPassword) {
-//        Connection con = null;
-//        PreparedStatement ps = null;
-//        boolean success = false;
-//
-//        try {
-//            con = getConnect(); // DBConnection là lớp để lấy kết nối tới cơ sở dữ liệu
-//            String query = "UPDATE users SET password = ? WHERE username = ?";
-//            ps = con.prepareStatement(query);
-//            ps.setString(1, newPassword);
-//            ps.setString(2, username);
-//
-//            int result = ps.executeUpdate();
-//            if (result > 0) {
-//                // Nếu có ít nhất một dòng bị ảnh hưởng, tức là cập nhật thành công
-//                success = true;
-//            }
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            try {
-//                if (ps != null) ps.close();
-//                if (con != null) con.close();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//        return success;
-//    }
+    
+    // Kiểm tra mật khẩu
+    public boolean checkPassword(String username, String password) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean isValid = false;
+
+        try {
+            con = getConnect();
+            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Nếu có kết quả từ cơ sở dữ liệu, tức là mật khẩu đúng
+                isValid = true;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return isValid;
+    }
+
+    // Hàm đổi mật khẩu
+    public boolean changePassword(String username, String newPassword) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        boolean success = false;
+
+        try {
+            con = getConnect(); // DBConnection là lớp để lấy kết nối tới cơ sở dữ liệu
+            String query = "UPDATE users SET password = ? WHERE username = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, newPassword);
+            ps.setString(2, username);
+
+            int result = ps.executeUpdate();
+            if (result > 0) {
+                // Nếu có ít nhất một dòng bị ảnh hưởng, tức là cập nhật thành công
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return success;
+    }
 
     
 //-----------------------------------------------------------------------------------
