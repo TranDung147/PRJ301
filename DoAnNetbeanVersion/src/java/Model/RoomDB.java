@@ -65,6 +65,28 @@ public class RoomDB implements DatabaseInfo {
         }
         return room;
     }
+   
+ public static Room bookRoom(String roomID) {
+    Room bookedRoom = null;
+    try (Connection con = getConnect()) {
+        String updateQuery = "UPDATE Room SET IsAvailable = 0 WHERE RoomID = ?";
+        try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+            updateStmt.setString(1, roomID);
+            int rowsUpdated = updateStmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                Logger.getLogger(RoomDB.class.getName()).log(Level.INFO, "Room updated successfully for Room ID: " + roomID);
+                bookedRoom = getRoom(roomID); // Lấy thông tin phòng sau khi đã book thành công
+            } else {
+                Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "No rows updated for Room ID: " + roomID);
+            }
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking room with ID: " + roomID, ex);
+    }
+    return bookedRoom;
+}
+
+
 
     // Method to get all rooms by HotelID
     public static List<Room> getRoomsByHotel(String hotelID) {

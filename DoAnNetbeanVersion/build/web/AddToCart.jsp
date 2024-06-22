@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="Model.*, java.util.*" %>
+<%@ page import="Model.Room" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Shopping Cart</title>
+    <title>Room Booking Status</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,12 +31,17 @@
         table th {
             background-color: #f2f2f2;
         }
-        .total-row {
-            font-weight: bold;
-        }
-        .empty-cart-msg {
+        .success-msg {
             text-align: center;
-            color: #666;
+            color: #28a745; /* Green color for success message */
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .error-msg {
+            text-align: center;
+            color: #dc3545; /* Red color for error message */
+            font-size: 18px;
+            margin-bottom: 20px;
         }
         .text-link {
             display: block;
@@ -49,51 +54,36 @@
     </style>
 </head>
 <body>
-    <h1>Order Cart</h1>
+    <h1>Room Booking Status</h1>
+
+   <div class="container">
+    <% 
+      Room bookedRoom = (Room) session.getAttribute("bookedRoom");
+            if (bookedRoom != null) {
+    %>
+    <div class="success-msg">
+        Room Booked Successfully!
+    </div>
     <table>
         <tr>
-            <th>ID</th>
-                <th>Hotel Name</th>
-                <th>Hotel Description</th>
-                <th>Hotel Address</th>
-                <th>City</th>
-                <th>Country</th>
+            <th>Room ID</th>
+            <th>Room Number</th>
+            <th>Room Type</th>
+            
         </tr>
-        <%
-            ArrayList<Hotel> cart = (ArrayList<Hotel>) session.getAttribute("cart");
-            if (cart != null && !cart.isEmpty()) {
-                double totalAmount = 0;
-                for (Hotel ht : cart) {
-                    double total = 1;
-                    //double total = t.getPrice() * t.getQuantity();
-                    totalAmount += total;
-        %>
         <tr>
-            <td><%= ht.getHotelId() %></td>
-            <td><%= ht.getHotelName() %></td>
-            <td>$ <%= ht.getHotelDescription() %></td>
-            <td><%= ht.getHotelAddress() %></td>
-            <td><%= ht.getCity() %></td>
-            <td><%= ht.getCountry() %></td>
-            <td>$ <%= String.format("%.2f", total) %></td>
+            <td><%= bookedRoom.getRoomID() %></td>
+            <td><%= bookedRoom.getRoomNumber() %></td>
+            <td><%= bookedRoom.getRoomType() %></td>
+           
         </tr>
-        <% 
-                }
-        %>
-        <tr class="total-row">
-            <td colspan="4" style="text-align: right;">Total Amount:</td>
-            <td>$ <%= String.format("%.2f", totalAmount) %></td>
-        </tr>
-        <% 
-            } else {
-        %>
-        <tr>
-            <td colspan="5" class="empty-cart-msg">Your cart is empty.</td>
-        </tr>
-        <% 
-            }
-        %>
     </table>
+    <% } else { %>
+    <div class="error-msg">
+        Booking Failed. Please try again.
+    </div>
+    <% } %>
     <a class="text-link" href="table_product.jsp">Continue viewing</a>
+</div>
 </body>
 </html>

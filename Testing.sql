@@ -275,3 +275,7 @@ VALUES
 
 
 
+	-- Đặt IsAvailable thành 1 (true) cho phòng có RoomID là RM0001
+UPDATE Room
+SET IsAvailable = 1
+WHERE RoomID = 'RM0001';
