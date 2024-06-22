@@ -14,5 +14,5 @@
 
   <link href="assets/css/index.css" rel="stylesheet" />
   <link href="assets/css/sort.css" rel="stylesheet" />
-  <link href="assets/css/responsive" rel="stylesheet"/>
+  <link href="assets/css/responsive.css" rel="stylesheet"/>
 </head>

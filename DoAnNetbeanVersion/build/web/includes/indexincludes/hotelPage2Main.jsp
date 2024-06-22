@@ -1,6 +1,15 @@
 
 <%@page import="java.sql.*, Model.DatabaseInfo, Model.Hotel"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    HttpSession sessionObj = request.getSession(false); // Lấy session hiện tại, không tạo mới nếu chưa có
+
+    // Kiểm tra nếu session không tồn tại hoặc không có thuộc tính username
+    if (sessionObj == null || sessionObj.getAttribute("user") == null) {
+        // Nếu không có session hoặc không có thông tin đăng nhập, chuyển hướng về trang đăng nhập
+        response.sendRedirect("index.jsp");
+    }
+%>
 <main>  
     <div class="containerB ">
         <div class="row">

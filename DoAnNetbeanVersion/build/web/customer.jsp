@@ -1,5 +1,7 @@
-<%-- Document : admin Created on : Jun 15, 2024, 9:16:54 PM Author : plmin --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.DatabaseInfo"%>
+<%@page import="Model.User"%>
+<%@page import="Model.UserDB"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,6 +29,7 @@
             body {
                 min-height: 100vh;
                 overflow-x: hidden;
+                background-color: var(--gray);
             }
 
             .container {
@@ -65,7 +68,8 @@
             }
 
             .navigation-admin ul li:hover,
-            .navigation-admin ul li.hovered {
+            .navigation-admin ul li.hovered,
+            .navigation-admin ul li.active {
                 background-color: var(--white);
             }
 
@@ -78,7 +82,8 @@
                 color: var(--white);
             }
             .navigation-admin ul li:hover a,
-            .navigation-admin ul li.hovered a {
+            .navigation-admin ul li.hovered a,
+            .navigation-admin ul li.active a {
                 color: var(--blue);
             }
 
@@ -106,7 +111,8 @@
 
             /* --------- curve outside ---------- */
             .navigation-admin ul li:hover a::before,
-            .navigation-admin ul li.hovered a::before {
+            .navigation-admin ul li.hovered a::before,
+            .navigation-admin ul li.active a::before {
                 content: "";
                 position: absolute;
                 right: 0;
@@ -119,7 +125,8 @@
                 pointer-events: none;
             }
             .navigation-admin ul li:hover a::after,
-            .navigation-admin ul li.hovered a::after {
+            .navigation-admin ul li.hovered a::after,
+            .navigation-admin ul li.active a::after {
                 content: "";
                 position: absolute;
                 right: 0;
@@ -132,623 +139,270 @@
                 pointer-events: none;
             }
 
-            /* ===================== Main ===================== */
-            .main-admin {
-                position: absolute;
-                width: calc(100% - 300px);
-                left: 300px;
-                min-height: 100vh;
-                background: var(--white);
-                transition: 0.5s;
-            }
-            .main-admin.active {
-                width: calc(100% - 80px);
-                left: 80px;
-            }
-
-            .topbar-admin {
-                width: 100%;
-                height: 60px;
+            /* =============== Header ================ */
+            .header {
+                margin-left: 300px;
+                padding: 20px;
+                background-color: lightseagreen;
+                color: var(--white);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                text-align: right;
-                padding: 0 20px;
             }
 
-            .burger div {
-                width: 30px;
-                height: 4px;
-                background-color: #000;
-                margin: 5px;
-                border-radius: 20%;
+            .header h1 {
+                font-size: 2rem;
             }
 
-            /* ======================= Cards ====================== */
-            .cardBox-admin {
-                position: relative;
-                width: 100%;
-                padding: 20px;
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                grid-gap: 30px;
+            .header .logout {
+                font-size: 1rem;
+                color: var(--white);
+                text-decoration: none;
+                padding: 10px 20px;
+                border: 2px solid var(--white);
+                border-radius: 5px;
+                transition: background 0.3s, color 0.3s;
             }
 
-            .cardBox-admin .card {
-                position: relative;
-                background: var(--white);
-                padding: 30px;
-                border-radius: 20px;
-                display: flex;
-                justify-content: space-between;
-                cursor: pointer;
-                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-            }
-
-            .cardBox-admin .card .numbers {
-                position: relative;
-                font-weight: 500;
-                font-size: 2.5rem;
+            .header .logout:hover {
+                background-color: var(--white);
                 color: var(--blue);
             }
 
-            .cardBox-admin .card .cardName {
-                color: var(--black2);
-                font-size: 1.1rem;
-                margin-top: 5px;
-            }
-
-            .cardBox-admin .card .iconBx {
-                font-size: 3.5rem;
-                color: var(--black2);
-            }
-
-            .cardBox-admin .card:hover {
-                background: var(--blue);
-            }
-            .cardBox-admin .card:hover .numbers,
-            .cardBox-admin .card:hover .cardName,
-            .cardBox-admin .card:hover .iconBx {
-                color: var(--white);
-            }
-
-            /* ================== Charts JS ============== */
-            .chartsBx {
-                position: relative;
-                width: 100%;
+            /* =============== Information Section ================ */
+            .information {
+                margin-left: 300px;
                 padding: 20px;
-                display: grid;
-                grid-template-columns: 1fr 2fr;
-                grid-gap: 30px;
-            }
-
-            .chartsBx .chart {
-                position: relative;
-                background: #fff;
-                padding: 20px;
-                width: 100%;
-                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-                border-radius: 20px;
-                border: 1px solid var(--blue);
-            }
-
-            /* ================== Order Details List ============== */
-            .details-admin {
-                width: 100%;
-                padding: 20px;
-                display: grid;
-                grid-template-columns: 2fr 1fr;
-                grid-gap: 30px;
-            }
-            .details-admin .recentOrders-admin {
-                position: relative;
-                min-height: 500px;
-                background: var(--white);
-                padding: 20px;
-                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-                border-radius: 20px;
-            }
-            .details-admin .cardHeader-amdin {
+                background-color: var(--gray);
                 display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-            }
-            .cardHeader-amdin h2 {
-                font-weight: 600;
-                color: var (--blue);
+                flex-direction: column;
+                align-items: center;
             }
 
-            .actions-admin a {
-                text-decoration: none;
-                color: var(--black1);
+            .information h2 {
+                margin-bottom: 20px;
+                color: var(--blue);
             }
 
-            .actions-admin a:hover {
-                color: gray;
-            }
-            .cardHeader-amdin .btn {
-                position: relative;
-                padding: 5px 10px;
-                background: var(--blue);
-                text-decoration: none;
-                color: var(--white);
-                border-radius: 6px;
-            }
-            .details-admin table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 10px;
-            }
-            .details-admin table thead td {
-                font-weight: 600;
-            }
-            .details-admin .recentOrders-admin table tr {
-                color: var(--black1);
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            }
-            .details-admin .recentOrders-admin table tr:last-child {
-                border-bottom: none;
-            }
-            .details-admin .recentOrders-admin table tbody tr:hover {
-                background: var(--gray);
-                color: var(--black);
-            }
-            .details-admin .recentOrders-admin table tr td {
-                padding: 10px;
-            }
-            .details-admin .recentOrders-admin table tr td:last-child {
-                text-align: end;
-            }
-            .details-admin .recentOrders-admin table tr td:nth-child(2) {
-                text-align: center;
-            }
-            .details-admin .recentOrders-admin table tr td:nth-child(3) {
-                text-align: center;
-            }
-            .status.done {
-                padding: 2px 4px;
-                background: #8de02c;
-                color: var(--white);
-                border-radius: 4px;
-                font-size: 12px;
-                font-weight: 500;
-            }
-            .status.pending {
-                padding: 2px 4px;
-                background: #f9ca3f;
-                color: var(--white);
-                border-radius: 4px;
-                font-size: 12px;
-                font-weight: 500;
-            }
-            .status.process {
-                padding: 2px 4px;
-                background: #1795ce;
-                color: var(--white);
-                border-radius: 4px;
-                font-size: 12px;
-                font-weight: 500;
-            }
-            .status.cancel {
-                padding: 2px 4px;
-                background: #f00;
-                color: var(--white);
-                border-radius: 4px;
-                font-size: 12px;
-                font-weight: 500;
-            }
-
-            .details-admin .recentCustomers-admin {
-                position: relative;
-                min-height: 500px;
-                background: var(--white);
+            .profile-card {
+                background-color: white;
                 padding: 20px;
-                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-                border-radius: 20px;
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                width: 90%;
+                max-width: 800px;
+                margin: 40px 0;
             }
 
-            .details-admin .recentCustomers-admin .imgBx {
-                position: relative;
-                width: 40px;
-                height: 40px;
-                overflow: hidden;
-                border-radius: 50%;
+            .profile-section {
+                margin-bottom: 20px;
             }
 
-            .details-admin .recentCustomers-admin img {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
+            .profile-section h2 {
+                color: #1b3661;
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+                border-bottom: 2px solid #1b3661;
+                padding-bottom: 5px;
             }
 
-            .details-admin .recentCustomers-admin table tr td {
-                padding: 12px;
+            .profile-info {
+                margin-bottom: 15px;
             }
 
-            .details-admin .recentCustomers-admin table tr:hover {
-                background: var(--gray);
-                color: var(--black1);
+            .profile-info label {
+                display: block;
+                font-weight: bold;
+                color: lightseagreen;
+                margin-bottom: 5px;
             }
 
-            .details-admin .recentCustomers-admin table tr td h4 {
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 1.2rem;
-            }
-            .details-admin .recentCustomers-admin table tr td h4 span {
-                font-size: 14px;
-                color: var(--black2);
+            .profile-info p {
+                font-size: 1.1rem;
             }
 
-            @media (max-width: 991px) {
-                .navigation-admin {
-                    left: -300px;
-                }
-                .navigation-admin.active {
-                    width: 300px;
-                    left: 0;
-                }
-
-                .main-admin {
-                    width: 100%;
-                    left: 0;
-                }
-
-                .main-admin.active {
-                    width: calc(100% - 300px);
-                    left: 300px;
-                }
-                .cardBox-admin {
-                    grid-template-columns: repeat(2, 1fr);
-                }
+            .profile-info p span {
+                font-weight: bold;
             }
 
-            @media (max-width: 768px) {
-                .cardBox-admin {
-                    grid-template-columns: repeat(1, 1fr);
-                }
-
-                .chartsBx {
-                    grid-template-columns: repeat(1, 1fr);
-                }
-
-                .details-admin {
-                    grid-template-columns: repeat(1, 1fr);
-                }
+            button {
+                background-color: lightseagreen;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
             }
 
-            @media (max-width: 480px) {
-                .navigation-admin ul li a {
-                    font-size: 0.75rem;
-                }
+            button:hover {
+                background-color: #1b3661;
             }
+
+
         </style>
     </head>
     <body>
+        <!-- =============== Navigation ================ -->
         <div class="container">
             <div class="navigation-admin">
                 <ul>
                     <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="cube-outline"></ion-icon>
-                            </span>
-                            <span class="title">Brand Name</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
+                        <a href="userDBoard.jsp">
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
                             <span class="title">Dashboard</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="active" href="#">
+
+                    <li class="active">
+                        <a href="customer.jsp">
                             <span class="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
-                            <span class="title">Customers</span>
+                            <span class="title">Customers</span> 
                         </a>
                     </li>
+
                     <li>
-                        <a href="#">
+                        <a href="order.jsp">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
-                            <span class="title">Messages</span>
+                            <span class="title">Orders</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="#">
                             <span class="icon">
                                 <ion-icon name="help-outline"></ion-icon>
                             </span>
-                            <span class="title">Help</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="settings-outline"></ion-icon>
-                            </span>
-                            <span class="title">Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="lock-closed-outline"></ion-icon>
-                            </span>
-                            <span class="title">Password</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="log-out-outline"></ion-icon>
-                            </span>
-                            <span class="title">Sign Out</span>
+                            <span class="title">Messages</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <div class="main-admin">
-                <div class="topbar-admin">
-                    <div class="burger">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <div class="user">
-                        <img src="https://via.placeholder.com/40" />
-                    </div>
-                </div>
+            <!-- =============== Header ================ -->
+            <div class="header">
+                <h1>Admin Dashboard</h1>
+                <form id="logoutForm" method="post" action="UserServlet">
+                    <input type="hidden" name="action" value="log out">
+                    <a class="logout" href="#" onclick="document.getElementById('logoutForm').submit();">Log Out</a>
+                </form>
 
-                <!-- ======================= Cards ======================= -->
-                <div class="cardBox-admin">
-                    <div class="card">
-                        <div>
-                            <div class="numbers">1,504</div>
-                            <div class="cardName">Daily Views</div>
-                        </div>
-                        <div class="iconBx">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <div class="numbers">80</div>
-                            <div class="cardName">Sales</div>
-                        </div>
-                        <div class="iconBx">
-                            <ion-icon name="cart-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <div class="numbers">284</div>
-                            <div class="cardName">Comments</div>
-                        </div>
-                        <div class="iconBx">
-                            <ion-icon name="chatbubbles-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <div class="numbers">$7,842</div>
-                            <div class="cardName">Earning</div>
-                        </div>
-                        <div class="iconBx">
-                            <ion-icon name="cash-outline"></ion-icon>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ================ Order Details List ================= -->
-                <div class="details-admin">
-                    <div class="recentOrders-admin">
-                        <div class="cardHeader-amdin">
-                            <h2>Recent Orders</h2>
-                            <a href="#" class="btn">View All</a>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Price</td>
-                                    <td>Payment</td>
-                                    <td>Status</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Star Refrigerator</td>
-                                    <td>$1200</td>
-                                    <td>Paid</td>
-                                    <td><span class="status done">Delivered</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dell Laptop</td>
-                                    <td>$110</td>
-                                    <td>Due</td>
-                                    <td><span class="status pending">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Apple Watch</td>
-                                    <td>$1200</td>
-                                    <td>Paid</td>
-                                    <td><span class="status process">Processing</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Addidas Shoes</td>
-                                    <td>$620</td>
-                                    <td>Paid</td>
-                                    <td><span class="status done">Delivered</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Star Refrigerator</td>
-                                    <td>$1200</td>
-                                    <td>Paid</td>
-                                    <td><span class="status done">Delivered</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dell Laptop</td>
-                                    <td>$110</td>
-                                    <td>Due</td>
-                                    <td><span class="status pending">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Apple Watch</td>
-                                    <td>$1200</td>
-                                    <td>Paid</td>
-                                    <td><span class="status process">Processing</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Addidas Shoes</td>
-                                    <td>$620</td>
-                                    <td>Paid</td>
-                                    <td><span class="status done">Delivered</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- =========== New Customers List =============== -->
-                    <div class="recentCustomers-admin">
-                        <div class="cardHeader-admin">
-                            <h2>Recent Customers</h2>
-                        </div>
-                        <table>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        David
-                                        <br /><span>Italy</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Amit
-                                        <br /><span>India</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Karim
-                                        <br /><span>Morocco</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        David
-                                        <br /><span>Italy</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Amit
-                                        <br /><span>India</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Karim
-                                        <br /><span>Morocco</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        David
-                                        <br /><span>Italy</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Amit
-                                        <br /><span>India</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="60px">
-                                    <div class="imgBx">
-                                        <img src="https://via.placeholder.com/40" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>
-                                        Karim
-                                        <br /><span>Morocco</span>
-                                    </h4>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
             </div>
-        </div>
+
+            <div class="information">
+                <%
+                    // Allow access only if session exists
+                    String user = null;
+                    String pass = null;
+                    if (session.getAttribute("user") == null || session.getAttribute("pass") == null) {
+                        response.sendRedirect("index.jsp");
+                    } else {
+                        user = (String) session.getAttribute("user");
+                        pass = (String) session.getAttribute("pass");
+                    }
+
+                    String userName = null;
+                    String sessionID = null;
+                    Cookie[] cookies = request.getCookies();
+                    if (cookies != null) {
+                        for (Cookie cookie : cookies) {
+                            if (cookie.getName().equals("user")) userName = cookie.getValue();
+                            if (cookie.getName().equals("JSESSIONID")) sessionID = cookie.getValue();
+                            if (cookie.getName().equals("pass")) pass = cookie.getValue();
+                        }
+                    } else {
+                        sessionID = session.getId();
+                    }
+
+                    if (session != null) {
+                        String sessionUser = (String) session.getAttribute("user");
+                        String sessionPass = (String) session.getAttribute("pass");
+                        if (sessionUser != null && sessionPass != null) {
+                            userName = sessionUser;
+                            pass = sessionPass;
+                        }
+                    }
+                    
+                    UserDB userDB = new UserDB();
+                    User users = userDB.getUsers(userName, pass);
+                    
+                    if (users != null) {
+                %>
+                <div class="profile-card">
+                    <!-- Hiển thị session ID, username, và các thông tin khác -->
+                    <div>
+                        <h1>Thông tin tài khoản:</h1>
+                        <div class="profile-info">
+                            <label>Username:</label>
+                            <p><span><%= userName %></span></p>
+                        </div>
+                        <div class="profile-info">
+                            <label>Password:</label>
+                            <p>
+                                <span id="passwordDisplay">********</span>
+                                <button onclick="togglePassword()">Show</button>
+                                <button id="changePasswordLink" onclick="changePassword()">Change Password</button>
+                            </p>
+                        </div>
+
+                        <div class="profile-info">
+                            <label>Email:</label>
+                            <p><span><%= users.getEmail() %></span></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h1>THông tin cá nhân:</h1>
+                        <div class="profile-info">
+                            <label>Họ:</label>
+                            <p><span><%= users.getlName() %></span></p>
+                        </div>
+                        <div class="profile-info">
+                            <label>Tên:</label>
+                            <p><span><%= users.getfName() %></span></p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <% } else { %>
+                <!-- Trường hợp không tìm thấy người dùng -->
+                <div class="information">
+                    <h2>Hello <%= userName %>, Login successful.</h2>
+                    <p>User information not found.</p>
+                </div>
+                <% } %>
+            </div>
+
+            <script>
+                function togglePassword() {
+                    var passwordField = document.getElementById('passwordDisplay');
+                    var button = event.target;
+                    var changePasswordLink = document.getElementById('changePasswordLink');
+
+                    if (passwordField.innerHTML === "********") {
+                        passwordField.innerHTML = "<%= pass %>";
+                        button.textContent = "Hide";
+                        changePasswordLink.style.display = 'inline'; // Hiển thị link
+                    } else {
+                        passwordField.innerHTML = "********";
+                        button.textContent = "Show";
+                        changePasswordLink.style.display = 'none'; // Ẩn link
+                    }
+                }
+
+                // Hàm chuyển hướng đến trang thay đổi mật khẩu
+                document.getElementById('changePasswordLink').onclick = function () {
+                    window.location.href = 'changePassword.jsp'; // Thay thế đường dẫn này bằng đường dẫn tới trang thay đổi mật khẩu của bạn
+                };
+            </script>
+
+
     </body>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </html>
