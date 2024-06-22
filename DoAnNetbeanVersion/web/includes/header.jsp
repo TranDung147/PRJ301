@@ -7,7 +7,7 @@
                 <h3 class="col-md-2">QTALD</h3>
 
                 <form class="search-bar col-md-6 row" action="hotelPage1.jsp">
-                    <input class="col-md-8" type="text" placeholder="Tìm kiếm" />
+                    <input class="col-md-8 headsearch" type="text" placeholder="Tìm kiếm" />
                     <button class="col-md-3 submitbut" type="submit">Search</button>
                 </form>
 
@@ -69,19 +69,32 @@
                             </div>
                         </form>
                     </div>
-
+                    <div class="menu-container">
+                        <button class="buthidden" id="menu-button">Menu</button>
+                    </div>
                 </div>
-
             </div>
 
             <div class="botfloor nav-links text-center custom-nav">
-                <nav class="nav justify-content-center">
+
+                <nav class="nav justify-content-center" id="hidden-buttons">
                     <a class="nav-link active" href="index.jsp">Trang chủ</a>
                     <a class="nav-link" href="flight.jsp">Chuyến bay</a>
                     <a class="nav-link" href="hotel.jsp">Khách sạn</a>
                     <a class="nav-link" href="planePage1.jsp">Thuê xe</a>
-                    <a class="nav-link" href="#">Địa điểm tham quan</a>
+                    <a class="nav-link" href="#">Tham quan</a>
                     <a class="nav-link" href="#">Taxi sân bay</a>
                 </nav>
             </div>
     </header>
+
+    <script>
+        document.getElementById('menu-button').addEventListener('click', function () {
+            var hiddenButtons = document.getElementById('hidden-buttons');
+            if (hiddenButtons.style.display === 'none' || hiddenButtons.style.display === '') {
+                hiddenButtons.style.display = 'flex';
+            } else {
+                hiddenButtons.style.display = 'none';
+            }
+        });
+    </script>

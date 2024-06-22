@@ -1,3 +1,6 @@
+/*--------------------NOTE--------------------
+sec3 cần phải sửa lại , khó modified media queries được
+*/
 /*--------------------HEADER--------------------*/
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -10,13 +13,14 @@ body {
     max-width: 1600px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 15px; /* Added padding to ensure no overflow */
-    padding-right: 15px; /* Added padding to ensure no overflow */
+    padding-left: 15px;
+    padding-right: 15px;
     box-sizing: border-box; /* Ensures padding is included in the width */
 }
 
 header {
-    position: sticky;
+    position: absolute; /*sticky*/
+    width: 100%;
     padding-left: 3%;
     padding-right: 3%;
     top: 0;
@@ -77,6 +81,7 @@ header button:hover {
 }
 
 .upfloor {
+    padding-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -125,16 +130,66 @@ header button:hover {
     background-color: #fffdfd54;
 }
 
-/* Ensures no horizontal scrollbar on small screens */
-@media (max-width: 768px) {
-    .upfloor, .botfloor .nav {
-        margin-left: 0;
-        margin-right: 0;
+@media only screen and (min-width: 1024px) and (max-width: 1254px){
+
+    header .log{
+        padding-left: 0px;
     }
-    .botfloor a {
-        margin-left: 0.5%;
-        margin-right: 0.5%;
+
+    .botfloor a{
+        width: 15%;
+        text-align: center;
     }
+    
+    .buthidden{
+        display: none;
+    }
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
+    .headsearch{
+        width: 100%;
+    }
+
+    header .log{
+        padding-left: 4%;
+    }
+
+    .botfloor a{
+        width: 15%;
+        display: flex;            /* Sử dụng Flexbox */
+        align-items: center;      /* Căn giữa theo chiều dọc */
+        justify-content: center;  /* Căn giữa theo chiều ngang (nếu cần) */
+        text-align: center;       /* Căn giữa văn bản (thường không cần thiết khi dùng flex) */
+        padding: 0 10px;          /* Khoảng cách giữa nội dung và biên */
+    }
+    
+    .buthidden{
+        display: none;
+    }
+
+}
+
+@media only screen and (min-width: 425px) and (max-width: 767px){
+    
+    header h3{
+        text-align: center; 
+    }
+    
+    header .log{
+        margin-top: 12px;
+        margin-bottom: 0;
+        padding: 0;
+        justify-content: flex-start;
+        margin-left: 5%;
+    }
+    
+    .menu-container{
+        width: 50px;
+    }
+    
 }
 
 /*--------------------LOGIN LOGOUT--------------------*/
@@ -161,7 +216,7 @@ header button:hover {
 
 /* Set a style for all buttons */
 .logmodal button {
-    background-color: #04AA6D;
+    background-color: #1b3661;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -234,20 +289,27 @@ header button:hover {
     cursor: pointer;
 }
 
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    .logmodal span.psw {
-        display: block;
-        float: none;
+@media only screen and (min-width: 1024px) and (max-width: 1254px){
+
+    .modal-content{
+        padding-left:2%;
+        padding-right: 2%;
     }
-    .logmodal .cancelbtn {
-        width: 100%;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
+    .modal-content{
+        padding-left:1%;
+        padding-right: 1%;
     }
+
 }
 
 /*--------------------BODY--------------------*/
 
 .container-body {
+
     max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
@@ -257,6 +319,10 @@ header button:hover {
 
 }
 /*--------------------1--------------------*/
+.sec1{
+    margin-top: 137px;
+}
+
 .carousel-item img {
     height: 530px;
     object-fit: cover;
@@ -390,6 +456,14 @@ header button:hover {
     border-radius: 10px;
 }
 
+.willing form .diadiem{
+    margin-left: 0;
+}
+
+.willing form .diadiem option{
+    margin-left: 0;
+}
+
 .willing form p{
     text-align: left;
     color: #6dBFE2;
@@ -407,15 +481,44 @@ header button:hover {
     transition: all .3s ease;
 }
 
-.buttonlol{
-    text-align: center;
+.buttonlol {
+    display: flex;
+    justify-content: center; /* Căn giữa nút */
+    align-items: center; /* Căn giữa theo trục dọc */
+    width: 100%; /* Đảm bảo div chiếm toàn bộ chiều rộng cha */
     padding-top: 30px;
+}
+
+.nottub {
+    flex-grow: 1; /* Nút sẽ chiếm hết không gian có thể trong div */
+    padding: 10px; /* Khoảng cách bên trong nút */
+    font-size: 1rem; /* Kích thước văn bản co dãn theo kích thước của div */
 }
 
 .willing form button:hover{
     background-color: transparent;
     border: 1px solid #6dBFE2;
     color: #6dBFE2;
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1254px){
+    .willing img{
+        height: 500px;
+        width: 300px;
+        border-radius: 5px;
+    }
+
+    .willing .sec5form{
+        width: 120px;
+    }
+
+    .buttonlol {
+        padding-top: 10px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
 }
 
 /*--------------------Section 6--------------------*/
@@ -520,7 +623,7 @@ header button:hover {
 
 /*--------------------FOOTER--------------------*/
 #footer {
-    padding: 70px 0;
+    padding-top: 20px;
     background-color: #1b3661;
     color: #ffffff;
     text-align: left;
@@ -577,37 +680,6 @@ header button:hover {
     border-radius: 10%;
     background-color: #ffffff;
     padding: 5px;
-}
-
-@media only screen and (max-width: 749px) {
-
-    
-    .main-footer {
-        padding: 20px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .info {
-        padding: 20px 0;
-    }
-}
-
-@media (max-width: 480px) {
-
-    
-    .main-footer {
-        grid-template-columns: 1fr;
-    }
-
-    .sociallogos {
-        padding: 20px 0;
-    }
-
-    .com {
-        padding: 20px 0;
-    }
-
 }
 
 /*--------------------???--------------------*/
