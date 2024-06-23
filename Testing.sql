@@ -1,4 +1,4 @@
-create database DoAnDatabase
+﻿create database DoAnDatabase
 use DoAnDatabase
 -- Create table Employee
 CREATE TABLE Employee (
@@ -25,10 +25,12 @@ CREATE TABLE Users (
     CreatedAt DATE DEFAULT GETDATE()
 );
 
--- Create table Plane
-CREATE TABLE Plane (
+--Sửa lại plane
+CREATE TABLE Plane(
     PlaneID CHAR(6) PRIMARY KEY,
-    PlaneName NVARCHAR(50)		,
+    PlaneName NVARCHAR(50),
+    Airline NVARCHAR(50),
+    ImageFileName NVARCHAR(100), -- Thay thế trường ImageUrl bằng ImageFileName
     NoSeat INT CHECK (NoSeat > 0)
 );
 
@@ -137,18 +139,34 @@ CREATE TABLE Transactions (
 	FOREIGN KEY (RoomBookingID) REFERENCES Booking_Room(RoomBookingID)
 );
 
-INSERT INTO Plane (PlaneID, PlaneName, NoSeat)
-VALUES 
-('PL0001', 'Boeing 737', 180),
-('PL0002', 'Airbus A320', 160),
-('PL0003', 'Boeing 777', 396),
-('PL0004', 'Airbus A380', 853),
-('PL0005', 'Boeing 747', 410),
-('PL0006', 'Embraer 190', 114),
-('PL0007', 'Bombardier CRJ900', 90),
-('PL0008', 'Cessna 172', 4),
-('PL0009', 'Gulfstream G650', 18),
-('PL0010', 'Boeing 787', 242);
+
+
+INSERT INTO Plane(PlaneID, PlaneName, Airline, ImageFileName, NoSeat)
+VALUES
+    ('PL0001', 'Boeing 737', 'Boeing', 'boeing737.jpg', 180),
+    ('PL0002', 'Airbus A320', 'Airbus', 'airbusa320.jpg', 160),
+    ('PL0003', 'Boeing 777', 'Boeing', 'boeing777.jpg', 396),
+    ('PL0004', 'Airbus A380', 'Airbus', 'airbusa380.jpg', 853),
+    ('PL0005', 'Boeing 747', 'Boeing', 'boeing747.jpg', 410),
+    ('PL0006', 'Embraer 190', 'Embraer', 'embraer190.jpg', 114),
+    ('PL0007', 'Bombardier CRJ900', 'Bombardier', 'bombardiercrj900.jpg', 90),
+    ('PL0008', 'Cessna 172', 'Cessna', 'cessna172.jpg', 4),
+    ('PL0009', 'Gulfstream G650', 'Gulfstream', 'gulfstreamg650.jpg', 18),
+    ('PL0010', 'Boeing 787', 'Boeing', 'boeing787.jpg', 242),
+    ('PL0011', 'Airbus A321', 'Airbus', 'airbusa321.jpg', 185),
+    ('PL0012', 'Boeing 767', 'Boeing', 'boeing767.jpg', 375),
+    ('PL0013', 'Airbus A330', 'Airbus', 'airbusa330.jpg', 335),
+    ('PL0014', 'Boeing 737 MAX', 'Boeing', 'boeing737max.jpg', 210),
+    ('PL0015', 'Bombardier Q400', 'Bombardier', 'bombardierq400.jpg', 76),
+    ('PL0016', 'Cessna Citation X', 'Cessna', 'cessnacitationx.jpg', 12),
+    ('PL0017', 'Embraer ERJ145', 'Embraer', 'embraererj145.jpg', 50),
+    ('PL0018', 'Airbus A350', 'Airbus', 'airbusa350.jpg', 325),
+    ('PL0019', 'Boeing 757', 'Boeing', 'boeing757.jpg', 295),
+    ('PL0020', 'Bombardier Global 7500', 'Bombardier', 'bombardierglobal7500.jpg', 19),
+    ('PL0021', 'Embraer E175', 'Embraer', 'embraere175.jpg', 88),
+    ('PL0022', 'Gulfstream G500', 'Gulfstream', 'gulfstreamg500.jpg', 19),
+    ('PL0023', 'Airbus A220', 'Airbus', 'airbusa220.jpg', 140),
+    ('PL0024', 'Boeing 787-10', 'Boeing', 'boeing78710.jpg', 318);
 
 
 INSERT INTO Hotel (HotelID, HotelName, HotelAddress, Description, ProductImage, City, Country)
@@ -209,7 +227,55 @@ VALUES
 ('US0010', 'jmiller', 'hashed_pwd10', 'jmiller@example.com', 'Jack', 'Miller', '707 Walnut St, Hilltown', '0123456789', '1987-10-30', GETDATE(), 'User');
 
 
+INSERT INTO Room (RoomID, HotelID, RoomNumber, RoomType, IsAvailable)
+VALUES
+    ('RM0001', 'HT0001', '101', 'Single', 1),
+    ('RM0002', 'HT0001', '102', 'Double', 1),
+    ('RM0003', 'HT0002', '201', 'Single', 1),
+    ('RM0004', 'HT0002', '202', 'Double', 1),
+    ('RM0005', 'HT0003', '301', 'Single', 1),
+    ('RM0006', 'HT0003', '302', 'Double', 1),
+    ('RM0007', 'HT0004', '401', 'Single', 1),
+    ('RM0008', 'HT0004', '402', 'Double', 1),
+    ('RM0009', 'HT0005', '501', 'Single', 1),
+    ('RM0010', 'HT0005', '502', 'Double', 1),
+    ('RM0011', 'HT0006', '601', 'Single', 1),
+    ('RM0012', 'HT0006', '602', 'Double', 1),
+    ('RM0013', 'HT0007', '701', 'Single', 1),
+    ('RM0014', 'HT0007', '702', 'Double', 1),
+    ('RM0015', 'HT0008', '801', 'Single', 1),
+    ('RM0016', 'HT0008', '802', 'Double', 1),
+    ('RM0017', 'HT0009', '901', 'Single', 1),
+    ('RM0018', 'HT0009', '902', 'Double', 1),
+    ('RM0019', 'HT0010', '1001', 'Single', 1),
+    ('RM0020', 'HT0010', '1002', 'Double', 1);
+
+INSERT INTO Seat (SeatID, PlaneID, SeatNumber, SeatType, IsAvailable)
+VALUES
+    ('ST0001', 'PL0001', 1, 'Normal', 1),
+    ('ST0002', 'PL0001', 2, 'Normal', 1),
+    ('ST0003', 'PL0002', 1, 'Normal', 1),
+    ('ST0004', 'PL0002', 2, 'Normal', 1),
+    ('ST0005', 'PL0003', 1, 'Normal', 1),
+    ('ST0006', 'PL0003', 2, 'Normal', 1),
+    ('ST0007', 'PL0004', 1, 'Normal', 1),
+    ('ST0008', 'PL0004', 2, 'Normal', 1),
+    ('ST0009', 'PL0005', 1, 'Normal', 1),
+    ('ST0010', 'PL0005', 2, 'Normal', 1),
+    ('ST0011', 'PL0006', 1, 'Normal', 1),
+    ('ST0012', 'PL0006', 2, 'Normal', 1),
+    ('ST0013', 'PL0007', 1, 'Normal', 1),
+    ('ST0014', 'PL0007', 2, 'Normal', 1),
+    ('ST0015', 'PL0008', 1, 'Normal', 1),
+    ('ST0016', 'PL0008', 2, 'Normal', 1),
+    ('ST0017', 'PL0009', 1, 'Normal', 1),
+    ('ST0018', 'PL0009', 2, 'Normal', 1),
+    ('ST0019', 'PL0010', 1, 'Normal', 1),
+    ('ST0020', 'PL0010', 2, 'Normal', 1);
 
 
 
-
+	-- Đặt IsAvailable thành 1 (true) cho phòng có RoomID là RM0001
+UPDATE Room
+SET IsAvailable = 1
+WHERE RoomID = 'RM0001';

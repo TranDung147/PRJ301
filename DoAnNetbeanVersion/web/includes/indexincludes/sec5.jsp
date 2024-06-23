@@ -16,10 +16,10 @@
               </div>
             </div>
           </div>
-          <form class="col-md-4" action="">
+          <form class="sec5form col-md-4" action="">
             <h1>Điểm đến cần tìm</h1>
             <p>Điểm đến:</p>
-            <select name="" id="">
+            <select class="diadiem">
               <option value="#">--Chọn địa điểm--</option>
               <option value="">Hồ Chí Minh</option>
               <option value="">Đà Nẵng</option>
@@ -33,7 +33,7 @@
             <p>Ngày về:</p>
             <input type="date" />
             <div class="buttonlol">
-            <button type="submit">Tìm kiếm</button>
+            <button type="submit nottub">Tìm kiếm</button>
             </div>
           </form>
         </div>

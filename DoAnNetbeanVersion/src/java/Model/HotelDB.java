@@ -136,11 +136,11 @@ public class HotelDB implements DatabaseInfo {
         ArrayList<Hotel> list = new ArrayList<Hotel>();//vì cái trả về là một danh sách nên lưu và truyền nó ở dạng arraylist
 
         try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("Select HotelID, HotelName, HotelAddress, Description, City, Country from Hotel");
+            PreparedStatement stmt = con.prepareStatement("Select HotelID, HotelName, HotelAddress, Description, productImage, City, Country from Hotel");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(new Hotel(rs.getString(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getString(6)));
+                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)));
             }
             con.close();
             return list;

@@ -1,337 +1,772 @@
-<%-- 
-    Document   : userDBoard
-    Created on : Jun 16, 2024, 2:57:18 PM
-    Author     : NOMNOM
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<style>
-    header {
-        position: relative;
-    }
 
-    .containerus {
-        display: flex;
-        height: 100vh;
-        width: 100%;
-    }
-
-    .sidebar {
-        width: 250px;
-        background-color: #2c3e50;
-        color: white;
-        padding: 20px;
-    }
-
-    .logo {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .sidebar nav ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .sidebar nav ul li {
-        margin: 20px 0;
-    }
-
-    .sidebar nav ul li a {
-        color: white;
-        text-decoration: none;
-        display: block;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .sidebar nav ul li a:hover, .sidebar nav ul li.active a {
-        background-color: #1abc9c;
-        color: white;
-    }
-
-    .main-content {
-        flex: 1;
-        padding: 20px;
-        background-color: white;
-        overflow-y: auto;
-    }
-
-    .main-content header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .main-content header input {
-        padding: 10px;
-        width: 300px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    .profile {
-        display: flex;
-        align-items: center;
-    }
-
-    .profile img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
-    .dashboard h2 {
-        margin: 0 0 20px 0;
-    }
-
-    .cards {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .card {
-        background-color: #ecf0f1;
-        padding: 20px;
-        border-radius: 5px;
-        text-align: center;
-        flex: 1;
-        margin: 0 10px;
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-    .card:hover {
-        background-color: #bdc3c7;
-        transform: scale(1.05);
-    }
-
-    .card h3 {
-        margin: 0;
-    }
-
-    .tours {
-        margin-top: 20px;
-    }
-
-    .tour {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        transition: background-color 0.3s;
-    }
-
-    .tour:hover {
-        background-color: #ecf0f1;
-    }
-
-    .tour img {
-        width: 60px;
-        height: 60px;
-        border-radius: 5px;
-        margin-right: 20px;
-    }
-
-    .tour-info h4 {
-        margin: 0 0 5px 0;
-    }
-
-    .tour-info p {
-        margin: 0;
-        color: #777;
-    }
-
-    .section {
-        display: none;
-    }
-
-    .section.active {
-        display: block;
-    }
-
-    .profile-details {
-        width: 100%;
-        max-width: 1500px;
-        margin: 0 auto;
-        text-align: left;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-    }
-
-    .profile-details img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
-
-    .profile-details h3 {
-        margin: 10px 0;
-    }
-
-    .profile-details p {
-        margin: 10px 0;
-        color: #555;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    .profile-details p strong {
-        display: inline-block;
-        width: 200px;
-    }
-    .eye-button {
-        padding: 5px;
-        font-size: 16px;
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        outline: none;
-    }
-
-    .eye-button:hover {
-        color: #333; /* Màu của con mắt khi di chuột qua */
-    }
-
-    .eye-button::selection {
-        background-color: transparent; /* Ẩn hiệu ứng chọn văn bản khi click */
-    }
-    .password-container {
-        display: flex;
-        align-items: center; /* Canh chính mật khẩu và nút con mắt theo chiều dọc */
-    }
-
-    .password-container p {
-        margin-right: 10px; /* Tạo khoảng cách giữa mật khẩu và nút con mắt */
-    }
-
-</style>
-<div class="containerus">
-    <aside class="sidebar">
-        <div class="logo">
-            <h2>Tour Booking</h2>
-        </div>
-        <nav>
-            <ul>
-                <li class="active"><a href="#" data-target="dashboard">Dashboard</a></li>
-                <li><a href="#" data-target="available-tours">Available Tours</a></li>
-                <li><a href="#" data-target="booked-tours">Booked Tours</a></li>
-                <li><a href="#" data-target="profile">Profile</a></li>
-                <li><a href="#" data-target="messages">Messages</a></li>
-                <li><a href="#" data-target="help">Help</a></li>
-            </ul>
-        </nav>
-    </aside>
-    <main class="main-content">
-        <section id="dashboard" class="section active">
-            <h2>Dashboard</h2>
-            <div class="cards">
-                <div class="card">
-                    <h3>Available Tours</h3>
-                </div>
-                <div class="card">
-                    <h3>Booked Tours</h3>
-                </div>
-                <div class="card">
-                    <h3>Profile</h3>
-                </div>
-            </div>
-        </section>
-        <section id="available-tours" class="section">
-            <h2>Available Tours</h2>
-            <div class="tours">
-                <div class="tour">
-                    <img src="tour1.jpg" alt="Tour Picture">
-                    <div class="tour-info">
-                        <h4>Beach Paradise</h4>
-                        <p>7 days - $2000</p>
-                    </div>
-                </div>
-                <div class="tour">
-                    <img src="tour2.jpg" alt="Tour Picture">
-                    <div class="tour-info">
-                        <h4>Mountain Adventure</h4>
-                        <p>5 days - $1500</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section id="booked-tours" class="section">
-            <h2>Booked Tours</h2>
-            <!-- Booked tours content goes here -->
-        </section>
-        <section id="profile" class="section">
-            <h2>Profile</h2>
-            <div class="profile-details">
-                <img src="profile.jpg" alt="Profile Picture">
-                <%
-                    // Truy xuất đối tượng User từ request scope
-                    User user = (User) request.getAttribute("user");
-
-                    // Kiểm tra xem đối tượng User có tồn tại hay không
-                    if (user != null) {
-                %>
-                <!-- Hiển thị thông tin người dùng -->
-                <h3><%= user.getUsername() %></h3>
-                <p><strong>Username:</strong> <%= user.getUsername() %></p>
-                <p><strong>Email:</strong> <%= user.getEmail() %></p>
-                <%
-                    } else {
-                        // Không có đối tượng User trong request
-                        out.println("<p>User not found</p>");
-                    }
-                %>
-            </div>
-        </section>
-
-    </main>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const navLinks = document.querySelectorAll('.sidebar nav ul li a');
-        const sections = document.querySelectorAll('.section');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                // Remove active class from all links
-                navLinks.forEach(link => link.parentElement.classList.remove('active'));
-
-                // Add active class to the clicked link
-                link.parentElement.classList.add('active');
-
-                // Hide all sections
-                sections.forEach(section => section.classList.remove('active'));
-
-                // Show the targeted section
-                const target = link.getAttribute('data-target');
-                document.getElementById(target).classList.add('active');
-            });
-        });
-
-        const togglePasswordButton = document.getElementById('togglePassword');
-        const passwordInput = document.querySelector('.password-container input');
-
-        let passwordVisible = false;
-
-        togglePasswordButton.addEventListener('click', () => {
-            passwordVisible = !passwordVisible;
-            if (passwordVisible) {
-                passwordInput.type = 'text'; // Hiển thị mật khẩu
-                togglePasswordButton.innerHTML = '&#x1F441;'; // Hiển thị mắt mở
-            } else {
-                passwordInput.type = 'password'; // Ẩn mật khẩu
-                togglePasswordButton.innerHTML = '&#x1F440;'; // Hiển thị mắt đóng
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard</title>
+        <style>
+            /* Nhớ thay đổi khi ghép code */
+            /* =============== Globals ============== */
+            * {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-        });
-    });
-</script>
+
+            :root {
+                --blue: #1b3661;
+                --white: #fff;
+                --gray: #f5f5f5;
+                --black1: #222;
+                --black2: #999;
+            }
+
+            body {
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            .container {
+                position: relative;
+                width: 100%;
+            }
+
+            /* =============== Navigation ================ */
+            .navigation-admin {
+                position: fixed;
+                width: 300px;
+                height: 100%;
+                background: var(--blue);
+                border-left: 10px solid var(--blue);
+                transition: 0.5s;
+                overflow: hidden;
+            }
+            .navigation-admin.active {
+                width: 80px;
+            }
+
+            .navigation-admin ul {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding-top: 70px;
+            }
+
+            .navigation-admin ul li {
+                position: relative;
+                width: 100%;
+                list-style: none;
+                border-top-left-radius: 30px;
+                border-bottom-left-radius: 30px;
+            }
+
+            .navigation-admin ul li:hover,
+            .navigation-admin ul li.hovered {
+                background-color: var(--white);
+            }
+
+            .navigation-admin ul li a {
+                position: relative;
+                display: block;
+                width: 100%;
+                display: flex;
+                text-decoration: none;
+                color: var(--white);
+            }
+            .navigation-admin ul li:hover a,
+            .navigation-admin ul li.hovered a {
+                color: var(--blue);
+            }
+
+            .navigation-admin ul li a .icon {
+                position: relative;
+                display: block;
+                min-width: 60px;
+                height: 60px;
+                line-height: 75px;
+                text-align: center;
+            }
+            .navigation-admin ul li a .ion-icon .icon {
+                font-size: 1.75rem;
+            }
+
+            .navigation-admin ul li a .title {
+                position: relative;
+                display: block;
+                padding: 0 10px;
+                height: 60px;
+                line-height: 60px;
+                text-align: start;
+                white-space: nowrap;
+            }
+
+            /* --------- curve outside ---------- */
+            .navigation-admin ul li:hover a::before,
+            .navigation-admin ul li.hovered a::before {
+                content: "";
+                position: absolute;
+                right: 0;
+                top: -50px;
+                width: 50px;
+                height: 50px;
+                background-color: transparent;
+                border-radius: 50%;
+                box-shadow: 35px 35px 0 10px var(--white);
+                pointer-events: none;
+            }
+            .navigation-admin ul li:hover a::after,
+            .navigation-admin ul li.hovered a::after {
+                content: "";
+                position: absolute;
+                right: 0;
+                bottom: -50px;
+                width: 50px;
+                height: 50px;
+                background-color: transparent;
+                border-radius: 50%;
+                box-shadow: 35px -35px 0 10px var(--white);
+                pointer-events: none;
+            }
+
+            /* ===================== Main ===================== */
+            .main-admin {
+                position: absolute;
+                width: calc(100% - 300px);
+                left: 300px;
+                min-height: 100vh;
+                background: var(--white);
+                transition: 0.5s;
+            }
+            .main-admin.active {
+                width: calc(100% - 80px);
+                left: 80px;
+            }
+
+            .topbar-admin {
+                width: 100%;
+                height: 60px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right;
+                padding: 0 20px;
+            }
+
+            .burger div {
+                width: 30px;
+                height: 4px;
+                background-color: #000;
+                margin: 5px;
+                border-radius: 20%;
+            }
+
+            /* ======================= Cards ====================== */
+            .cardBox-admin {
+                position: relative;
+                width: 100%;
+                padding: 20px;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-gap: 30px;
+            }
+
+            .cardBox-admin .card {
+                position: relative;
+                background: var(--white);
+                padding: 30px;
+                border-radius: 20px;
+                display: flex;
+                justify-content: space-between;
+                cursor: pointer;
+                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+            }
+
+            .cardBox-admin .card .numbers {
+                position: relative;
+                font-weight: 500;
+                font-size: 2.5rem;
+                color: var(--blue);
+            }
+
+            .cardBox-admin .card .cardName {
+                color: var(--black2);
+                font-size: 1.1rem;
+                margin-top: 5px;
+            }
+
+            .cardBox-admin .card .iconBx {
+                font-size: 3.5rem;
+                color: var(--black2);
+            }
+
+            .cardBox-admin .card:hover {
+                background: var(--blue);
+            }
+            .cardBox-admin .card:hover .numbers,
+            .cardBox-admin .card:hover .cardName,
+            .cardBox-admin .card:hover .iconBx {
+                color: var(--white);
+            }
+
+            /* ================== Charts JS ============== */
+            .chartsBx {
+                position: relative;
+                width: 100%;
+                padding: 20px;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                grid-gap: 30px;
+            }
+
+            .chartsBx .chart {
+                position: relative;
+                background: #fff;
+                padding: 20px;
+                width: 100%;
+                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+                border-radius: 20px;
+                border: 1px solid var(--blue);
+            }
+
+            /* ================== Order Details List ============== */
+            .details-admin {
+                width: 100%;
+                padding: 20px;
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                grid-gap: 30px;
+            }
+            .details-admin .recentOrders-admin {
+                position: relative;
+                min-height: 500px;
+                background: var(--white);
+                padding: 20px;
+                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+                border-radius: 20px;
+            }
+            .details-admin .cardHeader-amdin {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+            .cardHeader-amdin h2 {
+                font-weight: 600;
+                color: var(--blue);
+            }
+
+            .actions-admin a {
+                text-decoration: none;
+                color: var(--black1);
+            }
+
+            .actions-admin a:hover {
+                color: gray;
+            }
+            .cardHeader-amdin .btn {
+                position: relative;
+                padding: 5px 10px;
+                background: var(--blue);
+                text-decoration: none;
+                color: var(--white);
+                border-radius: 6px;
+            }
+            .details-admin table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+            .details-admin table thead td {
+                font-weight: 600;
+            }
+            .details-admin .recentOrders-admin table tr {
+                color: var(--black1);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            .details-admin .recentOrders-admin table tr:last-child {
+                border-bottom: none;
+            }
+            .details-admin .recentOrders-admin table tbody tr:hover {
+                background: var(--gray);
+                color: var(--black);
+            }
+            .details-admin .recentOrders-admin table tr td {
+                padding: 10px;
+            }
+            .details-admin .recentOrders-admin table tr td:last-child {
+                text-align: end;
+            }
+            .details-admin .recentOrders-admin table tr td:nth-child(2) {
+                text-align: center;
+            }
+            .details-admin .recentOrders-admin table tr td:nth-child(3) {
+                text-align: center;
+            }
+            .status.done {
+                padding: 2px 4px;
+                background: #8de02c;
+                color: var(--white);
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 500;
+            }
+            .status.processing {
+                padding: 2px 4px;
+                background: #e9b10a;
+                color: var(--white);
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 500;
+            }
+            .status.canceled {
+                padding: 2px 4px;
+                background: #f00;
+                color: var(--white);
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .recentCustomers-admin {
+                position: relative;
+                min-height: 500px;
+                padding: 20px;
+                background: var(--white);
+                box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+                border-radius: 20px;
+            }
+            .recentCustomers-admin .imgBx {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                border-radius: 50px;
+                overflow: hidden;
+            }
+            .recentCustomers-admin .imgBx img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .recentCustomers-admin table tr td {
+                padding: 12px 10px;
+            }
+            .recentCustomers-admin table tr td h4 {
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 1.2rem;
+            }
+            .recentCustomers-admin table tr td h4 span {
+                font-size: 14px;
+                color: var(--black2);
+            }
+            .recentCustomers-admin table tr:hover {
+                background: var(--gray);
+                color: var(--black1);
+            }
+            .recentCustomers-admin table tr:hover td h4 span {
+                color: var(--black2);
+            }
+
+            /* ====================== Responsive Design ========================== */
+            @media (max-width: 991px) {
+                .navigation {
+                    left: -300px;
+                }
+                .navigation.active {
+                    width: 300px;
+                    left: 0;
+                }
+                .main {
+                    width: 100%;
+                    left: 0;
+                }
+                .main.active {
+                    left: 300px;
+                }
+                .cardBox {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .details {
+                    grid-template-columns: 1fr;
+                }
+                .recentOrders {
+                    overflow-x: auto;
+                }
+                .status.inProgress {
+                    white-space: nowrap;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .cardBox {
+                    grid-template-columns: repeat(1, 1fr);
+                }
+                .cardHeader h2 {
+                    font-size: 20px;
+                }
+                .user {
+                    min-width: 40px;
+                }
+                .navigation {
+                    width: 100%;
+                    left: -100%;
+                    z-index: 1000;
+                }
+                .navigation.active {
+                    width: 100%;
+                    left: 0;
+                }
+                .toggle {
+                    z-index: 10001;
+                }
+                .main.active .toggle {
+                    color: #fff;
+                    position: fixed;
+                    right: 0;
+                    left: initial;
+                }
+            }
+            @media only screen and (max-width: 425px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            height: auto;
+        }
+
+        .main-content {
+            padding: 10px;
+        }
+
+        .main-content header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .main-content header input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .profile img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .cards {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .card {
+            margin: 10px 0;
+        }
+
+        .tour {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tour img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .profile-details {
+            padding: 10px;
+        }
+
+        .profile-details img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .profile-details p strong {
+            width: 100%;
+        }
+
+        .eye-button {
+            font-size: 14px;
+            padding: 2px;
+        }
+
+        .password-container {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .password-container p {
+            margin: 0 0 5px 0;
+        }
+    }
+        </style>
+    </head>
+    <body>
+        <!-- =============== Navigation ================ -->
+        <div class="container">
+            <div class="navigation-admin">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </span>
+                            <span class="title">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="people-outline"></ion-icon>
+                            </span>
+                            <span class="title">Customers</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="chatbubble-outline"></ion-icon>
+                            </span>
+                            <span class="title">Orders</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <span class="icon">
+                                <ion-icon name="help-outline"></ion-icon>
+                            </span>
+                            <span class="title">Messages</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- ========================= Main ==================== -->
+            <div class="main-admin">
+                <div class="topbar-admin">
+                    <div class="burger">
+                        <div class="line1"></div>
+                        <div class="line2"></div>
+                        <div class="line3"></div>
+                    </div>
+                </div>
+                <!-- ======================= Cards ================== -->
+                <div class="cardBox-admin">
+                    <div class="card">
+                        <div>
+                            <div class="numbers">1,504</div>
+                            <div class="cardName">Daily Views</div>
+                        </div>
+
+                        <div class="iconBx">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div>
+                            <div class="numbers">80</div>
+                            <div class="cardName">Orders</div>
+                        </div>
+
+                        <div class="iconBx">
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div>
+                            <div class="numbers">284</div>
+                            <div class="cardName">Comments</div>
+                        </div>
+
+                        <div class="iconBx">
+                            <ion-icon name="chatbubbles-outline"></ion-icon>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div>
+                            <div class="numbers">$7,842</div>
+                            <div class="cardName">Earning</div>
+                        </div>
+
+                        <div class="iconBx">
+                            <ion-icon name="cash-outline"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================ Add Charts JS ================= -->
+                <div class="chartsBx">
+                    <div class="chart"><canvas id="chart-1"></canvas></div>
+                    <div class="chart"><canvas id="chart-2"></canvas></div>
+                </div>
+
+                <!-- ================ Order Details List ================= -->
+                <div class="details-admin">
+                    <div class="recentOrders-admin">
+                        <div class="cardHeader-amdin">
+                            <h2>Recent Orders</h2>
+                            <a href="#" class="btn">View All</a>
+                        </div>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Price</td>
+                                    <td>Actions</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>Phòng Tổng Thống</td>
+                                    <td>$1000</td>
+                                    <td class="actions-admin">
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                    <td><span class="status done">Done</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Phòng VIP</td>
+                                    <td>$500</td>
+                                    <td class="actions-admin">
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                    <td><span class="status processing">Processing</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Phòng Đôi Thường</td>
+                                    <td>$1200</td>
+                                    <td class="actions-admin">
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                    <td><span class="status canceled">Canceled</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Phòng Đơn</td>
+                                    <td>$1200</td>
+                                    <td class="actions-admin">
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                    <td><span class="status done">Done</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Phòng Tổng Thống</td>
+                                    <td>$110</td>
+                                    <td class="actions-admin">
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                    </td>
+                                    <td><span class="status processing">Processing</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- ================= New Customers ================ -->
+                    <div class="recentCustomers-admin">
+                        <div class="cardHeader-admin">
+                            <h2>Recent Customers</h2>
+                        </div>
+
+                        <table>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="assets/imgs/customer02.jpg" alt="" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Huynh Dinh Thien <br />
+                                        <span>Phòng Tổng Thống</span>
+                                    </h4>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="assets/imgs/customer01.jpg" alt="" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Bui Le Viet Anh <br />
+                                        <span>Phòng Thường Đôi</span>
+                                    </h4>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="assets/imgs/customer02.jpg" alt="" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Dinh Nguyen Khanh Luan <br />
+                                        <span>Phòng Thường Đôi</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="assets/imgs/customer02.jpg" alt="" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Pham Le Minh Quan <br />
+                                        <span>Phòng VIP1</span>
+                                    </h4>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="60px">
+                                    <div class="imgBx">
+                                        <img src="assets/imgs/customer01.jpg" alt="" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <h4>
+                                        Tran Trung Dung <br />
+                                        <span>Phòng VIP2</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+        <script src="assets/js/chartsJS.js"></script>
+    </body>
+</html>

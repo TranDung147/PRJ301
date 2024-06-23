@@ -47,6 +47,32 @@ public class UserDB implements DatabaseInfo {
         return user;
     }
 
+    public User getUsers(String username, String password) {
+        User user = null;
+        String query = "select Username, Pass, FName , LName , UserID, Email from Users where Username =?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // String id = rs.getString("UserId");
+                username = rs.getString(1);
+                password = rs.getString(2);
+                String fName = rs.getString(3);
+                String lName = rs.getString(4);
+                String id = rs.getString(5);
+                String email = rs.getString(6);
+                user = new User(id, username, password, email, fName, lName);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return user;
+    }
+
 //--------------------------------------------------------------------------------------------
     // Phương thức để lấy ID lớn nhất hiện có
     public String getMaxUserId() {
@@ -125,7 +151,75 @@ public class UserDB implements DatabaseInfo {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    // Kiểm tra mật khẩu
+    public boolean checkPassword(String username, String password) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean isValid = false;
 
+        try {
+            con = getConnect();
+            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Nếu có kết quả từ cơ sở dữ liệu, tức là mật khẩu đúng
+                isValid = true;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return isValid;
+    }
+
+    // Hàm đổi mật khẩu
+    public boolean changePassword(String username, String newPassword) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        boolean success = false;
+
+        try {
+            con = getConnect(); // DBConnection là lớp để lấy kết nối tới cơ sở dữ liệu
+            String query = "UPDATE users SET password = ? WHERE username = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, newPassword);
+            ps.setString(2, username);
+
+            int result = ps.executeUpdate();
+            if (result > 0) {
+                // Nếu có ít nhất một dòng bị ảnh hưởng, tức là cập nhật thành công
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return success;
+    }
+
+    
 //-----------------------------------------------------------------------------------
 //
 //    public static Users updateUser(Users user) {
@@ -176,7 +270,6 @@ public class UserDB implements DatabaseInfo {
 //        }
 //        return res;
 //    }
-
 //    public static ArrayList<Users> listAllUsers() {
 //        ArrayList<Users> list = new ArrayList<>();
 //        String query = "SELECT UserId, username, password FROM Users";

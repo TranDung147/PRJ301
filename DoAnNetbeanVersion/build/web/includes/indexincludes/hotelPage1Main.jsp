@@ -1,6 +1,33 @@
 
-<%@page import="java.sql.*, Model.DatabaseInfo, Model.Hotel"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.Hotel"%>
+<%@page import="Model.HotelDB"%>
+<%@page import="java.sql.*"%>
+<%@page import="Model.DatabaseInfo"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    HttpSession sessionObj = request.getSession(false); // Lấy session hiện tại, không tạo mới nếu chưa có
+
+    // Kiểm tra nếu session không tồn tại hoặc không có thuộc tính username
+    if (sessionObj == null || sessionObj.getAttribute("user") == null) {
+        // Nếu không có session hoặc không có thông tin đăng nhập, chuyển hướng về trang đăng nhập
+        response.sendRedirect("index.jsp");
+    }
+%>
+<style>
+    
+    .cc {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%; /* Ensure the container height is defined or relies on content */
+    }
+    .btn {
+        /* Additional button styling */
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+</style>
 <main class="mainH">  
     <div class="containerB">
         <div class="row">
@@ -106,60 +133,27 @@
                     </div>
                 </div>
 
-                <!-- Your product list -->
+                <!-- Product list -->
                 <div class="product-list">
-                    <%
-                        Connection conn = null;
-                        Statement stmt = null;
-                        ResultSet rs = null;
-                        
-                        try {
-                            Class.forName(DatabaseInfo.DRIVERNAME);
-                            conn = DriverManager.getConnection(DatabaseInfo.DBURL, DatabaseInfo.USERDB, DatabaseInfo.PASSDB);
-                            stmt = conn.createStatement();
-                             String sql = "SELECT * FROM Hotel ORDER BY HotelID OFFSET 0 ROWS FETCH NEXT 12 ROWS ONLY"; // Sử dụng tên bảng thực tế của bạn
-                            rs = stmt.executeQuery(sql);
-
-                            if (!rs.isBeforeFirst()) {
-                                out.println("<p>No hotels found.</p>");
-                            } else {
-                                while (rs.next()) {
-                                    String hotelId = rs.getString("HotelID");
-                                    String hotelName = rs.getString("HotelName");
-                                    String hotelAddress = rs.getString("HotelAddress");
-                                    String hotelDescription = rs.getString("Description");
-                                    String productImage = rs.getString("ProductImage");
-                                    String city = rs.getString("City");
-                                    String country = rs.getString("Country");
-
-                                    Hotel hotel = new Hotel();
-                                    hotel.setHotelId(hotelId);
-                                    hotel.setHotelName(hotelName);
-                                    hotel.setHotelAddress(hotelAddress);
-                                    hotel.setHotelDescription(hotelDescription);
-                                    hotel.setProductImage(productImage);
-                                    hotel.setCity(city);
-                                    hotel.setCountry(country);
+                    <% ArrayList<Hotel> hotels = HotelDB.listAll();
+                       if (hotels == null || hotels.isEmpty()) {
+                           out.println("<p>No hotels found.</p>");
+                       } else {
+                           for (Hotel hotel : hotels) {
                     %>
                     <div class="cols product location">
-                        <img class="image images" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getHotelName() %>">
-                        <h4><%= hotel.getHotelName() %></h4>
-                        <p><span>Địa chỉ:</span> <%= hotel.getHotelAddress() %></p>
-                        <p><span>Mô tả:</span> <%= hotel.getHotelDescription() %></p>
-                        <p><span>Thành phố:</span> <%= hotel.getCity() %></p>
-                        <p><span>Quốc gia:</span> <%= hotel.getCountry() %></p>
+                        <form action="roomServlet" method="post">
+                            <input type="hidden" name="hotelID" value="<%= hotel.getHotelId() %>">
+                            <img class="image images" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getProductImage() %>">
+                            <h4><%= hotel.getHotelName() %></h4>
+                            <p><span>Địa chỉ:</span> <%= hotel.getHotelAddress() %>, <%= hotel.getCountry() %></p>
+                            <div class="cc">
+                                <button class="btn bg-primary text-white mx-auto xemphongbut" type="submit">Xem phòng</button>
+                            </div>
+                        </form>
                     </div>
-                    <%
-                                }
-                            }
-                        } catch (Exception e) {
-                            out.println("<p>Error: " + e.getMessage() + "</p>");
-                            e.printStackTrace();
-                        } finally {
-                            if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
-                            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-                            if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-                        }
+                    <%     }
+                           }
                     %>
                 </div>
             </div>

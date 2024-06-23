@@ -125,17 +125,7 @@ header button:hover {
     background-color: #fffdfd54;
 }
 
-/* Ensures no horizontal scrollbar on small screens */
-@media (max-width: 768px) {
-    .upfloor, .botfloor .nav {
-        margin-left: 0;
-        margin-right: 0;
-    }
-    .botfloor a {
-        margin-left: 0.5%;
-        margin-right: 0.5%;
-    }
-}
+
 
 /*--------------------LOGIN LOGOUT--------------------*/
 
@@ -234,16 +224,7 @@ header button:hover {
     cursor: pointer;
 }
 
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    .logmodal span.psw {
-        display: block;
-        float: none;
-    }
-    .logmodal .cancelbtn {
-        width: 100%;
-    }
-}
+
 
 /*--------------------BODY--------------------*/
 
@@ -579,35 +560,7 @@ header button:hover {
     padding: 5px;
 }
 
-@media only screen and (max-width: 749px) {
 
-    
-    .main-footer {
-        padding: 20px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
 
-    .info {
-        padding: 20px 0;
-    }
-}
-
-@media (max-width: 480px) {
-
-    
-    .main-footer {
-        grid-template-columns: 1fr;
-    }
-
-    .sociallogos {
-        padding: 20px 0;
-    }
-
-    .com {
-        padding: 20px 0;
-    }
-
-}
 
 /*--------------------???--------------------*/
