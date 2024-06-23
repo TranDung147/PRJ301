@@ -1,3 +1,12 @@
+window.onload = function() {
+    var modal = document.getElementById('id01');
+    var errorMessage = document.getElementById('errorMessage').innerText;
+    
+    if (errorMessage && errorMessage.trim() !== "") {
+        modal.style.display = 'block';
+    }
+};
+
 var modal = document.getElementById('id01');
 var modal2 = document.getElementById('id02');
 

@@ -17,7 +17,7 @@
 
                     <button class="loginout col-md-5" onclick="document.getElementById('id01').style.display = 'block'" style="width:auto;">Log In</button>
 
-                    <div id="id01" class="logmodal">
+                    <div id="id01" class="logmodal" style="display: none;">
 
                         <form class="modal-content animate" action="UserServlet" method="post">
                             <div class="topmodal">
@@ -32,9 +32,8 @@
 
                                 <label for="psw"><b>Password</b></label>
                                 <input type="password" placeholder="Enter Password" name="psw" required>
-
+                                <p id="errorMessage" style="color:red;">${errorMessage}</p>
                                 <button type="submit" name="action" value="login">Login</button>
-
                             </div>
 
                             <div class="logcontainer">
