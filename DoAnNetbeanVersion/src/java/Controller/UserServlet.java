@@ -65,7 +65,7 @@ public class UserServlet extends HttpServlet {
 //            passCookie.setHttpOnly(true);
 //            userCookie.setSecure(true);
 //            passCookie.setSecure(true);
-        if (a != null) {
+        if (a != null && a.getPassword().equals(pass)) {
             if (a.getRole().equals("Admin")) {
                 // Admin login
                 HttpSession session = request.getSession();
@@ -98,23 +98,12 @@ public class UserServlet extends HttpServlet {
 
             } else {
                 // Invalid role, handle accordingly
-                response.sendRedirect("error.jsp");
+                
+
             }
         } else {
-            // User not found or invalid credentials
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/error.jsp");
-            PrintWriter out = response.getWriter();
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet studentServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<style>h3{color: red; text-align: center; position: relative;top:507px;}</style>");
-            out.println("<h3>Either user name or password is wrong. Try again!</h3>");
-            out.println("</body>");
-            out.println("</html>");
-            rd.include(request, response);
+            request.setAttribute("errorMessage", "Wrong username or password. Please try again");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
 
     }

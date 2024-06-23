@@ -3,13 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/userDBoard.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/index_user.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Model/User.java</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/includes/indexincludes/userDBoardMain.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Controller/UserDashboard.java</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/includes/header_user.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/Add.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/update.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/includes/doctype.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/UserDB.java</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/includes/body.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/includes/header_user.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/DatabaseInfo.java</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Controller/UserServlet.java</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/includes/header.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/src/java/Model/User.java</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/index_user.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/table_product.jsp</file>
+            <file>file:/C:/Users/PC%20STUDENT/OneDrive/Documents/GitHub/PRJ301/DoAnNetbeanVersion/web/assets/js/loginlogout.js</file>
         </group>
     </open-files>
 </project-private>
