@@ -1,14 +1,5 @@
 ﻿create database DoAnDatabase
 use DoAnDatabase
--- Create table Employee
-CREATE TABLE Employee (
-    EmpID CHAR(6) PRIMARY KEY,
-    EmpName NVARCHAR(100),
-    Address NVARCHAR(150),
-    Phone VARCHAR(11),
-    Birth DATE,
-    Gender NVARCHAR(6) CHECK (Gender IN ('Male', 'Female', 'Other'))
-);
 
 -- Create the Users table
 CREATE TABLE Users (
