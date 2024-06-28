@@ -34,6 +34,7 @@ public class RoomServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          String hotelID = request.getParameter("hotelID");
+         String hotelName = request.getParameter("hotelName");
     
     // Fetch the room data for the specified hotel
     List<Room> rooms = RoomDB.getRoomsByHotel(hotelID);
@@ -41,6 +42,7 @@ public class RoomServlet extends HttpServlet {
     // Store the room list and hotel ID in request attributes
     request.setAttribute("rooms", rooms);
     request.setAttribute("hotelID", hotelID);
+    request.setAttribute("hotelName", hotelName);
 
     // Forward to the JSP page
     request.getRequestDispatcher("roomDisplay.jsp").forward(request, response);

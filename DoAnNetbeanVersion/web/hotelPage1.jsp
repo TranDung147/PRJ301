@@ -170,6 +170,8 @@
                         <div class="cols product location">
                             <form action="roomServlet" method="post">
                                 <input type="hidden" name="hotelID" value="<%= hotel.getHotelId() %>">
+                                <input type="hidden" name="hotelName" value="<%= hotel.getHotelName() %>">
+                               
                                 <img class="image images" src="img/<%= hotel.getProductImage() %>" alt="<%= hotel.getProductImage() %>">
                                 <h4><%= hotel.getHotelName() %></h4>
                                 <p><span>Địa chỉ:</span> <%= hotel.getHotelAddress() %>, <%= hotel.getCountry() %></p>

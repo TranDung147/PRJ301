@@ -1,0 +1,231 @@
+ /* Nhớ thay đổi khi ghép code */
+ 
+ 
+        /* =============== Globals ============== */
+        * {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue: #1b3661;
+            --white: #fff;
+            --gray: #f5f5f5;
+            --black1: #222;
+            --black2: #999;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-color: var(--gray);
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+        }
+
+        /* =============== Navigation ================ */
+        .navigation-admin {
+            position: fixed;
+            width: 300px;
+            height: 100%;
+            background: var(--blue);
+            border-left: 10px solid var(--blue);
+            transition: 0.5s;
+            overflow: hidden;
+        }
+        .navigation-admin.active {
+            width: 80px;
+        }
+
+        .navigation-admin ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding-top: 70px;
+        }
+
+        .navigation-admin ul li {
+            position: relative;
+            width: 100%;
+            list-style: none;
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+        }
+
+        .navigation-admin ul li:hover,
+        .navigation-admin ul li.hovered,
+        .navigation-admin ul li.active {
+            background-color: var(--white);
+        }
+
+        .navigation-admin ul li a {
+            position: relative;
+            display: block;
+            width: 100%;
+            display: flex;
+            text-decoration: none;
+            color: var(--white);
+        }
+        .navigation-admin ul li:hover a,
+        .navigation-admin ul li.hovered a,
+        .navigation-admin ul li.active a {
+            color: var(--blue);
+        }
+
+        .navigation-admin ul li a .icon {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            height: 60px;
+            line-height: 75px;
+            text-align: center;
+        }
+        .navigation-admin ul li a .ion-icon .icon {
+            font-size: 1.75rem;
+        }
+
+        .navigation-admin ul li a .title {
+            position: relative;
+            display: block;
+            padding: 0 10px;
+            height: 60px;
+            line-height: 60px;
+            text-align: start;
+            white-space: nowrap;
+        }
+
+        /* --------- curve outside ---------- */
+        .navigation-admin ul li:hover a::before,
+        .navigation-admin ul li.hovered a::before,
+        .navigation-admin ul li.active a::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -50px;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 35px 35px 0 10px var(--white);
+            pointer-events: none;
+        }
+        .navigation-admin ul li:hover a::after,
+        .navigation-admin ul li.hovered a::after,
+        .navigation-admin ul li.active a::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: -50px;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 35px -35px 0 10px var(--white);
+            pointer-events: none;
+        }
+
+        /* =============== Header ================ */
+        .header {
+            margin-left: 300px;
+            padding: 20px;
+            background-color: lightseagreen;
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+        }
+
+        .header .logout {
+            font-size: 1rem;
+            color: var(--white);
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid var(--white);
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .header .logout:hover {
+            background-color: var(--white);
+            color: var(--blue);
+        }
+
+        /* =============== Information Section ================ */
+        .information {
+            margin-left: 300px;
+            padding: 20px;
+            background-color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .information h2 {
+            margin-bottom: 20px;
+            color: var(--blue);
+        }
+
+        .profile-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 800px;
+            margin: 40px 0;
+        }
+
+        .profile-section {
+            margin-bottom: 20px;
+        }
+
+        .profile-section h2 {
+            color: #1b3661;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #1b3661;
+            padding-bottom: 5px;
+        }
+
+        .profile-info {
+            margin-bottom: 15px;
+        }
+
+        .profile-info label {
+            display: block;
+            font-weight: bold;
+            color: lightseagreen;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            font-size: 1.1rem;
+        }
+
+        .profile-info p span {
+            font-weight: bold;
+        }
+
+        button {
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #1b3661;
+        }

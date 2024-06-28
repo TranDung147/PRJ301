@@ -92,6 +92,7 @@ CREATE TABLE Room (
 	HotelID CHAR(6),
     RoomNumber VARCHAR(10) UNIQUE,
     RoomType VARCHAR(50),
+	capacity INT,
 	DateBook DATE,
     IsAvailable BIT DEFAULT 1,
     FOREIGN KEY (HotelID) REFERENCES Hotel(HotelID)
