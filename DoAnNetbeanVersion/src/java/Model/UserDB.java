@@ -22,38 +22,17 @@ public class UserDB implements DatabaseInfo {
         return null;
     }
 
-    public User getUser(String username, String password) {
-        User user = null;
-        String query = "select Username, Pass, Role , UserID, Email from Users where Username =?";
 
-        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                // String id = rs.getString("UserId");
-                username = rs.getString(1);
-                password = rs.getString(2);
-                String role = rs.getString(3);
-                String id = rs.getString(4);
-                String email = rs.getString(5);
-                user = new User(username, password, role, email, id);
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return user;
-    }
     
     public User getUsers(String username, String password) {
         User user = null;
-        String query = "select Username, Pass, FName , LName , UserID, Email from Users where Username =?";
+        String query = "select Username, Pass, FName , LName , UserID, Email, Phone, Address, Sex, DateOfBirth, MoneyLeft "
+                + "from Users where Username =? and Pass=? ";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
 
             stmt.setString(1, username);
+            stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -64,7 +43,13 @@ public class UserDB implements DatabaseInfo {
                 String lName = rs.getString(4);
                 String id = rs.getString(5);
                 String email = rs.getString(6);
-                user = new User(id, username, password, email, fName, lName);
+                String phone = rs.getString(7);
+                String address = rs.getString(8);
+                String sex = rs.getString(9);
+                String DOB = rs.getString(10);
+                String money = rs.getString(11);
+                String role = "User";
+                user = new User(id, username, password, email, role, fName, lName, address, phone, sex, DOB, money);
             }
 
         } catch (Exception ex) {
@@ -153,29 +138,27 @@ public class UserDB implements DatabaseInfo {
     }
 
 //-----------------------------------------------------------------------------------
-//
-//    public static Users updateUser(Users user) {
-//        String query = "UPDATE Users SET username=?, password=? WHERE UserId=?";
-//
-//        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-//
-//            stmt.setString(1, user.getUsername());
-//            stmt.setString(2, user.getPassword());
-//            stmt.setString(3, user.getUserId());
-//
-//            int rc = stmt.executeUpdate();
-//            if (rc == 0) {
-//                throw new SQLException("Update failed, no rows affected.");
-//            }
-//            return user;
-//
-//        } catch (Exception ex) {
-//            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-//            throw new RuntimeException("Invalid data");
-//        }
-//    }
-//
-////--------------------------------------------------------------------------------
+
+    public User updateUser(User user) {
+        String query = "UPDATE Users SET username=?, password=? WHERE UserId=?";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+
+            
+
+            int rc = stmt.executeUpdate();
+            if (rc == 0) {
+                throw new SQLException("Update failed, no rows affected.");
+            }
+            return user;
+
+        } catch (Exception ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Invalid data");
+        }
+    }
+
+//--------------------------------------------------------------------------------
 //    public static int deleteUser(String userId) {
 //        String query = "DELETE FROM Users WHERE UserId=?";
 //

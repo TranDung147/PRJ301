@@ -44,6 +44,9 @@ public class UserServlet extends HttpServlet {
             case "signup":
                 handleSignUp(request, response);
                 break;
+            case "db":
+                handleDashBoard(request, response);
+                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -56,7 +59,7 @@ public class UserServlet extends HttpServlet {
         String pass = request.getParameter("psw");
 
         UserDB db = new UserDB();
-        User a = db.getUser(user, pass);
+        User a = db.getUsers(user, pass);
 
         if (a != null && a.getPassword().equals(pass)) {
             if (a.getRole().equals("Admin")) {
@@ -139,6 +142,22 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }
+    
+    private void handleDashBoard(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("user");
+        String password = (String) session.getAttribute("pass");
+      
+        UserDB userDB = new UserDB();
+        User user = userDB.getUsers(username, password);
+       
+        request.setAttribute("user", user);
+     
+        RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
+        dispatcher.forward(request, response);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -156,5 +175,7 @@ public class UserServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+ 
 
 }

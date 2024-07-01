@@ -42,7 +42,7 @@ public class UserDashboard extends HttpServlet {
 
         // Giả sử bạn có lớp UserDB để lấy thông tin người dùng
         UserDB userDB = new UserDB();
-        User user = userDB.getUser(username, password);
+        User user = userDB.getUsers(username, password);
 
         // Đặt đối tượng User vào request scope
         request.setAttribute("user", user);

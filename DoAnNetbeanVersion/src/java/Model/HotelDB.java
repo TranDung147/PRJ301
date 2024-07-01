@@ -5,9 +5,7 @@ import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
 import java.sql.*;
-
 import java.util.ArrayList;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -192,11 +190,11 @@ public class HotelDB implements DatabaseInfo {
     }
     //--------------------------------------------------------------------------------------------
 
-//    public static void main(String[] a) {
-//        ArrayList<Hotel> list = HotelDB.listAll();
-//        for (Hotel item : list) {
-//            System.out.println(item);
-//        }
-//    }
+    public static void main(String[] a) {
+        ArrayList<Hotel> list = HotelDB.listAll();
+        for (Hotel item : list) {
+            System.out.println(item);
+        }
+    }
 //---------------------------------------------------------------------------
 }
