@@ -13,9 +13,8 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
-       
+        <link href="assets/css/headerfooter.css" rel="stylesheet" />
         <link href="assets/css/roomDisplay.css" rel="stylesheet" />
-         <link href="assets/css/headerfooter.css" rel="stylesheet" />
     </head>
 
     <body>
@@ -39,9 +38,9 @@
                                 <label class="sr-only">Room Type: </label><br>
                                 <!--Checkbox example-->
                                 <div class="checkbox-wrapper-30">
-                                    <label for="single">Single: </label>
+                                    <label for="single">Standard: </label>
                                     <span class="checkbox">
-                                        <input id="checkboxSingle" type="checkbox" onchange="filterRooms()" />
+                                        <input id="checkboxStandard" type="checkbox" onchange="filterRooms()" />
                                         <svg>
                                         <use xlink:href="#checkbox-30" class="checkbox"></use>
                                         </svg>
@@ -53,9 +52,9 @@
                                     </symbol>
                                     </svg>
 
-                                    <label for="double">Double: </label>
+                                    <label for="double">VIP: </label>
                                     <span class="checkbox">
-                                        <input id="checkboxDouble" type="checkbox" onchange="filterRooms()" />
+                                        <input id="checkboxVIP" type="checkbox" onchange="filterRooms()" />
                                         <svg>
                                         <use xlink:href="#checkbox-30" class="checkbox"></use>
                                         </svg>
@@ -73,13 +72,19 @@
                             <div class="form-inline">
                                 <form class="form-inline float-left" onsubmit="hideRoomsBeforeDate(event)">
                                     <div class="date-container mx-sm-3 mb-2">
-                                        <label for="inputDate" class="sr-only">Date:</label>
-                                        <input type="date" class="form-control" id="inputDate" placeholder="DD/MM/YYYY">
+                                        <label for="startDate" class="sr-only">Start Date:</label>
+                                        <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Start Date" required>
                                     </div>
+                                    <div class="date-container mx-sm-3 mb-2">
+                                        <label for="endDate" class="sr-only">End Date:</label>
+                                        <input type="date" class="form-control" id="endDate" name="endDate" placeholder="End Date" required>
+                                    </div>
+                                    <input type="hidden" id="hotelID" name="hotelID" value="${hotelID}"> <!-- Trường ẩn cho hotelID -->
                                     <button type="submit" class="btn btn-primary mb-2">Submit</button>
                                 </form>
                             </div>
                         </div>
+
                     </div>
                     <div class="room-container mt-3">
                         <div class="row">
@@ -90,7 +95,7 @@
                             %>
 
                             <div class="col-md-2 mb-3">
-                                <div class="room <%= roomClass %>" onclick="openModal('roomModal<%= room.getRoomID() %>')" data-room-type="<%= room.getRoomType() %>">
+                                <div class="room <%= roomClass %>" onclick="openModal('roomModal<%= room.getRoomID() %>')" data-room-type="<%= room.getRoomType() %>" data-room-id="<%= room.getRoomID() %>">
                                     <%= room.getRoomNumber() %>
                                 </div>
                             </div>
@@ -104,7 +109,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn-secondary" onclick="closeModal('roomModal<%= room.getRoomID() %>')">Close</button>
                                         <% if (room.getIsAvailable() == 1) { %>
-                                        <button type="button" class="btn-book" onclick="checkLoginAndBook('<%= room.getRoomID() %>')">Book</button>
+                                        <button type="button" class="btn-book" onclick="showBookingModal('<%= room.getRoomID() %>')">Book</button>
                                         <% } else { %>
                                         <button type="button" class="btn-book" disabled>Book</button>
                                         <% } %>
@@ -122,8 +127,29 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="bookingModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal('bookingModal')">&times;</span>
+                        <h5>Booking Details</h5>
+                        <form id="bookingForm" onsubmit="submitBooking(event)">
+                            <input type="hidden" id="bookingRoomID" name="roomID">
+                            <div class="form-group">
+                                <label for="checkInDate">Check-in Date:</label>
+                                <input type="date" id="checkInDate" name="checkInDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkOutDate">Check-out Date:</label>
+                                <input type="date" id="checkOutDate" name="checkOutDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </main>
+
 
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
@@ -142,17 +168,35 @@
                     }
                 }
 
-                function checkLoginAndBook(roomID) {
+                function showBookingModal(roomID) {
+                    document.getElementById('bookingRoomID').value = roomID;
+                    openModal('bookingModal');
+                }
+
+                function submitBooking(event) {
+                    event.preventDefault(); // Ngăn chặn form submit lại
+
+                    var form = document.getElementById('bookingForm');
+                    var roomID = document.getElementById('bookingRoomID').value;
+                    var checkInDate = document.getElementById('checkInDate').value;
+                    var checkOutDate = document.getElementById('checkOutDate').value;
+                    var hotelID = document.getElementById('hotelID').value; // Lấy hotelID từ trường ẩn
+
+                    // Kiểm tra login trước khi đặt phòng
+                    checkLoginAndBook(roomID, checkInDate, checkOutDate, hotelID);
+                }
+
+                function checkLoginAndBook(roomID, checkInDate, checkOutDate, hotelID) {
                     var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "CheckLoginServlet", true); // Assuming you have a SessionCheckServlet to handle session checking
+                    xhr.open("POST", "CheckLoginServlet", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200) {
                                 var response = JSON.parse(xhr.responseText);
                                 if (response.loggedIn) {
-                                    // If logged in, proceed to book the room
-                                    bookRoom(roomID);
+                                    // Nếu đã đăng nhập, tiến hành đặt phòng
+                                    bookRoom(roomID, checkInDate, checkOutDate, hotelID);
                                 } else {
                                     alert('You need login to book');
                                     window.location.href = 'index.jsp';
@@ -162,20 +206,20 @@
                             }
                         }
                     };
-                    xhr.send(); // No need to send any parameters for session check
+                    xhr.send();
                 }
 
-                function bookRoom(roomID) {
+                function bookRoom(roomID, checkInDate, checkOutDate, hotelID) {
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", "CartServlet", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200) {
-                                var response = JSON.parse(xhr.responseText); // Parse JSON response
+                                var response = JSON.parse(xhr.responseText);
                                 if (response.success) {
                                     alert("Room booked successfully.");
-                                    window.location.href = 'AddToCart.jsp'; // Redirect to confirmation page or appropriate URL
+                                    window.location.href = 'AddToCart.jsp';
                                 } else {
                                     alert("Booking failed. Please try again.");
                                 }
@@ -184,13 +228,13 @@
                             }
                         }
                     };
-                    xhr.send("roomID=" + roomID); // Send roomID as a POST parameter to CartServlet
+                    xhr.send("roomID=" + roomID + "&checkInDate=" + encodeURIComponent(checkInDate) + "&checkOutDate=" + encodeURIComponent(checkOutDate) + "&hotelID=" + encodeURIComponent(hotelID));
                 }
 
-                function filterRooms() {
-                    var singleChecked = document.getElementById('checkboxSingle').checked;
-                    var doubleChecked = document.getElementById('checkboxDouble').checked;
 
+                function filterRooms() {
+                    var singleChecked = document.getElementById('checkboxStandard').checked;
+                    var doubleChecked = document.getElementById('checkboxVIP').checked;
                     var rooms = document.querySelectorAll('.room');
                     rooms.forEach(function (room) {
                         var roomType = room.getAttribute('data-room-type');
@@ -198,43 +242,83 @@
 
                         if ((singleChecked && doubleChecked) && roomAvailable) {
                             room.style.display = 'flex';
-                        
-                        } else if ((singleChecked && roomType === 'Double') || (doubleChecked && roomType === 'Single')) {
+
+                        } else if ((singleChecked && roomType === 'VIP') || (doubleChecked && roomType === 'Standard')) {
                             room.style.display = 'none';
                         } else if (!roomAvailable) {
                             room.style.display = 'none';
                         } else {
                             room.style.display = 'flex';
-                            
-                        }
 
-                    }   
-                    );
-                }
-                    function hideRoomsBeforeDate(event) {
-                    event.preventDefault(); // Ngăn chặn form submit lại
-
-                    var inputDate = document.getElementById('inputDate').value; 
-                    var rooms = document.querySelectorAll('.room');
-
-    
-                    rooms.forEach(function (room) {
-                        var roomDate = room.getAttribute('data-room-date');
-
-                        if (roomDate && roomDate < inputDate) {
-                            room.style.display = 'none';
-                            room.classList.remove('room-available');
-                            room.classList.add('room-not-available');
                         }
                     });
                 }
+
+
+
+                function hideRoomsBeforeDate(event) {
+                    event.preventDefault();
+
+                    var startDate = document.getElementById('startDate').value;
+                    var endDate = document.getElementById('endDate').value;
+                    var hotelID = document.getElementById('hotelID').value;
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "CheckBookedServlet", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                console.log("Response:", response);
+
+                                var start = new Date(startDate);
+                                var end = new Date(endDate);
+
+                                var rooms = document.querySelectorAll('.room');
+                                rooms.forEach(function (room) {
+                                    var roomID = room.getAttribute('data-room-id');
+                                    var isBooked = response.bookings.some(function (booking) {
+                                        if (booking.roomID === roomID) {
+                                            var bookingStart = new Date(booking.checkInDate);
+                                            var bookingEnd = new Date(booking.checkOutDate);
+                                            return (bookingStart <= end && bookingEnd >= start);
+                                        }
+                                        return false;
+                                    });
+
+                                    if (isBooked) {
+                                        room.style.display = 'none';
+                                        room.classList.remove('room-available');
+                                        room.classList.add('room-not-available');
+                                    } else {
+                                        room.style.display = 'block'; // Hiển thị phòng nếu không bị đặt
+                                        room.classList.remove('room-not-available');
+                                        room.classList.add('room-available');
+                                    }
+                                });
+                            } else {
+                                console.error("Request failed with status: " + xhr.status + " " + xhr.statusText);
+                                alert("Failed to fetch booking dates. Please try again.");
+                            }
+                        }
+                    };
+
+                    xhr.send("hotelID=" + encodeURIComponent(hotelID));
+                }
+
+
+
 
                 window.openModal = openModal;
                 window.closeModal = closeModal;
                 window.bookRoom = bookRoom;
                 window.checkLoginAndBook = checkLoginAndBook;
+                window.showBookingModal = showBookingModal;
+                window.submitBooking = submitBooking;
                 window.filterRooms = filterRooms;
                 window.hideRoomsBeforeDate = hideRoomsBeforeDate;
+
             });
 
         </script>

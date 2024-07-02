@@ -7,18 +7,16 @@ public class BookingTicket implements Serializable {
     private String ticketBookingID;
     private String userID;
     private String totalPrice;
-    private String status;
     private String createdDate;
 
     // Constructors
     public BookingTicket() {
     }
 
-    public BookingTicket(String ticketBookingID, String userID, String totalPrice, String status, String createdDate) {
+    public BookingTicket(String ticketBookingID, String userID, String totalPrice, String createdDate) {
         this.ticketBookingID = ticketBookingID;
         this.userID = userID;
         this.totalPrice = totalPrice;
-        this.status = status;
         this.createdDate = createdDate;
     }
 
@@ -45,14 +43,6 @@ public class BookingTicket implements Serializable {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getCreatedDate() {

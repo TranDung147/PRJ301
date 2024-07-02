@@ -48,7 +48,6 @@ public class RoomDB implements DatabaseInfo {
 //        }
 //        return s;
 //    }
-    
     // Method to get room details by RoomID
     public static Room getRoom(String roomID) {
         Room room = null;
@@ -65,26 +64,26 @@ public class RoomDB implements DatabaseInfo {
         }
         return room;
     }
-    
+
     public static Room bookRoom(String roomID) {
-    Room bookedRoom = null;
-    try (Connection con = getConnect()) {
-        String updateQuery = "UPDATE Room SET IsAvailable = 0 WHERE RoomID = ?";
-        try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
-            updateStmt.setString(1, roomID);
-            int rowsUpdated = updateStmt.executeUpdate();
-            if (rowsUpdated > 0) {
-                Logger.getLogger(RoomDB.class.getName()).log(Level.INFO, "Room updated successfully for Room ID: " + roomID);
-                bookedRoom = getRoom(roomID); // Lấy thông tin phòng sau khi đã book thành công
-            } else {
-                Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "No rows updated for Room ID: " + roomID);
+        Room bookedRoom = null;
+        try (Connection con = getConnect()) {
+            String updateQuery = "UPDATE Room SET IsAvailable = 0 WHERE RoomID = ?";
+            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, roomID);
+                int rowsUpdated = updateStmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    Logger.getLogger(RoomDB.class.getName()).log(Level.INFO, "Room updated successfully for Room ID: " + roomID);
+                    bookedRoom = getRoom(roomID); // Lấy thông tin phòng sau khi đã book thành công
+                } else {
+                    Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "No rows updated for Room ID: " + roomID);
+                }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking room with ID: " + roomID, ex);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking room with ID: " + roomID, ex);
+        return bookedRoom;
     }
-    return bookedRoom;
-}
 
     // Method to get all rooms by HotelID
     public static List<Room> getRoomsByHotel(String hotelID) {
@@ -95,9 +94,9 @@ public class RoomDB implements DatabaseInfo {
             stmt.setString(1, hotelID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Room room = new Room(rs.getString("RoomID"), 
-                        rs.getInt("RoomNumber"), 
-                        rs.getString("RoomType"), 
+                Room room = new Room(rs.getString("RoomID"),
+                        rs.getInt("RoomNumber"),
+                        rs.getString("RoomType"),
                         rs.getInt("IsAvailable"));
                 roomList.add(room);
             }
@@ -106,7 +105,7 @@ public class RoomDB implements DatabaseInfo {
         }
         return roomList;
     }
-    
+
 //--------------------------------------------------------------------------------------------
 //
 //    public static int newHotel(Hotel s) {
@@ -127,7 +126,6 @@ public class RoomDB implements DatabaseInfo {
 //        return id;
 //    }
 //-----------------------------------------------------------------------------------
-
     public static Hotel update(Hotel hotel) {
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement("UPDATE Hotel SET HotelName=?, Description=?, HotelAddress=?, City=?, Country=? WHERE HotelID=?");

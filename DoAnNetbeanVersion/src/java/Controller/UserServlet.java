@@ -82,6 +82,7 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("pass", a.getPassword());
+                session.setAttribute("id",a.getUserID()); //added
                 session.setAttribute("role", "user");
 
                 session.setMaxInactiveInterval(30 * 60); // Session expiry

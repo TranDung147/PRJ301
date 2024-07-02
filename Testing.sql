@@ -50,7 +50,6 @@ CREATE TABLE Booking_Room (
     RoomBookingID CHAR(6) PRIMARY KEY,
     UserID CHAR(6),
     TotalPrice DECIMAL(10, 2),
-    Status VARCHAR(50),
 	CreatedDate DATE DEFAULT CAST(GETDATE() AS DATE),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
@@ -61,8 +60,8 @@ CREATE TABLE Booking_Room_Detail (
     RoomBookingID CHAR(6),
     RoomID CHAR(6),
     Price DECIMAL(10, 2),
-    DateFrom DATETIME,
-    DateTo DATETIME,
+    DateFrom DATE,
+    DateTo DATE,
     Status VARCHAR(50),
 	PRIMARY KEY (RoomID, RoomBookingID),
     FOREIGN KEY (RoomBookingID) REFERENCES Booking_Room(RoomBookingID),
@@ -106,7 +105,6 @@ CREATE TABLE Booking_Ticket (
     TicketBookingID CHAR(6) PRIMARY KEY,
 	UserID CHAR(6),
 	TotalPrice DECIMAL(10, 2),	
-	Status BIT DEFAULT 0,
 	CreatedDate DATE DEFAULT CAST(GETDATE() AS DATE),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
@@ -194,7 +192,60 @@ VALUES
     ('RM0017', 'HT0009', '901', 'VIP', 1),
     ('RM0018', 'HT0009', '902', 'Standard', 1),
     ('RM0019', 'HT0010', '1001', 'VIP', 1),
-    ('RM0020', 'HT0010', '1002', 'Standard', 1);
+    ('RM0020', 'HT0010', '1002', 'Standard', 1),
+    -- Hotel HT0009: 4 rooms
+    ('RM0021', 'HT0009', '901', 'Standard', 1),
+    ('RM0022', 'HT0009', '902', 'Double', 1),
+    ('RM0023', 'HT0009', '903', 'Suite', 1),
+    ('RM0024', 'HT0009', '904', 'Deluxe', 1),
+
+    -- Hotel HT0010: 3 rooms
+    ('RM0025', 'HT0010', '1001', 'Standard', 1),
+    ('RM0026', 'HT0010', '1002', 'VIP', 1),
+    ('RM0027', 'HT0010', '1003', 'VIP', 1),
+
+    -- Hotel HT0011: 2 rooms
+    ('RM0028', 'HT0011', '1101', 'Standard', 1),
+    ('RM0029', 'HT0011', '1102', 'VIP', 1),
+
+    -- Hotel HT0012: 1 room
+    ('RM0030', 'HT0012', '1201', 'Standard', 1),
+
+    -- Hotel HT0013: 4 rooms
+    ('RM0031', 'HT0013', '1301', 'Standard', 1),
+    ('RM0032', 'HT0013', '1302', 'VIP', 1),
+    ('RM0033', 'HT0013', '1303', 'VIP', 1),
+    ('RM0034', 'HT0013', '1304', 'VIP', 1),
+
+    -- Hotel HT0014: 3 rooms
+    ('RM0035', 'HT0014', '1401', 'Standard', 1),
+    ('RM0036', 'HT0014', '1402', 'VIP', 1),
+    ('RM0037', 'HT0014', '1403', 'VIP', 1),
+
+    -- Hotel HT0015: 2 rooms
+    ('RM0038', 'HT0015', '1501', 'Standard', 1),
+    ('RM0039', 'HT0015', '1502', 'VIP', 1),
+
+    -- Hotel HT0016: 1 room
+    ('RM0040', 'HT0016', '1601', 'Standard', 1),
+
+    -- Hotel HT0017: 4 rooms
+    ('RM0041', 'HT0017', '1701', 'Standard', 1),
+    ('RM0042', 'HT0017', '1702', 'VIP', 1),
+    ('RM0043', 'HT0017', '1703', 'VIP', 1),
+    ('RM0044', 'HT0017', '1704', 'VIP', 1),
+
+    -- Hotel HT0018: 3 rooms
+    ('RM0045', 'HT0018', '1801', 'Standard', 1),
+    ('RM0046', 'HT0018', '1802', 'VIP', 1),
+    ('RM0047', 'HT0018', '1803', 'VIP', 1),
+
+    -- Hotel HT0019: 2 rooms
+    ('RM0048', 'HT0019', '1901', 'Standard', 1),
+    ('RM0049', 'HT0019', '1902', 'VIP', 1),
+
+    -- Hotel HT0020: 1 room
+    ('RM0050', 'HT0020', '2001', 'Standard', 1);
 
 ----------------------------------------------------------------------------------------
 
@@ -259,5 +310,32 @@ VALUES
     ('ST0016', 'FL0008', 2, 'Standard', 1),
     ('ST0017', 'FL0009', 1, 'Standard', 1),
     ('ST0018', 'FL0009', 2, 'Standard', 1);
+
+-- Thêm dữ liệu vào bảng Booking_Room
+INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate)
+VALUES 
+('BR0001', 'US0001', 150.00, '2024-06-25'),
+('BR0002', 'US0002', 200.00, '2024-06-26');
+
+-- Thêm dữ liệu vào bảng Booking_Room_Detail
+INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status)
+VALUES 
+('BR0001', 'RM0001', 75.00, '2024-07-01', '2024-07-01', 'Confirmed'),
+('BR0001', 'RM0002', 75.00, '2024-07-01', '2024-07-01', 'Confirmed'),
+('BR0002', 'RM0003', 100.00, '2024-07-02', '2024-07-02', 'Pending');
+
+-- Thêm dữ liệu vào bảng Booking_Ticket
+INSERT INTO Booking_Ticket (TicketBookingID, UserID, TotalPrice, CreatedDate)
+VALUES 
+('BT0001', 'US0001', 50.00, '2024-06-25'),
+('BT0002', 'US0002', 100.00, '2024-06-26');
+
+-- Thêm dữ liệu vào bảng Booking_Ticket_Detail
+INSERT INTO Booking_Ticket_Detail (BookingTicketID, SeatID, Price, Status)
+VALUES 
+('BT0001', 'ST0001', 25.00, 'Confirmed'),
+('BT0001', 'ST0002', 25.00, 'Confirmed'),
+('BT0002', 'ST0003', 50.00, 'Pending'),
+('BT0002', 'ST0004', 50.00, 'Pending');
 
 
