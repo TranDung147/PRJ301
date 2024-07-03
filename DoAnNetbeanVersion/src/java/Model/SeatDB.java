@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SeatDB {
+public class SeatDB implements DatabaseInfo {
 
     public static Connection getConnect() {
         try {

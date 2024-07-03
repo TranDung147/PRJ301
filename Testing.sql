@@ -317,6 +317,13 @@ VALUES
 ('BR0001', 'US0001', 150.00, '2024-06-25'),
 ('BR0002', 'US0002', 200.00, '2024-06-26');
 
+INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate)
+VALUES
+('BR0003', 'US0001', 150.00, '2024-06-26')
+
+INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate)
+VALUES ('BR1234', 'US0001', 150.00, GETDATE());
+
 -- Thêm dữ liệu vào bảng Booking_Room_Detail
 INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status)
 VALUES 

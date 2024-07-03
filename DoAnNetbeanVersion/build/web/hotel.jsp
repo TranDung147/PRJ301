@@ -234,6 +234,7 @@
                         <div><img src="img/people.png" alt=""></div>
                         <div class="startht">
                             <select name="roomType" id="roomType">
+                                
                                 <option value="">Chọn loại phòng</option>
                                 <option value="VIP">Phòng đặc biệt</option>
                                 <option value="Standard">Phòng thường</option>

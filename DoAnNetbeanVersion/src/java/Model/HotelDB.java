@@ -221,11 +221,11 @@ public class HotelDB implements DatabaseInfo {
 }
     //--------------------------------------------------------------------------------------------
 
-    public static void main(String[] a) {
-        List<Hotel> list = HotelDB.getAvailableRooms("Suite");
-        for (Hotel item : list) {
-            System.out.println(item);
-        }
-    }
+//    public static void main(String[] a) {
+//        List<Hotel> list = HotelDB.getAvailableRooms("Suite");
+//        for (Hotel item : list) {
+//            System.out.println(item);
+//        }
+//    }
 //---------------------------------------------------------------------------
 }

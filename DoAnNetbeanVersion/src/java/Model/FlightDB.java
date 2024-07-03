@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlightDB {
+public class FlightDB implements DatabaseInfo{
 
     public static Connection getConnect() {
         try {

@@ -31,15 +31,6 @@
     <%@include file="includes/header_user.jsp" %>
     <% } %>
     
-    <%
-        HttpSession sessionObj = request.getSession(false); // Lấy session hiện tại, không tạo mới nếu chưa có
-
-        // Kiểm tra nếu session không tồn tại hoặc không có thuộc tính username
-        if (sessionObj == null || sessionObj.getAttribute("user") == null) {
-            // Nếu không có session hoặc không có thông tin đăng nhập, chuyển hướng về trang đăng nhập
-            response.sendRedirect("index.jsp");
-        }
-    %>
     <style>
 
         .cc {
@@ -168,7 +159,7 @@
                                for (Hotel hotel : hotels) {
                         %>
                         <div class="cols product location">
-                            <form action="roomServlet" method="post">
+                            <form action="roomServlet" method="get">
                                 <input type="hidden" name="hotelID" value="<%= hotel.getHotelId() %>">
                                 <input type="hidden" name="hotelName" value="<%= hotel.getHotelName() %>">
                                

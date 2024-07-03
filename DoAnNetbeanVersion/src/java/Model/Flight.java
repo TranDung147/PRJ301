@@ -26,6 +26,17 @@ public class Flight implements Serializable{
         this.noSeatLeft = noSeatLeft;
     }
 
+    public Flight(String flightID, String planeID, String dateStart, String dateEnd, String departureCity, String arrivalCity) {
+        this.flightID = flightID;
+        this.planeID = planeID;
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.departureCity = departureCity;
+        this.arrivalCity = arrivalCity;
+    }
+    
+    
+
     public String getNoSeatLeft() {
         return noSeatLeft;
     }

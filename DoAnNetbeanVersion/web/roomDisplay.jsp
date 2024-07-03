@@ -292,7 +292,7 @@
                                         room.classList.remove('room-available');
                                         room.classList.add('room-not-available');
                                     } else {
-                                        room.style.display = 'block'; // Hiển thị phòng nếu không bị đặt
+                                        room.style.display = 'flex'; // Hiển thị phòng nếu không bị đặt
                                         room.classList.remove('room-not-available');
                                         room.classList.add('room-available');
                                     }
