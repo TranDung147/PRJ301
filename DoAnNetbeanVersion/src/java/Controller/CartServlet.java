@@ -68,7 +68,7 @@ public class CartServlet extends HttpServlet {
         Room bookedRoom = RoomDB.bookRoom(roomID);
         if (bookedRoom != null) {
             String roomBookingID = AllBookingDB.insertBookingRoom(userID, null);
-            boolean isBookingDetailInserted = AllBookingDB.insertBookingRoomDetail(roomBookingID, roomID, null, checkInDate, checkOutDate, "Booked");
+            boolean isBookingDetailInserted = AllBookingDB.insertBookingRoomDetail(roomBookingID, roomID, null, checkInDate, checkOutDate, "Pending");
             sendBookingResponse(request, response, isBookingDetailInserted, bookedRoom, null, "Room booked successfully.", "Failed to insert booking detail.");
         } else {
             sendErrorResponse(response, "Room not found or already booked.");
@@ -79,8 +79,8 @@ public class CartServlet extends HttpServlet {
         Seat bookedSeat = SeatDB.bookSeat(seatID);
         if (bookedSeat != null) {
             try {
-                String seatBookingID = SeatDB.insertBookingSeat(userID, null, "1");
-                boolean isBookingDetailInserted = SeatDB.insertBookingTicketDetail(seatBookingID, seatID, null, "Booked");
+                String seatBookingID = SeatDB.insertBookingSeat(userID, null);
+                boolean isBookingDetailInserted = SeatDB.insertBookingTicketDetail(seatBookingID, seatID, null, "Pending");
                 List<BookingTicketDetail> bookingTicketDetails = AllBookingDB.getBookingTicketDetailsBySeatID(seatID);
                 sendBookingResponse(request, response, isBookingDetailInserted, bookedSeat, bookingTicketDetails, "Seat booked successfully.", "Failed to insert booking detail.");
             } catch (ParseException ex) {

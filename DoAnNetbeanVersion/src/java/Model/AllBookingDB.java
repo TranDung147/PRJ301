@@ -174,7 +174,7 @@ public class AllBookingDB implements DatabaseInfo {
     // Phương thức để chèn một booking mới vào cơ sở dữ liệu
     public static String insertBookingRoom(String userID, String totalPrice) {
         String roomBookingID = null;
-        String insertBookingRoomSQL = "INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, ?, GETDATE())";
+        String insertBookingRoomSQL = "INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, GETDATE())";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingRoomSQL)) {
             // Tạo roomBookingID mới dựa trên ID hiện tại hoặc ID nhỏ nhất bị thiếu
@@ -198,12 +198,16 @@ public class AllBookingDB implements DatabaseInfo {
             pstmt.setString(1, roomBookingID);
             pstmt.setString(2, roomID);
             pstmt.setString(3, price);
+            pstmt.setString(4, dateFrom);
+            pstmt.setString(5, dateTo);
+            
+                    
 
-            // Chuyển đổi chuỗi ngày thành java.sql.Timestamp
-            java.sql.Timestamp fromTimestamp = new java.sql.Timestamp(sdf.parse(dateFrom).getTime());
-            java.sql.Timestamp toTimestamp = new java.sql.Timestamp(sdf.parse(dateTo).getTime());
-            pstmt.setTimestamp(4, fromTimestamp);
-            pstmt.setTimestamp(5, toTimestamp);
+//            // Chuyển đổi chuỗi ngày thành java.sql.Timestamp
+//            java.sql.Timestamp fromTimestamp = new java.sql.Timestamp(sdf.parse(dateFrom).getTime());
+//            java.sql.Timestamp toTimestamp = new java.sql.Timestamp(sdf.parse(dateTo).getTime());
+//            pstmt.setTimestamp(4, fromTimestamp);
+//            pstmt.setTimestamp(5, toTimestamp);
 
             pstmt.setString(6, status);
 
@@ -211,11 +215,11 @@ public class AllBookingDB implements DatabaseInfo {
             return rowsAffected > 0; // Trả về true nếu có ít nhất một hàng bị ảnh hưởng
         } catch (SQLException e) {
             e.printStackTrace(); // In ra stack trace khi xảy ra lỗi SQL
-            return false;
-        } catch (ParseException e) {
-            e.printStackTrace(); // In ra stack trace khi xảy ra lỗi phân tích cú pháp
-            return false;
-        }
+            return false;}
+//        } catch (ParseException e) {
+//            e.printStackTrace(); // In ra stack trace khi xảy ra lỗi phân tích cú pháp
+//            return false;
+//        }
     }
 
     public List<java.sql.Date[]> getDateFromToDateByRoomBookingID(String roomBookingID) {

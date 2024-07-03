@@ -94,15 +94,14 @@ public class SeatDB implements DatabaseInfo {
         return bookedSeat;
     }
 
-    public static String insertBookingSeat(String userID, BigDecimal totalPrice, String status) {
+    public static String insertBookingSeat(String userID, String totalPrice) {
         String seatBookingID = null;
-        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, Status, CreatedDate) VALUES (?, ?, ?, ?, GETDATE())";
+        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, GETDATE())";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingSeatSQL)) {
             seatBookingID = generateUniqueBookingID();
             pstmt.setString(1, seatBookingID);
             pstmt.setString(2, userID);
-            pstmt.setBigDecimal(3, totalPrice);
-            pstmt.setString(4, status);
+            pstmt.setString(3, totalPrice);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error inserting booking seat: " + userID, e);
@@ -110,12 +109,12 @@ public class SeatDB implements DatabaseInfo {
         return seatBookingID;
     }
 
-    public static boolean insertBookingTicketDetail(String bookingTicketID, String seatID, BigDecimal price, String status) throws ParseException {
+    public static boolean insertBookingTicketDetail(String bookingTicketID, String seatID, String price, String status) throws ParseException {
         String insertBookingTicketDetailSQL = "INSERT INTO Booking_Ticket_Detail (BookingTicketID, SeatID, Price, Status) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingTicketDetailSQL)) {
             pstmt.setString(1, bookingTicketID);
             pstmt.setString(2, seatID);
-            pstmt.setBigDecimal(3, price);
+            pstmt.setString(3, price);
             pstmt.setString(4, status);
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;

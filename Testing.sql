@@ -187,17 +187,17 @@ VALUES
     ('RM0012', 'HT0006', '602', 'Standard', 1),
     ('RM0013', 'HT0007', '701', 'VIP', 1),
     ('RM0014', 'HT0007', '702', 'Standard', 1),
-    ('RM0015', 'HT0007', '703', 'VIP', 1),
-    ('RM0016', 'HT0007', '704', 'Standard', 1),
-    ('RM0017', 'HT0008', '801', 'VIP', 1),
-    ('RM0018', 'HT0008', '802', 'Standard', 1),
-    ('RM0019', 'HT0008', '803', 'VIP', 1),
-    ('RM0020', 'HT0008', '804', 'Standard', 1),
+    ('RM0015', 'HT0008', '801', 'VIP', 1),
+    ('RM0016', 'HT0008', '802', 'Standard', 1),
+    ('RM0017', 'HT0009', '901', 'VIP', 1),
+    ('RM0018', 'HT0009', '902', 'Standard', 1),
+    ('RM0019', 'HT0010', '1001', 'VIP', 1),
+    ('RM0020', 'HT0010', '1002', 'Standard', 1),
     -- Hotel HT0009: 4 rooms
     ('RM0021', 'HT0009', '901', 'Standard', 1),
-    ('RM0022', 'HT0009', '902', 'Standard', 1),
-    ('RM0023', 'HT0009', '903', 'Standard', 1),
-    ('RM0024', 'HT0009', '904', 'Standard', 1),
+    ('RM0022', 'HT0009', '902', 'Double', 1),
+    ('RM0023', 'HT0009', '903', 'Suite', 1),
+    ('RM0024', 'HT0009', '904', 'Deluxe', 1),
 
     -- Hotel HT0010: 3 rooms
     ('RM0025', 'HT0010', '1001', 'Standard', 1),
@@ -317,13 +317,6 @@ VALUES
 ('BR0001', 'US0001', 150.00, '2024-06-25'),
 ('BR0002', 'US0002', 200.00, '2024-06-26');
 
-INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate)
-VALUES
-('BR0003', 'US0001', 150.00, '2024-06-26')
-
-INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate)
-VALUES ('BR1234', 'US0001', 150.00, GETDATE());
-
 -- Thêm dữ liệu vào bảng Booking_Room_Detail
 INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status)
 VALUES 
@@ -344,5 +337,9 @@ VALUES
 ('BT0001', 'ST0002', 25.00, 'Confirmed'),
 ('BT0002', 'ST0003', 50.00, 'Pending'),
 ('BT0002', 'ST0004', 50.00, 'Pending');
+
+
+SELECT * FROM Flight
+SELECT seatID, flightID, seatNumber, seatType, IsAvailable FROM Seat WHERE FlightID='FL0001'
 
 
