@@ -14,21 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author NOMNOM
- */
+
 public class PlaneServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = Integer.parseInt(request.getParameter("page"));
@@ -45,7 +33,7 @@ public class PlaneServlet extends HttpServlet {
         request.setAttribute("totalPage", totalPage);
         request.setAttribute("curPage", page);
         request.setAttribute("pList", pList);
-        request.getRequestDispatcher("planePage1.jsp").forward(request, response);
+        request.getRequestDispatcher("plane.jsp").forward(request, response);
 
         System.out.println("Total planes: " + allPlanes.size());
         for (Plane plane : allPlanes) {
