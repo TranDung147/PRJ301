@@ -16,13 +16,13 @@
         <link href="assets/css/headerfooter.css" rel="stylesheet" />
     </head>
 
-    <% 
-    String user = (String) session.getAttribute("user");
-    if (user == null) { %>
+    <%
+        String user = (String) session.getAttribute("user");
+        if (user == null) { %>
     <%@include file="includes/header.jsp" %>
     <% } else { %>
     <%@include file="includes/header_user.jsp" %>
-    <% } %>
+    <% }%>
 
     <style>
         .mainht {
@@ -121,6 +121,27 @@
             gap: 10px;
         }
 
+        .leftht label{
+            width: 250px;
+        }
+        
+        .leftht select{
+            width: 250px;
+            height: 50px;
+            
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            
+            margin-top: 25px;
+        }
+
         .leftht img, .rightht img, .leftt img, .rightt img {
             width: 20px;
             height: 20px;
@@ -170,6 +191,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
+            margin-top: 20px;
         }
 
         .btnsht {
@@ -199,16 +221,6 @@
             <div class="containerht">
                 <div class="headerht">
                     <h1>Đặt khách sạn của bạn ngay hôm nay!</h1>
-                    <div class="optionals-buttonht">
-                        <div>
-                            <input type="radio" class="khuhoiht active" name="stayDuration">
-                            <label>Một đêm</label>
-                        </div>
-                        <div>
-                            <input type="radio" class="khuhoiht" name="stayDuration">
-                            <label>Nhiều đêm</label>
-                        </div>
-                    </div>
                 </div>
                 <div class="boxht">
                     <div class="leftht">
@@ -220,9 +232,12 @@
                     </div>
                     <div class="leftht">
                         <div><img src="img/people.png" alt=""></div>
-                        <div class="endht">
-                            <label for="country">Quốc gia:</label>
-                            <input type="text" id="country" placeholder="Nhập quốc gia">
+                        <div class="startht">
+                            <select name="roomType" id="roomType">
+                                <option value="">Chọn loại phòng</option>
+                                <option value="VIP">Phòng đặc biệt</option>
+                                <option value="Standard">Phòng thường</option>
+                            </select>
                         </div>
                     </div>
                     <div class="leftht">
@@ -250,10 +265,20 @@
                     </div>
                 </div>
                 <div class="submit-rowht">
-                    <button type="submit" class="btnsht">ĐẶT NGAY</button>
+                    <form action="roomServlet" method="post" id="bookingForm">
+                        <input type="hidden" name="action" value="bookRoom">
+                        <input type="hidden" name="rooms" id="hiddenRooms">
+                        <button type="submit" class="btnsht">ĐẶT NGAY</button>
+                    </form>
                 </div>
-                </form>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+    document.getElementById('bookingForm').addEventListener('submit', function (event) {
+        var rooms = document.getElementById('roomType').value;
+        document.getElementById('hiddenRooms').value = rooms;
+    });
+</script>

@@ -4,26 +4,21 @@
  */
 package Controller;
 
-import Model.AllBookingDB;
-import Model.RoomDB;
-import Model.Room;
+import Model.Seat;
+import Model.SeatDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author NOMNOM
  */
-public class CheckBookedServlet extends HttpServlet {
+public class SeatServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +37,10 @@ public class CheckBookedServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckBookedServlet</title>");
+            out.println("<title>Servlet SeatServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckBookedServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SeatServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -77,44 +72,10 @@ public class CheckBookedServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-
-        // Lấy hotelID từ request hoặc từ cấu hình servlet
-        String hotelID = request.getParameter("hotelID"); // Hoặc có thể lấy từ cấu hình servlet như getServletConfig().getInitParameter("hotelID");
-
-        AllBookingDB allDB = new AllBookingDB();
-        List<JSONObject> bookings = new ArrayList<>();
-
-        // Lấy danh sách các phòng theo hotelID
-        List<Room> rooms = RoomDB.getRoomsByHotel(hotelID);
-        for (Room room : rooms) {
-            String roomID = room.getRoomID();
-            List<String> roomBookingIDs = allDB.getRoomBookingIDsByRoomID(roomID);
-            for (String roomBookingID : roomBookingIDs) {
-                List<Date[]> bookedDates = allDB.getDateFromToDateByRoomBookingID(roomBookingID);
-                for (Date[] dates : bookedDates) {
-                    Date dateFrom = dates[0];
-                    Date dateTo = dates[1];
-
-                    // Tạo JSON object cho mỗi đặt phòng
-                    JSONObject booking = new JSONObject();
-                    booking.put("roomID", roomID);
-                    booking.put("checkInDate", dateFrom);
-                    booking.put("checkOutDate", dateTo);
-
-                    bookings.add(booking);
-                }
-            }
-        }
-
-        // Tạo JSON response từ danh sách JSON object đã tạo
-        JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("bookings", bookings);
-        jsonResponse.put("success", true);
-
-        PrintWriter out = response.getWriter();
-        out.print(jsonResponse.toString());
-        out.flush();
+        String flightID = request.getParameter("flightID");
+        List<Seat> seatList = SeatDB.getSeatByFlight(flightID);
+        request.setAttribute("seatList", seatList);
+        request.getRequestDispatcher("/seatDisplay.jsp").forward(request, response);
     }
 
     /**

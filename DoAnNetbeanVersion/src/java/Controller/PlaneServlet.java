@@ -4,25 +4,21 @@
  */
 package Controller;
 
-import Model.Hotel;
-import Model.HotelDB;
-import Model.Room;
-import Model.RoomDB;
+import Model.Plane;
+import Model.PlaneDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author NOMNOM
  */
-public class RoomServlet extends HttpServlet {
+public class PlaneServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +31,26 @@ public class RoomServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String hotelID = request.getParameter("hotelID");
-        String hotelName = request.getParameter("hotelName");
+        int page = Integer.parseInt(request.getParameter("page"));
+        List<Plane> allPlanes = PlaneDB.getAllPlanes();
+        List<Plane> pList = new ArrayList<>();
+        int maxLength = 12 * page;
+        if (maxLength > allPlanes.size()) {
+            maxLength = allPlanes.size();
+        }
+        for (int i = 12 * page - 12; i < maxLength; i++) {
+            pList.add(allPlanes.get(i));
+        }
+        int totalPage = (int) Math.ceil((double) allPlanes.size() / 12);
+        request.setAttribute("totalPage", totalPage);
+        request.setAttribute("curPage", page);
+        request.setAttribute("pList", pList);
+        request.getRequestDispatcher("planePage1.jsp").forward(request, response);
 
-        // Fetch the room data for the specified hotel
-        List<Room> rooms = RoomDB.getRoomsByHotel(hotelID);
-
-        // Store the room list and hotel ID in request attributes
-        request.setAttribute("rooms", rooms);
-        request.setAttribute("hotelID", hotelID);
-        request.setAttribute("hotelName", hotelName);
-
-        // Forward to the JSP page
-        request.getRequestDispatcher("roomDisplay.jsp").forward(request, response);
-        //response.sendRedirect(request.getContextPath() + "/roomDisplay.jsp");
+        System.out.println("Total planes: " + allPlanes.size());
+        for (Plane plane : allPlanes) {
+            System.out.println(plane.toString());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -63,20 +65,7 @@ public class RoomServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String hotelID = request.getParameter("hotelID");
-        String hotelName = request.getParameter("hotelName");
-
-        // Fetch the room data for the specified hotel
-        List<Room> rooms = RoomDB.getRoomsByHotel(hotelID);
-
-        // Store the room list and hotel ID in request attributes
-        request.setAttribute("rooms", rooms);
-        request.setAttribute("hotelID", hotelID);
-        request.setAttribute("hotelName", hotelName);
-
-        // Forward to the JSP page
-        request.getRequestDispatcher("roomDisplay.jsp").forward(request, response);
-        //response.sendRedirect(request.getContextPath() + "/roomDisplay.jsp");
+        processRequest(request, response);
     }
 
     /**
@@ -90,13 +79,7 @@ public class RoomServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String roomType = request.getParameter("rooms"); // Lấy giá trị từ select box "roomType"
-
-        List<Hotel> hotels = HotelDB.getAvailableRooms(roomType);
-        request.setAttribute("hotels", hotels);
-        request.setAttribute("roomType", roomType);
-
-        request.getRequestDispatcher("roomAvailableDisplay.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**

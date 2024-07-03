@@ -250,9 +250,11 @@
                         } else {
                             room.style.display = 'flex';
 
-                        }   
+                        }
                     });
                 }
+
+
 
                 function hideRoomsBeforeDate(event) {
                     event.preventDefault();

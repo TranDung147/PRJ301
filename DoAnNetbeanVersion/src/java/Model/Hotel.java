@@ -110,4 +110,10 @@ public class Hotel implements Serializable {
 //    public int delete() {
 //        return HotelDB.delete(this.hotelId);
 //    }
+
+    @Override
+    public String toString() {
+        return "Hotel{" + "hotelId=" + hotelId + ", hotelName=" + hotelName + ", hotelAddress=" + hotelAddress + ", hotelDescription=" + hotelDescription + ", productImage=" + productImage + ", city=" + city + ", country=" + country + '}';
+    }
+    
 }

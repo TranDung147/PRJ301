@@ -85,6 +85,25 @@ public class RoomDB implements DatabaseInfo {
         return bookedRoom;
     }
 
+//    public static List<Room> getAvailableRooms(String roomType) {
+//        List<Room> roomList = new ArrayList<>();
+//        try (Connection con = getConnect()) {
+//            String query = "SELECT RoomID, RoomNumber, RoomType, IsAvailable FROM Room WHERE IsAvailable = 1 AND RoomType = ?";
+//            PreparedStatement stmt = con.prepareStatement(query);
+//            stmt.setString(1, roomType);  // Set the room type parameter
+//            ResultSet rs = stmt.executeQuery();
+//            while (rs.next()) {
+//                Room room = new Room(rs.getString("RoomID"),
+//                        rs.getInt("RoomNumber"),
+//                        rs.getString("RoomType"),
+//                        rs.getInt("IsAvailable"));
+//                roomList.add(room);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return roomList;
+//    }
     // Method to get all rooms by HotelID
     public static List<Room> getRoomsByHotel(String hotelID) {
         List<Room> roomList = new ArrayList<>();
@@ -249,11 +268,11 @@ public class RoomDB implements DatabaseInfo {
     }
     //--------------------------------------------------------------------------------------------
 
-//    public static void main(String[] a) {
+    public static void main(String[] a) {
 //        ArrayList<Hotel> list = HotelDB.listAll();
 //        for (Hotel item : list) {
 //            System.out.println(item);
 //        }
-//    }
 //---------------------------------------------------------------------------
+    }
 }

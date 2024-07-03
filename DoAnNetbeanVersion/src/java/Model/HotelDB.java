@@ -4,8 +4,12 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
+import static Model.RoomDB.getConnect;
 import java.sql.*;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -188,10 +192,37 @@ public class HotelDB implements DatabaseInfo {
         }
         return null;
     }
+    
+    public static List<Hotel> getAvailableRooms(String roomType) {
+    List<Hotel> hotelList = new ArrayList<>();
+    try (Connection con = getConnect()) {
+        String query = "SELECT h.HotelID, HotelName, HotelAddress, Description, productImage, City, Country " +
+                       "FROM Hotel h " +
+                       "INNER JOIN Room r ON r.HotelID = h.HotelID " +
+                       "WHERE r.IsAvailable = 1 AND r.RoomType = ?";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setString(1, roomType);  // Set the room type parameter
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Hotel hotel = new Hotel(
+                    rs.getString("HotelID"),
+                    rs.getString("HotelName"),
+                    rs.getString("HotelAddress"),
+                    rs.getString("Description"),
+                    rs.getString("productImage"),
+                    rs.getString("City"),
+                    rs.getString("Country"));
+            hotelList.add(hotel);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return hotelList;
+}
     //--------------------------------------------------------------------------------------------
 
     public static void main(String[] a) {
-        ArrayList<Hotel> list = HotelDB.listAll();
+        List<Hotel> list = HotelDB.getAvailableRooms("Suite");
         for (Hotel item : list) {
             System.out.println(item);
         }

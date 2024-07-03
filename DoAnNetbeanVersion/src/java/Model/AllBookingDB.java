@@ -103,53 +103,119 @@ public class AllBookingDB implements DatabaseInfo {
         }
         return null;
     }
+    
+    public static List<BookingTicketDetail> getBookingTicketDetailsBySeatID(String seatID) {
+        List<BookingTicketDetail> bookingTicketDetails = new ArrayList<>();
+        String query = "SELECT BookingTicketID, SeatID, Price, Status FROM Booking_Ticket_Detail WHERE SeatID = ?";
+        try (Connection conn = getConnect();
+             PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, seatID);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    BookingTicketDetail bookingTicketDetail = new BookingTicketDetail(
+                            resultSet.getString("BookingTicketID"),
+                            resultSet.getString("SeatID"),
+                            resultSet.getString("Price"),
+                            resultSet.getString("Status")
+                    );
+                    bookingTicketDetails.add(bookingTicketDetail);
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(BookingTicketDetail.class.getName()).log(Level.SEVERE, "Error fetching Booking Ticket Details by SeatID: " + seatID, e);
+        }
+        return bookingTicketDetails;
+    }
 
     //------------------------------------------------------------------------------------------------------------------------
-    public static String insertBookingRoom(String userID, String totalPrice, String status) {
+    // Lấy tất cả các roomBookingID hiện có từ cơ sở dữ liệu
+    private static List<Integer> getExistingBookingIDs() {
+        List<Integer> existingIDs = new ArrayList<>();
+        String querySQL = "SELECT CAST(SUBSTRING(RoomBookingID, 3, LEN(RoomBookingID) - 2) AS INT) AS NumericID FROM Booking_Room ORDER BY NumericID";
+
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(querySQL); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                existingIDs.add(rs.getInt("NumericID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ SQL
+        }
+        return existingIDs;
+    }
+
+    // Tìm ID nhỏ nhất chưa được sử dụng
+    private static int findSmallestUnusedID(List<Integer> existingIDs) {
+        if (existingIDs.isEmpty()) {
+            return 1; // Nếu không có ID nào, bắt đầu từ 1
+        }
+
+        int expectedID = 1;
+        for (int id : existingIDs) {
+            if (id != expectedID) {
+                return expectedID; // Trả về ID nhỏ nhất bị thiếu
+            }
+            expectedID++;
+        }
+        return expectedID; // Nếu không thiếu ID nào, trả về ID tiếp theo lớn nhất
+    }
+
+    // Tạo roomBookingID mới hoặc sử dụng ID nhỏ nhất chưa được sử dụng
+    private static String generateNextAvailableBookingID() {
+        List<Integer> existingIDs = getExistingBookingIDs(); // Lấy tất cả các ID hiện có
+        int nextUnusedID = findSmallestUnusedID(existingIDs); // Tìm ID nhỏ nhất chưa được sử dụng
+        int largestID = existingIDs.isEmpty() ? 0 : existingIDs.get(existingIDs.size() - 1); // Tìm ID lớn nhất hiện tại
+
+        // Chọn ID nhỏ nhất chưa được sử dụng hoặc ID lớn nhất hiện tại + 1
+        int newID = Math.max(nextUnusedID, largestID + 1);
+
+        return String.format("RB%04d", newID); // Định dạng thành RBxxxx
+    }
+
+    // Phương thức để chèn một booking mới vào cơ sở dữ liệu
+    public static String insertBookingRoom(String userID, String totalPrice) {
         String roomBookingID = null;
-        String insertBookingRoomSQL = "INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, Status, CreatedDate) VALUES (?, ?, ?, ?, GETDATE())";
+        String insertBookingRoomSQL = "INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, ?, GETDATE())";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingRoomSQL)) {
-            roomBookingID = generateUniqueBookingID();
+            // Tạo roomBookingID mới dựa trên ID hiện tại hoặc ID nhỏ nhất bị thiếu
+            roomBookingID = generateNextAvailableBookingID();
             pstmt.setString(1, roomBookingID);
             pstmt.setString(2, userID);
             pstmt.setString(3, totalPrice);
-            pstmt.setString(4, status);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-
+            e.printStackTrace(); // Xử lý ngoại lệ SQL
         }
         return roomBookingID;
     }
 
-    public static boolean insertBookingRoomDetail(String roomBookingID, String roomID, String price, String dateFrom, String dateTo, String status) throws ParseException {
+    //---------------------------------------------------------------------------------------------------
+    public static boolean insertBookingRoomDetail(String roomBookingID, String roomID, String price, String dateFrom, String dateTo, String status) {
         String insertBookingRoomDetailSQL = "INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status) VALUES (?, ?, ?, ?, ?, ?)";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingRoomDetailSQL)) {
             pstmt.setString(1, roomBookingID);
             pstmt.setString(2, roomID);
             pstmt.setString(3, price);
 
-            // Convert date strings to java.sql.Timestamp
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date fromDate = sdf.parse(dateFrom);
-            java.util.Date toDate = sdf.parse(dateTo);
-            pstmt.setTimestamp(4, new java.sql.Timestamp(fromDate.getTime()));
-            pstmt.setTimestamp(5, new java.sql.Timestamp(toDate.getTime()));
+            // Chuyển đổi chuỗi ngày thành java.sql.Timestamp
+            java.sql.Timestamp fromTimestamp = new java.sql.Timestamp(sdf.parse(dateFrom).getTime());
+            java.sql.Timestamp toTimestamp = new java.sql.Timestamp(sdf.parse(dateTo).getTime());
+            pstmt.setTimestamp(4, fromTimestamp);
+            pstmt.setTimestamp(5, toTimestamp);
 
             pstmt.setString(6, status);
 
             int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một hàng bị ảnh hưởng
+        } catch (SQLException e) {
+            e.printStackTrace(); // In ra stack trace khi xảy ra lỗi SQL
+            return false;
+        } catch (ParseException e) {
+            e.printStackTrace(); // In ra stack trace khi xảy ra lỗi phân tích cú pháp
             return false;
         }
-    }
-
-    private static String generateUniqueBookingID() {
-
-        String uniqueID = UUID.randomUUID().toString().substring(0, 6);
-        return uniqueID;
     }
 
     public List<java.sql.Date[]> getDateFromToDateByRoomBookingID(String roomBookingID) {
@@ -186,5 +252,6 @@ public class AllBookingDB implements DatabaseInfo {
         }
         return roomBookingIDs;
     }
+    
 
 }

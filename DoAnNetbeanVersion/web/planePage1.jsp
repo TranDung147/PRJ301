@@ -1,4 +1,4 @@
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.sql.*, Model.DatabaseInfo, Model.Plane"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -26,7 +26,7 @@
     <% } else { %>
     <%@include file="includes/header_user.jsp" %>
     <% } %>
-    
+
     <main class="mainH">  
         <div class="containerB">
             <div class="row">
@@ -125,66 +125,29 @@
                             </select>
                         </form>
                         <div class="pagination">
-                            <span class="text">1/</span>
-                            <span class="text">2</span>
-                            <button class="btn prev"><a href="planePage1.jsp">Prev</a></button>
-                            <button class="btn next"><a href="planePage2.jsp">Next</a></button>
+                            <span class="text">${curPage}/${totalPage}</span>
+                            <c:if test="${curPage > 1}">
+                            <a href="PlaneServlet?page=${curPage - 1}"><button class="btn prev">Prev</button></a>
+                            </c:if>
+                            <c:if test="${curPage < totalPage}">
+                            <a href="PlaneServlet?page=${curPage + 1}"><button class="btn next">Next</button></a>
+                            </c:if>
                         </div>
                     </div>
 
                     <!-- Your product list -->
-                    <div class="product-list">
-                        <%
-                            Connection conn = null;
-                            Statement stmt = null;
-                            ResultSet rs = null;
-                        
-                            try {
-                                Class.forName(DatabaseInfo.DRIVERNAME);
-                                conn = DriverManager.getConnection(DatabaseInfo.DBURL, DatabaseInfo.USERDB, DatabaseInfo.PASSDB);
-                                stmt = conn.createStatement();
-                                String sql = "SELECT * FROM Plane ORDER BY PlaneID OFFSET 0 ROWS FETCH NEXT 12 ROWS ONLY"; // Sử dụng tên bảng thực tế của bạn
-                                rs = stmt.executeQuery(sql);
-
-                                if (!rs.isBeforeFirst()) {
-                                    out.println("<p>No planes found.</p>");
-                                } else {
-                                    while (rs.next()) {
-                                        String planeID = rs.getString("PlaneID");
-                                        String planeName = rs.getString("PlaneName");
-                                        String airline = rs.getString("Airline");
-                                        String imagePlane = rs.getString("ImageFileName");
-                                        String numSeat = rs.getString("NoSeat");
-
-                                        Plane plane = new Plane();
-                                        plane.setPlaneID(planeID);
-                                        plane.setPlaneName(planeName);
-                                        plane.setAirline(airline);
-                                        plane.setPlaneImg(imagePlane);
-                                        plane.setNoSeat(numSeat);
-                        %>
-                        <div class="cols product location">
-                            <img class="image images" src="img/<%= plane.getPlaneImg() %>" alt="<%= plane.getPlaneName() %>">
-                            <h4><%= plane.getPlaneName() %></h4>
-                            <p><span>Hãng:</span> <%= plane.getAirline() %></p>
-                            <p><span>Còn trống:</span> <%= plane.getNoSeat() %></p>
-                        </div>
-                        <%
-                                    }
-                                }
-                            } catch (Exception e) {
-                                out.println("<p>Error: " + e.getMessage() + "</p>");
-                                e.printStackTrace();
-                            } finally {
-                                if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
-                                if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-                                if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-                            }
-                        %>
+                    <div class="product-list" id="content">
+                        <c:forEach var="p" items="${pList}">
+                            <div class="cols product location">
+                                <img class="image images" src="img/${p.planeImg}" alt="${p.planeImg}">
+                                <h4>${p.planeName}</h4>
+                                <p><span>Hãng:</span>${p.airline}</p>
+                                <p><span>Còn trống:</span> ${p.noSeat}</p>
+                            </div>
+                        </c:forEach> 
                     </div>
                 </div>
             </div>
         </div>  
     </main>
     <%@include file="includes/footer.jsp" %>
-

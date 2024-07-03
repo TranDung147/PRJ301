@@ -140,9 +140,9 @@
         <div class="botfloor nav-links text-center custom-nav">
             <nav class="nav justify-content-center">
                 <a class="nav-link active" href="index.jsp">Trang chủ</a>
-                <a class="nav-link" href="flight.jsp">Chuyến bay</a>
+                <a class="nav-link" href="FlightServlet">Chuyến bay</a>
                 <a class="nav-link" href="hotel.jsp">Khách sạn</a>
-                <a class="nav-link" href="#">Thuê xe</a>
+                <a class="nav-link" href="PlaneServlet?page=1">Thuê xe</a>
                 <a class="nav-link" href="#">Địa điểm tham quan</a>
                 <a class="nav-link" href="#">Taxi sân bay</a>
             </nav>
