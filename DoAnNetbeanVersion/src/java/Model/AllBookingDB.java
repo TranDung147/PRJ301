@@ -103,12 +103,11 @@ public class AllBookingDB implements DatabaseInfo {
         }
         return null;
     }
-    
+
     public static List<BookingTicketDetail> getBookingTicketDetailsBySeatID(String seatID) {
         List<BookingTicketDetail> bookingTicketDetails = new ArrayList<>();
         String query = "SELECT BookingTicketID, SeatID, Price, Status FROM Booking_Ticket_Detail WHERE SeatID = ?";
-        try (Connection conn = getConnect();
-             PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+        try (Connection conn = getConnect(); PreparedStatement preparedStatement = conn.prepareStatement(query)) {
             preparedStatement.setString(1, seatID);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -193,29 +192,27 @@ public class AllBookingDB implements DatabaseInfo {
     public static boolean insertBookingRoomDetail(String roomBookingID, String roomID, String price, String dateFrom, String dateTo, String status) {
         String insertBookingRoomDetailSQL = "INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status) VALUES (?, ?, ?, ?, ?, ?)";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingRoomDetailSQL)) {
             pstmt.setString(1, roomBookingID);
             pstmt.setString(2, roomID);
             pstmt.setString(3, price);
             pstmt.setString(4, dateFrom);
             pstmt.setString(5, dateTo);
-            
-                    
 
 //            // Chuyển đổi chuỗi ngày thành java.sql.Timestamp
 //            java.sql.Timestamp fromTimestamp = new java.sql.Timestamp(sdf.parse(dateFrom).getTime());
 //            java.sql.Timestamp toTimestamp = new java.sql.Timestamp(sdf.parse(dateTo).getTime());
 //            pstmt.setTimestamp(4, fromTimestamp);
 //            pstmt.setTimestamp(5, toTimestamp);
-
             pstmt.setString(6, status);
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0; // Trả về true nếu có ít nhất một hàng bị ảnh hưởng
         } catch (SQLException e) {
             e.printStackTrace(); // In ra stack trace khi xảy ra lỗi SQL
-            return false;}
+            return false;
+        }
 //        } catch (ParseException e) {
 //            e.printStackTrace(); // In ra stack trace khi xảy ra lỗi phân tích cú pháp
 //            return false;
@@ -256,6 +253,125 @@ public class AllBookingDB implements DatabaseInfo {
         }
         return roomBookingIDs;
     }
+
+    //--------------------------------------------------------------------------------------------------------
+    // Lấy danh sách các đơn đặt phòng khách sạn
+    public List<HotelBooking> getAllHotelBookings(String id) {
+        List<HotelBooking> bookings = new ArrayList<>();
+        String query = "SELECT br.RoomBookingID, u.Username, h.HotelName, h.HotelAddress, r.RoomNumber, "
+                + "r.RoomType, brd.Price, brd.DateFrom, brd.DateTo, brd.Status "
+                + "FROM Booking_Room br "
+                + "JOIN Booking_Room_Detail brd ON br.RoomBookingID = brd.RoomBookingID "
+                + "JOIN Room r ON brd.RoomID = r.RoomID "
+                + "JOIN Hotel h ON r.HotelID = h.HotelID "
+                + "JOIN Users u ON br.UserID = u.UserID "
+                + "WHERE u.UserID = ? "
+                + "ORDER BY br.CreatedDate DESC";
+
+        try (Connection connection = getConnect(); PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    HotelBooking booking = new HotelBooking();
+                    booking.setHotelName(rs.getString("HotelName"));
+                    booking.setHotelAddress(rs.getString("HotelAddress"));
+                    booking.setRoomNumber(rs.getString("RoomNumber"));
+                    booking.setRoomType(rs.getString("RoomType"));
+                    booking.setPrice(rs.getDouble("Price"));
+                    booking.setDateFrom(rs.getString("DateFrom"));
+                    booking.setDateTo(rs.getString("DateTo"));
+                    booking.setStatus(rs.getString("Status"));
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    // Lấy danh sách các đơn đặt vé máy bay
+    public List<PlaneBooking> getAllPlaneBookings(String id) {
+        List<PlaneBooking> bookings = new ArrayList<>();
+        String query = "SELECT bt.TicketBookingID, u.Username, p.PlaneName, f.DepartureCity, f.ArrivalCity, "
+                + "f.DateStart, f.DateEnd, s.SeatNumber, s.SeatType, btd.Price, btd.Status "
+                + "FROM Booking_Ticket bt "
+                + "JOIN Booking_Ticket_Detail btd ON bt.TicketBookingID = btd.BookingTicketID "
+                + "JOIN Seat s ON btd.SeatID = s.SeatID "
+                + "JOIN Flight f ON s.FlightID = f.FlightID "
+                + "JOIN Plane p ON f.PlaneID = p.PlaneID "
+                + "JOIN Users u ON bt.UserID = u.UserID "
+                + "WHERE u.UserID = ? "
+                + "ORDER BY bt.CreatedDate DESC";
+
+        try (Connection connection = getConnect(); PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PlaneBooking booking = new PlaneBooking();
+                    booking.setPlaneName(rs.getString("PlaneName"));
+                    booking.setStartTime(rs.getString("DateStart"));
+                    booking.setLocationFrom(rs.getString("DepartureCity"));
+                    booking.setLocationTo(rs.getString("ArrivalCity"));
+                    booking.setSeatNumber(rs.getString("SeatNumber"));
+                    booking.setSeatType(rs.getString("SeatType"));
+                    booking.setPrice(rs.getDouble("Price"));
+                    booking.setStatus(rs.getString("Status"));
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
     
+    //-------------------------------------------------------------------------------------
+    
+    public static List<BookingRoomDetail> getRoomOrders() throws SQLException {
+        List<BookingRoomDetail> roomOrders = new ArrayList<>();
+
+        try (Connection connection = getConnect()) {
+            String roomOrderSql = "SELECT * FROM Booking_Room_Detail";
+            PreparedStatement roomOrderPs = connection.prepareStatement(roomOrderSql);
+            ResultSet roomOrderRs = roomOrderPs.executeQuery();
+            while (roomOrderRs.next()) {
+                BookingRoomDetail roomOrder = new BookingRoomDetail(
+                        roomOrderRs.getString("RoomBookingID"),
+                        roomOrderRs.getString("RoomID"),
+                        roomOrderRs.getString("Price"),
+                        roomOrderRs.getString("DateFrom"),
+                        roomOrderRs.getString("DateTo"),
+                        roomOrderRs.getString("Status")
+                );
+                roomOrders.add(roomOrder);
+            }
+        }
+
+        return roomOrders;
+    }
+
+    public static List<BookingTicketDetail> getTicketOrders() throws SQLException {
+        List<BookingTicketDetail> ticketOrders = new ArrayList<>();
+
+        try (Connection connection = getConnect()) {
+            String ticketOrderSql = "SELECT * FROM Booking_Ticket_Detail";
+            PreparedStatement ticketOrderPs = connection.prepareStatement(ticketOrderSql);
+            ResultSet ticketOrderRs = ticketOrderPs.executeQuery();
+            while (ticketOrderRs.next()) {
+                BookingTicketDetail ticketOrder = new BookingTicketDetail(
+                        ticketOrderRs.getString("BookingTicketID"),
+                        ticketOrderRs.getString("SeatID"),
+                        ticketOrderRs.getString("Price"),
+                        ticketOrderRs.getString("Status")
+                );
+                ticketOrders.add(ticketOrder);
+            }
+        }
+
+        return ticketOrders;
+    }
 
 }

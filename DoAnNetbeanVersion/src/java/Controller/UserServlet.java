@@ -47,6 +47,8 @@ public class UserServlet extends HttpServlet {
             case "db":
                 handleDashBoard(request, response);
                 break;
+            case "change":
+                handleChange(request, response);
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -82,7 +84,7 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", a.getUsername());
                 session.setAttribute("pass", a.getPassword());
-                session.setAttribute("id",a.getUserID()); //added
+                session.setAttribute("id", a.getUserID()); //added
                 session.setAttribute("role", "user");
 
                 session.setMaxInactiveInterval(30 * 60); // Session expiry
@@ -143,21 +145,56 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }
-    
+
     private void handleDashBoard(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         
+
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("user");
         String password = (String) session.getAttribute("pass");
-      
+
         UserDB userDB = new UserDB();
         User user = userDB.getUsers(username, password);
-       
+
         request.setAttribute("user", user);
-     
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
         dispatcher.forward(request, response);
+    }
+
+    private void handleChange(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Retrieve form parameters
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String fullname = request.getParameter("fullname");
+        String address = request.getParameter("address");
+        String phone = request.getParameter("phone");
+        String sex = request.getParameter("sex");
+        String dob = request.getParameter("dob");
+
+// Split full name into first name and last name
+        String[] nameParts = fullname.split("\\s+", 2); // Split by whitespace, limit to 2 parts
+        String fname = nameParts[0]; // First part is first name
+        String lname = (nameParts.length > 1) ? nameParts[1] : ""; // Second part is last name, or empty if not provided
+
+// Create a User object with updated information
+        User updatedUser = new User(username, password, email, fname, lname, address, phone, sex, dob);
+
+        // Update user data in the database
+        UserDB userDB = new UserDB();
+        boolean success = userDB.updateUser(updatedUser);
+
+        if (success) {
+            // Redirect to a success page or dashboard
+            response.sendRedirect("userDBoard.jsp"); // Example redirect to dashboard page
+        } else {
+            // Handle failure (e.g., display an error message)
+            request.setAttribute("errorMessage", "Failed to update user information.");
+            RequestDispatcher rd = request.getRequestDispatcher("updateinfo.jsp");
+            rd.forward(request, response);
+        }
     }
 
     @Override
@@ -176,7 +213,5 @@ public class UserServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
- 
 
 }

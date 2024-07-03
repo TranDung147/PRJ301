@@ -17,14 +17,14 @@
             <div class="navigation-admin">
                 <ul>
                     <li class="logo">
-                        <div class="topbar-admin">
-                            <a href="index.jsp">
+                        <a href="index.jsp">
+                            <div class="topbar-admin">
                                 <h3 class="logo-text">QTALD</h3>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="adminDBoard.jsp">
                             <span class="icon">
                                 <img src="img/admin/dashboard.png" alt="Dashboard">
                             </span>
@@ -32,23 +32,23 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="adminOrder.jsp">
                             <span class="icon">
-                                <img src="img/admin/customer.png" alt="Customers">
+                                <img src="img/admin/order.png" alt="Order">
                             </span>
-                            <span class="title">Customers</span>
+                            <span class="title">Order</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="adminDetails.jsp">
                             <span class="icon">
-                                <img src="img/admin/order.png" alt="Orders">
+                                <img src="img/admin/details.png" alt="Details">
                             </span>
-                            <span class="title">Orders</span>
+                            <span class="title">Detail</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="LogoutServlet">    <!-- Logout -->
                             <span class="icon">
                                 <img src="img/admin/logout.png" alt="Messages">
                             </span>

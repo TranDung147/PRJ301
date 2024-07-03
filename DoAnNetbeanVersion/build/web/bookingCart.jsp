@@ -2,6 +2,13 @@
 <%@page import="Model.DatabaseInfo"%>
 <%@page import="Model.User"%>
 <%@page import="Model.UserDB"%>
+<%@page import="Model.AllBookingDB"%>
+<%@page import="java.util.List"%>
+<%@page import="Model.HotelBooking"%>
+<%@page import="Model.PlaneBooking"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html lang="vn">
 
@@ -14,6 +21,35 @@
         <link href="assets/css/userdb.css" rel="stylesheet"/>
         <link href="assets/css/customer.css" rel="stylesheet"/> 
     </head>
+       <style>
+
+
+        /* Booking Tables */
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .booking-table th, .booking-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .booking-table th {
+            background-color: #f2f2f2;
+        }
+
+        .hotel-bookings, .plane-bookings {
+            margin-top: 30px;
+        }
+
+        .hotel-bookings h2, .plane-bookings h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
     <body>
         <!-- =============== Navigation ================ -->
         <div class="container">
@@ -107,7 +143,91 @@
                         <!-- Hiển thị session ID, username, và các thông tin khác -->
                         <div>
                             <h1>Your Cart Order</h1>
-                        </div> 
+                        </div>
+
+                        <%-- Hotel Bookings Section --%>
+                        <div class="hotel-bookings">
+                            <h2>Your Hotel Bookings</h2>
+                            <table class="booking-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hotel Name</th>
+                                        <th>Hotel Address</th>
+                                        <th>Room Number</th>
+                                        <th>Room Type</th>
+                                        <th>Price</th>
+                                        <th>Date From</th>
+                                        <th>Date To</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% 
+                                       // Get all hotel bookings for the user
+                                       AllBookingDB a = new AllBookingDB();
+                                       
+                                       List<HotelBooking> hotelBookings = a.getAllHotelBookings(users.getUserID());
+                                       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                                       for (HotelBooking booking : hotelBookings) {
+                                    %>
+                                    <tr>
+                                        <td><%= booking.getHotelName() %></td>
+                                        <td><%= booking.getHotelAddress() %></td>
+                                        <td><%= booking.getRoomNumber() %></td>
+                                        <td><%= booking.getRoomType() %></td>
+                                        <td><%= booking.getPrice() %></td>
+                                        <td><%= booking.getDateFrom() %></td>
+                                        <td><%= booking.getDateTo() %></td>
+                                        <td><%= booking.getStatus() %></td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <%-- Plane Bookings Section --%>
+                        <div class="plane-bookings">
+                            <h2>Your Plane Bookings</h2>
+                            <table class="booking-table">
+                                <thead>
+                                    <tr>
+                                        <th>Plane Name</th>
+                                        <th>Departure City</th>
+                                        <th>Arrival City</th>
+                                        <th>Start Time</th>
+                                        <th>Seat Number</th>
+                                        <th>Seat Type</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% 
+                                        AllBookingDB b = new AllBookingDB();
+                                        
+                                       // Get all plane bookings for the user
+                                       List<PlaneBooking> planeBookings = b.getAllPlaneBookings(users.getUserID());
+
+                                       for (PlaneBooking booking : planeBookings) {
+                                    %>
+                                    <tr>
+                                        <td><%= booking.getPlaneName() %></td>
+                                        <td><%= booking.getLocationFrom() %></td>
+                                        <td><%= booking.getLocationTo() %></td>
+                                        <td><%= booking.getStartTime() %></td>
+                                        <td><%= booking.getSeatNumber() %></td>
+                                        <td><%= booking.getSeatType() %></td>
+                                        <td><%= booking.getPrice() %></td>
+                                        <td><%= booking.getStatus() %></td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

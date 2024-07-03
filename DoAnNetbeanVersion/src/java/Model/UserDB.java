@@ -22,8 +22,6 @@ public class UserDB implements DatabaseInfo {
         return null;
     }
 
-
-    
     public User getUsers(String username, String password) {
         User user = null;
         String query = "select Username, Pass, FName , LName , UserID, Email, Phone, Address, Sex, DateOfBirth, MoneyLeft "
@@ -138,13 +136,10 @@ public class UserDB implements DatabaseInfo {
     }
 
 //-----------------------------------------------------------------------------------
-
-    public User updateUser(User user) {
+    public User updateeUser(User user) {
         String query = "UPDATE Users SET username=?, password=? WHERE UserId=?";
 
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
-
-            
 
             int rc = stmt.executeUpdate();
             if (rc == 0) {
@@ -156,6 +151,50 @@ public class UserDB implements DatabaseInfo {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException("Invalid data");
         }
+    }
+
+    // Method to update user information in the database
+    public boolean updateUser(User user) {
+        boolean success = false;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = getConnect(); // Get database connection (implement as per your DatabaseInfo class)
+            String sql = "UPDATE Users SET password=?, email=?, fName=?, lName=?, address=?, phone=?, sex=?, dob=? WHERE username=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, user.getPassword());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getfName()); // Set first name (fName)
+            stmt.setString(4, user.getlName()); // Set last name (lName)
+            stmt.setString(5, user.getAddress());
+            stmt.setString(6, user.getPhone());
+            stmt.setString(7, user.getSex());
+            stmt.setString(8, user.getDob());
+            stmt.setString(9, user.getUsername());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return success;
     }
 
 //--------------------------------------------------------------------------------
@@ -185,7 +224,6 @@ public class UserDB implements DatabaseInfo {
 //        }
 //        return res;
 //    }
-
 //    public static ArrayList<Users> listAllUsers() {
 //        ArrayList<Users> list = new ArrayList<>();
 //        String query = "SELECT UserId, username, password FROM Users";

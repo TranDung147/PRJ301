@@ -43,6 +43,10 @@
         <servlet-name>FlightServlet</servlet-name>
         <servlet-class>Controller.FlightServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminOrderServlet</servlet-name>
+        <servlet-class>Controller.AdminOrderServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
@@ -99,6 +103,10 @@
     <servlet-mapping>
         <servlet-name>FlightServlet</servlet-name>
         <url-pattern>/FlightServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminOrderServlet</servlet-name>
+        <url-pattern>/AdminOrderServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

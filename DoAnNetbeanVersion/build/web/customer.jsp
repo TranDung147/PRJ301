@@ -116,7 +116,6 @@
                                 <p>
                                     <span id="passwordDisplay">********</span>
                                     <button onclick="togglePassword()">Show</button>
-                                    <button id="changePasswordLink" onclick="changePassword()">Change Password</button>
                                 </p>
                             </div>
                             <div class="profile-info">
@@ -149,8 +148,7 @@
                             </div>
                         </div>
                         <div class="change-info-button">
-                            <form action="<%=response.encodeURL("UserServlet") %>" method="get">
-                                <input type="hidden" name="action" value="editProfile">
+                            <form action="updateinfo.jsp" method="get">
                                 <button type="submit">Change Information</button>
                             </form>
                         </div>
@@ -177,11 +175,6 @@
                     changePasswordLink.style.display = 'none'; // Ẩn link
                 }
             }
-
-            // Hàm chuyển hướng đến trang thay đổi mật khẩu
-            document.getElementById('changePasswordLink').onclick = function () {
-                window.location.href = 'changePassword.jsp'; // Thay thế đường dẫn này bằng đường dẫn tới trang thay đổi mật khẩu của bạn
-            };
 
             document.addEventListener('DOMContentLoaded', function () {
                 const burger = document.querySelector('.burger');
