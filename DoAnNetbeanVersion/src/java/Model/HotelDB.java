@@ -192,33 +192,37 @@ public class HotelDB implements DatabaseInfo {
         }
         return null;
     }
-    
+
     public static List<Hotel> getAvailableRooms(String roomType) {
-    List<Hotel> hotelList = new ArrayList<>();
-    try (Connection con = getConnect()) {
-        String query = "SELECT h.HotelID, HotelName, HotelAddress, Description, productImage, City, Country " +
-                       "FROM Hotel h " +
-                       "INNER JOIN Room r ON r.HotelID = h.HotelID " +
-                       "WHERE r.IsAvailable = 1 AND r.RoomType = ?";
-        PreparedStatement stmt = con.prepareStatement(query);
-        stmt.setString(1, roomType);  // Set the room type parameter
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Hotel hotel = new Hotel(
-                    rs.getString("HotelID"),
-                    rs.getString("HotelName"),
-                    rs.getString("HotelAddress"),
-                    rs.getString("Description"),
-                    rs.getString("productImage"),
-                    rs.getString("City"),
-                    rs.getString("Country"));
-            hotelList.add(hotel);
+        List<Hotel> hotelList = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT h.HotelID, h.HotelName, h.HotelAddress, h.Description, h.productImage, h.City, h.Country\n"
+                    + "FROM Hotel h\n"
+                    + "INNER JOIN (\n"
+                    + "    SELECT DISTINCT h.HotelID\n"
+                    + "    FROM Hotel h\n"
+                    + "    INNER JOIN Room r ON r.HotelID = h.HotelID\n"
+                    + "    WHERE r.IsAvailable = 1 AND r.RoomType = ?\n"
+                    + ") distinct_hotels ON h.HotelID = distinct_hotels.HotelID";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, roomType);  // Set the room type parameter
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Hotel hotel = new Hotel(
+                        rs.getString("HotelID"),
+                        rs.getString("HotelName"),
+                        rs.getString("HotelAddress"),
+                        rs.getString("Description"),
+                        rs.getString("productImage"),
+                        rs.getString("City"),
+                        rs.getString("Country"));
+                hotelList.add(hotel);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        return hotelList;
     }
-    return hotelList;
-}
     //--------------------------------------------------------------------------------------------
 
     public static void main(String[] a) {
