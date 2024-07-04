@@ -47,8 +47,9 @@ public class UserServlet extends HttpServlet {
             case "db":
                 handleDashBoard(request, response);
                 break;
-            case "change":
-                handleChange(request, response);
+            case "update":
+                handleUpdate(request, response);
+                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -162,38 +163,39 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void handleChange(HttpServletRequest request, HttpServletResponse response)
+    private void handleUpdate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Retrieve form parameters
+        // Lấy thông tin từ form
+        String userID = request.getParameter("userID");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
-        String fullname = request.getParameter("fullname");
+        String fName = request.getParameter("fName");
+        String lName = request.getParameter("lName");
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String sex = request.getParameter("sex");
         String dob = request.getParameter("dob");
 
-// Split full name into first name and last name
-        String[] nameParts = fullname.split("\\s+", 2); // Split by whitespace, limit to 2 parts
-        String fname = nameParts[0]; // First part is first name
-        String lname = (nameParts.length > 1) ? nameParts[1] : ""; // Second part is last name, or empty if not provided
+        // Tạo một đối tượng User
+        User user = new User(userID, username, password, email, "User", fName, lName, address, phone, sex, dob);
 
-// Create a User object with updated information
-        User updatedUser = new User(username, password, email, fname, lname, address, phone, sex, dob);
-
-        // Update user data in the database
+        // Cập nhật thông tin người dùng trong cơ sở dữ liệu
         UserDB userDB = new UserDB();
-        boolean success = userDB.updateUser(updatedUser);
+        boolean isUpdated = userDB.updateUser(user);
 
-        if (success) {
-            // Redirect to a success page or dashboard
-            response.sendRedirect("userDBoard.jsp"); // Example redirect to dashboard page
+        if (isUpdated) {
+            // Nếu cập nhật thành công, lưu thông tin mới vào session
+            HttpSession session = request.getSession();
+            session.setAttribute("user", username);
+            session.setAttribute("pass", password);
+            session.setAttribute("userDetails", user);
+
+            // Chuyển hướng trở lại trang thông tin người dùng
+            response.sendRedirect("customer.jsp");
         } else {
-            // Handle failure (e.g., display an error message)
-            request.setAttribute("errorMessage", "Failed to update user information.");
-            RequestDispatcher rd = request.getRequestDispatcher("updateinfo.jsp");
-            rd.forward(request, response);
+            // Xử lý nếu cập nhật thất bại
+            response.sendRedirect("updateinfo.jsp?error=UpdateFailed");
         }
     }
 

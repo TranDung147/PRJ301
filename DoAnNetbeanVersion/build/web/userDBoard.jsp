@@ -1,7 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Model.DatabaseInfo"%>
-<%@page import="Model.User"%>
-<%@page import="Model.UserDB"%>
+<%@ page import="Model.User"%>
+<%@ page import="Model.UserDB"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vn">
 
@@ -43,7 +44,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="bookingCart.jsp">
+                        <a href="booking">
                             <span class="icon">
                                 <img src="img/admin/order.png" alt="Booking Cart">
                             </span>
@@ -57,64 +58,42 @@
             <div class="main-admin">
                 <!-- =============== Header ================ -->
                 <div class="information">
-
-                    <%
-                        // Allow access only if session exists
-                        String user = null;
-                        String pass = null;
-                        if (session.getAttribute("user") == null || session.getAttribute("pass") == null) {
+                    <jsp:useBean id="userDB" class="Model.UserDB" scope="request" />
+                    <% 
+                        // Gọi phương thức getUserFromSession từ UserDB
+                        User user = userDB.getUserFromSession(session, request);
+                    
+                        if (user == null) {
                             response.sendRedirect("index.jsp");
                         } else {
-                            user = (String) session.getAttribute("user");
-                            pass = (String) session.getAttribute("pass");
+                            request.setAttribute("user", user);
                         }
-
-                        String userName = null;
-                        String sessionID = null;
-                        Cookie[] cookies = request.getCookies();
-                        if (cookies != null) {
-                            for (Cookie cookie : cookies) {
-                                if (cookie.getName().equals("user")) userName = cookie.getValue();
-                                if (cookie.getName().equals("JSESSIONID")) sessionID = cookie.getValue();
-                                if (cookie.getName().equals("pass")) pass = cookie.getValue();
-                            }
-                        } else {
-                            sessionID = session.getId();
-                        }
-
-                        if (session != null) {
-                            String sessionUser = (String) session.getAttribute("user");
-                            String sessionPass = (String) session.getAttribute("pass");
-                            if (sessionUser != null && sessionPass != null) {
-                                userName = sessionUser;
-                                pass = sessionPass;
-                            }
-                        }
-                    
-                        UserDB userDB = new UserDB();
-                        User users = userDB.getUsers(userName, pass);
-                    
-                        if (users != null) {
                     %>
-                    <div class="profile-card">
-                        <div class="topbar-admin">
-                            <div class="burger">
-                                <div class="line1"></div>
-                                <div class="line2"></div>
-                                <div class="line3"></div>
-                            </div>
-                        </div>
-                        <!-- Hiển thị session ID, username, và các thông tin khác -->
-                        <div>
-                            <h1>Dash Board</h1>
-                        </div> 
+
+                    <c:choose>
+                        <c:when test="${user == null}">
+                            <c:redirect url="index.jsp" />
+                        </c:when>
+                        <c:otherwise>
+                            <div class="profile-card">
+                                <div class="topbar-admin">
+                                    <div class="burger">
+                                        <div class="line1"></div>
+                                        <div class="line2"></div>
+                                        <div class="line3"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h1>User Dashboard</h1>
+
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
         </div>
-        <% }%>
-
-
+                    
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const burger = document.querySelector('.burger');

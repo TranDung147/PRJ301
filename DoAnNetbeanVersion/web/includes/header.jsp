@@ -79,7 +79,7 @@
 
                 <nav class="nav justify-content-center" id="hidden-buttons">
                     <a class="nav-link active" href="index.jsp">Trang chủ</a>
-                    <a class="nav-link" href="FlightServlet">Chuyến bay</a>
+                    <a class="nav-link" href="FlightServlet?page=1&action=loadAllDB">Chuyến bay</a>
                     <a class="nav-link" href="hotel.jsp">Khách sạn</a>
                     <a class="nav-link" href="PlaneServlet?page=1">Thuê xe</a>
                     <a class="nav-link" href="#">Tham quan</a>

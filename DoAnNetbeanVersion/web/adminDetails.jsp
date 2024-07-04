@@ -1,8 +1,3 @@
-<%-- 
-    Document   : details
-    Created on : Jul 1, 2024, 11:45:09 PM
-    Author     : plmin
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -378,7 +373,7 @@
 
                 <!-- ========================= Type of Table ==================== -->
                 <div class="table-type">
-                    <form id="detailForm" method="post" action="adminDetails.jsp">
+                    <form id="detailForm" method="post" action="adminDetails">
                         <label for="detailType">Select Detail Type:</label>
                         <select id="detailType" name="detailType" onchange="document.getElementById('detailForm').submit();">
                             <option value="Hotel" ${param.detailType == 'Hotel' ? 'selected' : ''}>Hotel</option>
@@ -408,11 +403,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%
-                        HotelDB h = new HotelDB();
-                        List<Hotel> hotels = h.listAll();
-                        request.setAttribute("hotels", hotels);
-                                    %>
                                     <c:forEach var="hotel" items="${hotels}">
                                         <tr>
                                             <td>${hotel.productImage}</td>

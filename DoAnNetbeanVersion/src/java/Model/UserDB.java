@@ -1,5 +1,8 @@
 package Model;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.sql.*;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -153,48 +156,51 @@ public class UserDB implements DatabaseInfo {
         }
     }
 
-    // Method to update user information in the database
     public boolean updateUser(User user) {
-        boolean success = false;
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
-        try {
-            conn = getConnect(); // Get database connection (implement as per your DatabaseInfo class)
-            String sql = "UPDATE Users SET password=?, email=?, fName=?, lName=?, address=?, phone=?, sex=?, dob=? WHERE username=?";
-            stmt = conn.prepareStatement(sql);
-
+        boolean result = false;
+        String sql = "UPDATE Users SET pass=?, email=?, fName=?, lName=?, address=?, phone=?, sex=?, DateOfBirth=?, username =? WHERE userID=?";
+        try (Connection conn = getConnect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getPassword());
             stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getfName()); // Set first name (fName)
-            stmt.setString(4, user.getlName()); // Set last name (lName)
+            stmt.setString(3, user.getfName());
+            stmt.setString(4, user.getlName());
             stmt.setString(5, user.getAddress());
             stmt.setString(6, user.getPhone());
             stmt.setString(7, user.getSex());
             stmt.setString(8, user.getDob());
             stmt.setString(9, user.getUsername());
+            stmt.setString(10, user.getUserID());
 
-            int rowsAffected = stmt.executeUpdate();
-
-            if (rowsAffected > 0) {
-                success = true;
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                result = true;
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    public User getUserFromSession(HttpSession session, HttpServletRequest request) {
+        String userName = (String) session.getAttribute("user");
+        String pass = (String) session.getAttribute("pass");
+
+        if (userName == null || pass == null) {
+            // Check cookies only if session attributes are not present
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("user")) userName = cookie.getValue();
+                    if (cookie.getName().equals("pass")) pass = cookie.getValue();
                 }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
         }
 
-        return success;
+        if (userName != null && pass != null) {
+            return getUsers(userName, pass); // Assuming this method fetches the User object
+        }
+        return null; // or throw an exception if user not found
     }
 
 //--------------------------------------------------------------------------------

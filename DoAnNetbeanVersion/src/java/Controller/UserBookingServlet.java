@@ -4,9 +4,11 @@
  */
 package Controller;
 
+import Model.AllBookingDB;
+import Model.HotelBooking;
+import Model.PlaneBooking;
 import Model.User;
 import Model.UserDB;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +16,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  *
  * @author NOMNOM
  */
-public class UserDashboard extends HttpServlet {
+public class UserBookingServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,38 +35,47 @@ public class UserDashboard extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         // Thiết lập định dạng nội dung và bộ ký tự
-        response.setContentType("text/html;charset=UTF-8");
-
-        // Lấy thông tin người dùng từ session hoặc từ cơ sở dữ liệu
         HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("user");
-        String password = (String) session.getAttribute("pass");
+        String userName = (String) session.getAttribute("user");
+        String pass = (String) session.getAttribute("pass");
 
-        // Giả sử bạn có lớp UserDB để lấy thông tin người dùng
+        if (userName == null || pass == null) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+
         UserDB userDB = new UserDB();
-        User user = userDB.getUsers(username, password);
+        User user = userDB.getUsers(userName, pass);
 
-        // Đặt đối tượng User vào request scope
+        if (user == null) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+
+        AllBookingDB bookingDB = new AllBookingDB();
+        List<HotelBooking> hotelBookings = bookingDB.getAllHotelBookings(user.getUserID());
+        List<PlaneBooking> planeBookings = bookingDB.getAllPlaneBookings(user.getUserID());
+
+        // Đặt thuộc tính cho JSP
         request.setAttribute("user", user);
+        request.setAttribute("hotelBookings", hotelBookings);
+        request.setAttribute("planeBookings", planeBookings);
 
-        // Chuyển tiếp yêu cầu tới trang JSP
-        RequestDispatcher dispatcher = request.getRequestDispatcher("userDBoard.jsp");
-        dispatcher.forward(request, response);
+        // Chuyển tiếp yêu cầu tới JSP
+        request.getRequestDispatcher("bookingCart.jsp").forward(request, response);
     }
 
-
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-/**
- * Handles the HTTP <code>GET</code> method.
- *
- * @param request servlet request
- * @param response servlet response
- * @throws ServletException if a servlet-specific error occurs
- * @throws IOException if an I/O error occurs
- */
-@Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -77,7 +89,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -88,7 +100,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
      * @return a String containing servlet description
      */
     @Override
-public String getServletInfo() {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

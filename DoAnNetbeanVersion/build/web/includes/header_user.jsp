@@ -2,10 +2,8 @@
 
 <style>
     body {
-        font-family: Arial, sans-serif;
         background-color: #f0f2f5;
         margin: 0;
-        height: 100vh;
     }
 
     .user-menu {
@@ -115,7 +113,7 @@
                         <div class="menu-header">
                             <img src="img/avtvodanh.png" alt="User Avatar">
                             <span>admin</span>
-                            <a href="UserDashboard">Xem tất cả trang cá nhân</a>
+                            <a href="userDBoard.jsp">Xem tất cả trang cá nhân</a>
                         </div>
                         <a href="#" id="settings-privacy">
                             <img src="img/settings_privacy.png" alt="Settings & Privacy"> Cài đặt & quyền riêng tư
@@ -140,7 +138,7 @@
         <div class="botfloor nav-links text-center custom-nav">
             <nav class="nav justify-content-center">
                 <a class="nav-link active" href="index.jsp">Trang chủ</a>
-                <a class="nav-link" href="FlightServlet">Chuyến bay</a>
+                <a class="nav-link" href="FlightServlet?page=1&action=loadAllDB">Chuyến bay</a>
                 <a class="nav-link" href="hotel.jsp">Khách sạn</a>
                 <a class="nav-link" href="PlaneServlet?page=1">Thuê xe</a>
                 <a class="nav-link" href="#">Địa điểm tham quan</a>

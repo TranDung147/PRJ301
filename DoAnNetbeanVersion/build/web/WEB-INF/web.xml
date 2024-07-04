@@ -16,10 +16,6 @@
         <servlet-class>Controller.UserServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserDashboard</servlet-name>
-        <servlet-class>Controller.UserDashboard</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>RoomServlet</servlet-name>
         <servlet-class>Controller.RoomServlet</servlet-class>
     </servlet>
@@ -46,6 +42,14 @@
     <servlet>
         <servlet-name>AdminOrderServlet</servlet-name>
         <servlet-class>Controller.AdminOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserBookingServlet</servlet-name>
+        <servlet-class>Controller.UserBookingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminDetailsServlet</servlet-name>
+        <servlet-class>Controller.AdminDetailsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
@@ -77,10 +81,6 @@
     </servlet-mapping>
     <!-- ```````````````````````````````````````````````````````````````````````` -->
     <servlet-mapping>
-        <servlet-name>UserDashboard</servlet-name>
-        <url-pattern>/UserDashboard</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>RoomServlet</servlet-name>
         <url-pattern>/roomServlet</url-pattern>
     </servlet-mapping>
@@ -107,6 +107,14 @@
     <servlet-mapping>
         <servlet-name>AdminOrderServlet</servlet-name>
         <url-pattern>/AdminOrderServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserBookingServlet</servlet-name>
+        <url-pattern>/booking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminDetailsServlet</servlet-name>
+        <url-pattern>/adminDetails</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

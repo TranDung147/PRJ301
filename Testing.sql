@@ -289,6 +289,23 @@ VALUES
 ('FL0009', 'PL0009', '2024-07-09', '2024-07-09', 'San Diego', 'Denver'),
 ('FL0010', 'PL0010', '2024-07-10', '2024-07-10', 'San Francisco', 'Boston');
 
+INSERT INTO Flight (FlightID, PlaneID, DateStart, DateEnd, DepartureCity, ArrivalCity)
+VALUES	
+('FL0011', 'PL0011', '2024-07-11', '2024-07-11', 'Portland', 'Chicago'),
+('FL0012', 'PL0012', '2024-07-12', '2024-07-12', 'Las Vegas', 'Atlanta'),
+('FL0013', 'PL0013', '2024-07-13', '2024-07-13', 'Orlando', 'Dallas'),
+('FL0014', 'PL0014', '2024-07-14', '2024-07-14', 'Los Angeles', 'Seattle'),
+('FL0015', 'PL0015', '2024-07-15', '2024-07-15', 'New York', 'San Diego'),
+('FL0016', 'PL0016', '2024-07-16', '2024-07-16', 'Boston', 'San Francisco'),
+('FL0017', 'PL0017', '2024-07-17', '2024-07-17', 'Denver', 'Orlando'),
+('FL0018', 'PL0018', '2024-07-18', '2024-07-18', 'San Francisco', 'Atlanta'),
+('FL0019', 'PL0019', '2024-07-19', '2024-07-19', 'Miami', 'Seattle'),
+('FL0020', 'PL0020', '2024-07-20', '2024-07-20', 'Chicago', 'Los Angeles'),
+('FL0021', 'PL0021', '2024-07-21', '2024-07-21', 'Atlanta', 'Houston'),
+('FL0022', 'PL0022', '2024-07-22', '2024-07-22', 'Dallas', 'Portland'),
+('FL0023', 'PL0023', '2024-07-23', '2024-07-23', 'New York', 'Las Vegas'),
+('FL0024', 'PL0024', '2024-07-24', '2024-07-24', 'San Diego', 'Boston');
+
 
 INSERT INTO Seat (SeatID, FlightID, SeatNumber, SeatType, IsAvailable)
 VALUES
@@ -338,8 +355,6 @@ VALUES
 ('BT0002', 'ST0003', 50.00, 'Pending'),
 ('BT0002', 'ST0004', 50.00, 'Pending');
 
-
-SELECT * FROM Flight
-SELECT seatID, flightID, seatNumber, seatType, IsAvailable FROM Seat WHERE FlightID='FL0001'
+UPDATE Users SET pass='4', email='asmith@example.com', fName='Alice', lName='Smith', address='456 Oak St, Othertown', phone='2345678901', sex='Male', DateOfBirth='1985-02-15', username='user' WHERE userID='US0002'
 
 
