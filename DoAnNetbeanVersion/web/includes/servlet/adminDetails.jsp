@@ -3,230 +3,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import="Model.*" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Admin Details Information</title>
+        <link href="assets/css/admindb.css" rel="stylesheet"/>
     </head>
     <style>
-        /* =============== Globals ============== */
-        * {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --blue: #1b3661;
-            --white: #fff;
-            --gray: #f5f5f5;
-            --black1: #222;
-            --black2: #999;
-        }
-
-        body {
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            position: relative;
-            width: 100%;
-        }
-
-        /* =============== Navigation ================ */
-        .topbar-details {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0 10px;
-        }
-
-        .topbar-details h3 {
-            color: #fffdfde7;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            font-size: 35px;
-            transition: color 0.3s ease; /* Thêm hiệu ứng transition cho màu sắc */
-        }
-
-        .navigation-admin ul li:nth-child(1) {
-            margin-bottom: 40px;
-        }
-
-        .navigation-admin .logo {
-            display: block;
-        }
-
-        .navigation-admin.active .logo-text, .navigation-admin .logo-text {
-            display: block; /* hide the QTALD when navigation is minimized */
-            transition: opacity 0.3s ease; /* thêm hiệu ứng transition */
-            opacity: 1; /* mặc định là hiển thị */
-        }
-
-        .navigation-admin.active ul .logo-text {
-            opacity: 0; /* ẩn văn bản khi thanh điều hướng bị thu gọn */
-        }
-
-        .navigation-admin {
-            position: fixed;
-            width: 300px;
-            height: 100%;
-            background: var(--blue);
-            border-left: 10px solid var(--blue);
-            transition: 0.5s;
-            overflow: hidden;
-            z-index: 1000;
-        }
-        .navigation-admin.active {
-            width: 80px;
-        }
-
-        .navigation-admin ul {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-        }
-
-        .navigation-admin ul li {
-            position: relative;
-            width: 100%;
-            list-style: none;
-            border-top-left-radius: 30px;
-            border-bottom-left-radius: 30px;
-        }
-
-        .navigation-admin ul li:hover,
-        .navigation-admin ul li.hovered {
-            background-color: var(--white);
-        }
-
-        /* Làm cho cái ul đầu tiên (QTALD) không có hiệu ứng lúc di chuột vào */
-        .navigation-admin ul li:hover:nth-child(1) {
-            background-color: var(--blue);
-        }
-
-        .navigation-admin ul li a {
-            position: relative;
-            display: block;
-            width: 100%;
-            display: flex;
-            text-decoration: none;
-            color: var(--white);
-        }
-        .navigation-admin ul li:hover a,
-        .navigation-admin ul li.hovered a {
-            color: var(--blue);
-        }
-
-        .navigation-admin ul li a .icon {
-            position: relative;
-            display: block;
-            min-width: 60px;
-            height: 50px;
-            line-height: 85px;
-            text-align: center;
-            overflow: hidden;
-        }
-        .navigation-admin ul li a .icon img {
-            width: 65%;
-            height: 40px;
-            max-width: 100%;
-        }
-
-        .navigation-admin ul li a .title {
-            position: relative;
-            display: block;
-            padding: 0 10px;
-            height: 60px;
-            line-height: 60px;
-            text-align: start;
-            white-space: nowrap;
-        }
-
-        /* --------- curve outside ---------- */
-        .navigation-admin ul li:hover a::before,
-        .navigation-admin ul li.hovered a::before {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: -50px;
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border-radius: 50%;
-            box-shadow: 35px 35px 0 10px var(--white);
-            pointer-events: none;
-        }
-        .navigation-admin ul li:hover a::after,
-        .navigation-admin ul li.hovered a::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            bottom: -50px;
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            border-radius: 50%;
-            box-shadow: 35px -35px 0 10px var(--white);
-            pointer-events: none;
-        }
-        
-        .navigation-admin ul li.logo:hover a::before,
-        .navigation-admin ul li.logo.hovered a::before,
-        .navigation-admin ul li.logo:hover a::after,
-        .navigation-admin ul li.logo.hovered a::after {
-            content: none; /* Remove the curve motion effect for the QTALD logo */
-        }
-
-        /* ===================== Main ===================== */
-        .main-details {
-            position: relative;
-            width: calc(100% - 300px);
-            left: 300px;
-            background: var(--white);
-            transition: 0.5s;
-            overflow: hidden;
-        }
-        .main-details.active {
-            width: 95%;
-            left: 10px;
-        }
-
-        /* Add burger menu styles */
-        .burger {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            width: 30px;
-            height: 25px;
-            cursor: pointer;
-        }
-
-        .burger div {
-            width: 100%;
-            height: 4px;
-            background-color: #333;
-            transition: all 0.3s ease;
-            margin-left: 20px;
-        }
-
-        /* Adjust navigation slide-in behavior */
-        .navigation-admin.active {
-            left: 0; /* Ensure the navigation bar slides in from the left */
-        }
-
-        .main-details.active {
-            margin-left: 80px; /* Adjust based on the width of the navigation bar */
-        }
-
         /* ====================== Table ========================== */
         .table-type {
             display: flex;
@@ -239,7 +24,6 @@
             color: black;
             font-weight: bolder;
         }
-
         .table-details {
             width: 97%;
             padding: 20px;
@@ -252,8 +36,29 @@
             box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column; /* Sắp xếp các phần tử theo hàng dọc */
+            justify-content: flex-start; /* Căn chỉnh phần tử từ đầu */
+            align-items: flex-start; /* Căn chỉnh các phần tử theo chiều dọc */
+        }
+
+        .table-details .addsearch {
+            display: flex; /* Sắp xếp các phần tử trong addsearch theo hàng ngang */
+            justify-content: space-between; /* Căn phần tử trái và phải của addsearch ra hai đầu */
+            align-items: center; /* Căn phần tử theo chiều dọc */
+            margin-bottom: 20px; /* Khoảng cách dưới addsearch */
+        }
+
+        .table-details .addsearch button{
+            background-color: #4CAF50; /* Màu xanh */
+            color: white; /* Màu chữ trắng */
+            padding: 10px 20px; /* Đệm nút */
+            border: none; /* Loại bỏ viền */
+            text-decoration: none; /* Loại bỏ gạch chân */
+            border-radius: 5px; /* Đường viền cong */
+        }
+
+        .table-details .addsearch button:hover {
+            background-color: #45a049; /* Đổi màu nền khi di chuột qua */
         }
 
         .table-details table {
@@ -261,20 +66,25 @@
             border-collapse: collapse;
             margin-top: 15px;
         }
+
         .table-details table thead td {
             font-weight: 600;
         }
+
         .table-details table tr {
             color: var(--black1);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
+
         .table-details table tr:last-child {
             border-bottom: none;
         }
+
         .table-details table tbody tr:hover {
             background: var(--gray);
             color: var(--black);
         }
+
         .table-details table tr td {
             padding: 10px;
         }
@@ -328,7 +138,7 @@
                 <ul>
                     <li class="logo">
                         <a href="index.jsp">
-                            <div class="topbar-details">
+                            <div class="topbar-admin">
                                 <h3 class="logo-text">QTALD</h3>
                             </div>
                         </a>
@@ -350,7 +160,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails.jsp">
+                        <a href="adminOrderHistory.jsp">
+                            <span class="icon">
+                                <img src="img/admin/orderHistory.png" alt="Order History">
+                            </span>
+                            <span class="title">Order History</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="adminDetails?detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>
@@ -358,7 +176,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="LogoutServlet">    <!-- Logout -->
+                        <a onclick="logout();">    <!-- Logout -->
                             <span class="icon">
                                 <img src="img/admin/logout.png" alt="Messages">
                             </span>
@@ -397,6 +215,13 @@
                 <div class="table-details">
                     <c:choose>
                         <c:when test="${param.detailType == 'Hotel'}">
+                            <div class="addsearch">
+                                <a href="adminAddHotel.jsp" class="btn">Add Hotel</a>
+                                <form action="searchHotelServlet" method="GET">
+                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
+                                    <button type="submit">Search</button>
+                                </form>
+                            </div>
                             <table>
                                 <thead>
                                     <tr>
@@ -406,62 +231,76 @@
                                         <th>Description</th>
                                         <th>City</th>
                                         <th>Country</th>
+                                        <th>ImageURL</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach var="hotel" items="${hotels}">
                                         <tr>
-                                            <td>${hotel.productImage}</td>
                                             <td>${hotel.hotelId}</td>
                                             <td>${hotel.hotelName}</td>
                                             <td>${hotel.hotelAddress}</td>
                                             <td>${hotel.hotelDescription}</td>
                                             <td>${hotel.city}</td>
                                             <td>${hotel.country}</td>
+                                            <td>${hotel.productImage}</td>
                                             <td>
-                                                <a href="updateHotel.jsp?id=${hotel.id}">Update</a>
-                                                <a href="deleteHotel?id=${hotel.id}">Delete</a>
-                                                <a href="showHotel.jsp?id=${hotel.id}">Show</a>
+                                                <a href="updateHotel.jsp?id=${hotel.hotelId}">Update</a>
+                                                <a href="deleteHotel?id=${hotel.hotelId}">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-                            <a href="adminAddHotel.jsp" class="btn">Add Hotel</a>
+
                         </c:when>
-                            
+
                         <c:when test="${param.detailType == 'Plane'}">
+                            <div class="addsearch">
+                                <a href="adminAddPlane.jsp" class="btn">Add Plane</a>
+                                <form action="searchPlaneServlet" method="GET">
+                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
+                                    <button type="submit">Search</button>
+                                </form>
+                            </div>
                             <table>
                                 <thead>
                                     <tr>
                                         <th>Plane ID</th>
-                                        <th>Model</th>
-                                        <th>Brand</th>
-                                        <th>Capacity</th>
-                                        <th>Actions</th>
+                                        <th>Plane Name</th>
+                                        <th>Airline</th>
+                                        <th>ImageURL</th>
+                                        <th>Number of Seat</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="plane" items="${planeList}">
+                                    <c:forEach var="plane" items="${planes}">
                                         <tr>
-                                            <td>${plane.planeImg}</td>
                                             <td>${plane.planeID}</td>
                                             <td>${plane.planeName}</td>
                                             <td>${plane.airline}</td>
+                                            <td>${plane.planeImg}</td>
                                             <td>${plane.noSeat}</td>
                                             <td>
-                                                <a href="updatePlane.jsp?id=${plane.id}">Update</a>
-                                                <a href="deletePlane?id=${plane.id}">Delete</a>
-                                                <a href="showPlane.jsp?id=${plane.id}">Show</a>
+                                                <a href="updatePlane.jsp?id=${plane.planeID}">Update</a>
+                                                <a href="deletePlane?id=${plane.planeID}">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-                            <a href="adminAddPlane.jsp" class="btn">Add Plane</a>
+
                         </c:when>
                         <c:when test="${param.detailType == 'Flight'}">
+                            <div class="addsearch">
+                                <a href="adminAddFlight.jsp" class="btn">Add Flight</a>
+                                <form action="searchFlightServlet" method="GET">
+                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
+                                    <button type="submit">Search</button>
+                                </form>
+                            </div>
                             <table>
                                 <thead>
                                     <tr>
@@ -471,59 +310,75 @@
                                         <th>Date End</th>
                                         <th>Departure</th>
                                         <th>Arrival</th>
+                                        <th>Number of Seat Left</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="flight" items="${flightList}">
+                                    <c:forEach var="flight" items="${flights}">
                                         <tr>
-                                            <td>${flight.id}</td>
-                                            <td>${flight.planeId}</td>
+                                            <td>${flight.flightID}</td>
+                                            <td>${flight.planeID}</td>
                                             <td>${flight.dateStart}</td>
                                             <td>${flight.dateEnd}</td>
-                                            <td>${flight.departure}</td>
-                                            <td>${flight.arrival}</td>
+                                            <td>${flight.departureCity}</td>
+                                            <td>${flight.arrivalCity}</td>
+                                            <td>${flight.noSeatLeft}</td>
                                             <td>
-                                                <a href="updateFlight.jsp?id=${flight.id}">Update</a>
-                                                <a href="deleteFlight?id=${flight.id}">Delete</a>
-                                                <a href="showFlight.jsp?id=${flight.id}">Show</a>
+                                                <a href="updateFlight.jsp?id=${flight.flightID}">Update</a>
+                                                <a href="deleteFlight?id=${flight.flightID}">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-                            <a href="adminAddFlight.jsp" class="btn">Add Flight</a>
                         </c:when>
                         <c:when test="${param.detailType == 'Room'}">
+                            <div class="addsearch">
+                                <a href="adminAddRoom.jsp" class="btn">Add Room</a>
+                                <form action="searchRoomServlet" method="GET">
+                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
+                                    <button type="submit">Search</button>
+                                </form>
+                            </div>
                             <table>
                                 <thead>
                                     <tr>
                                         <th>Room ID</th>
+                                        <th>Hotel ID</th>
                                         <th>Room Number</th>
                                         <th>Type</th>
+                                        <th>Capacity</th>
                                         <th>Availability</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="room" items="${roomList}">
+                                    <c:forEach var="room" items="${rooms}">
                                         <tr>
                                             <td>${room.roomID}</td>
+                                            <td>${room.hotelID}</td>
                                             <td>${room.roomNumber}</td>
                                             <td>${room.roomType}</td>
+                                            <td>${room.capacity}</td>
                                             <td>${room.isAvailable}</td>
                                             <td>
-                                                <a href="updateRoom.jsp?id=${room.id}">Update</a>
-                                                <a href="deleteRoom?id=${room.id}">Delete</a>
-                                                <a href="showRoom.jsp?id=${room.id}">Show</a>
+                                                <a href="updateRoom.jsp?id=${room.roomID}">Update</a>
+                                                <a href="deleteRoom?id=${room.roomID}">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-                            <a href="adminAddRoom.jsp" class="btn">Add Room</a>
                         </c:when>
                         <c:when test="${param.detailType == 'Seat'}">
+                            <div class="addsearch">
+                                <a href="adminAddSeat.jsp" class="btn">Add Seat</a>
+                                <form action="searchSeatServlet" method="GET">
+                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
+                                    <button type="submit">Search</button>
+                                </form>
+                            </div>
                             <table>
                                 <thead>
                                     <tr>
@@ -536,43 +391,38 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="seat" items="${seatList}">
+                                    <c:forEach var="seat" items="${seats}">
                                         <tr>
-                                            <td>${seat.id}</td>
-                                            <td>${seat.flightId}</td>
-                                            <td>${seat.seatNo}</td>
-                                            <td>${seat.type}</td>
-                                            <td>${seat.availability}</td>
+                                            <td>${seat.seatID}</td>
+                                            <td>${seat.flightID}</td>
+                                            <td>${seat.seatNumber}</td>
+                                            <td>${seat.seatType}</td>
+                                            <td>${seat.isAvailable}</td>
                                             <td>
-                                                <a href="updateSeat.jsp?id=${seat.id}">Update</a>
-                                                <a href="deleteSeat?id=${seat.id}">Delete</a>
-                                                <a href="showSeat.jsp?id=${seat.id}">Show</a>
+                                                <a href="updateSeat.jsp?id=${seat.seatID}">Update</a>
+                                                <a href="deleteSeat?id=${seat.seatID}">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-                            <a href="adminAddSeat.jsp" class="btn">Add Seat</a>
                         </c:when>
                     </c:choose>
                 </div>
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-        <script src="assets/js/chartsJS.js"></script>
-
         <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const burger = document.querySelector('.burger');
-                                const navigation = document.querySelector('.navigation-admin');
-                                const main = document.querySelector('.main-details');
+            document.addEventListener('DOMContentLoaded', function () {
+                const burger = document.querySelector('.burger');
+                const navigation = document.querySelector('.navigation-admin');
+                const main = document.querySelector('.main-details');
 
-                                burger.addEventListener('click', function () {
-                                    navigation.classList.toggle('active');
-                                    main.classList.toggle('active');
-                                });
-                            });
+                burger.addEventListener('click', function () {
+                    navigation.classList.toggle('active');
+                    main.classList.toggle('active');
+                });
+            });
         </script>
     </body>
 </html>

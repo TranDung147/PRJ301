@@ -353,7 +353,7 @@
                 <ul>
                     <li class="logo">
                         <a href="index.jsp">
-                            <div class="topbar-order">
+                            <div class="topbar-admin">
                                 <h3 class="logo-text">QTALD</h3>
                             </div>
                         </a>
@@ -391,7 +391,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="LogoutServlet">    <!-- Logout -->
+                        <a onclick="logout();">    <!-- Logout -->
                             <span class="icon">
                                 <img src="img/admin/logout.png" alt="Messages">
                             </span>

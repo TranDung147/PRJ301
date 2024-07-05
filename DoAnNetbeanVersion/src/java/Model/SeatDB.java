@@ -91,6 +91,23 @@ public class SeatDB implements DatabaseInfo {
         return bookedSeat;
     }
     
+    public ArrayList<Seat> getAllSeats() {
+        ArrayList<Seat> list = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT * FROM Seat";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Seat(rs.getString("SeatID"), rs.getString("FlightID"), rs.getInt("SeatNumber"), rs.getString("SeatType"), rs.getInt("IsAvailable")));
+            }
+            con.close();
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     
 
 }

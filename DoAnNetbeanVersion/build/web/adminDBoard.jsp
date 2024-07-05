@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails.jsp">
+                        <a href="adminDetails?detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>

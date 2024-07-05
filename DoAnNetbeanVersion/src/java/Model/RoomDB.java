@@ -28,6 +28,7 @@ public class RoomDB implements DatabaseInfo {
         }
         return null;
     }
+
     // Method to get room details by RoomID
     public static Room getRoom(String roomID) {
         Room room = null;
@@ -43,6 +44,24 @@ public class RoomDB implements DatabaseInfo {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return room;
+    }
+
+    // Method to get room details by RoomID
+    public ArrayList<Room> getAllRooms() {
+        ArrayList<Room> list = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT * FROM Room";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Room(rs.getString("RoomID"), rs.getString("HotelID"), rs.getInt("RoomNumber"), rs.getString("RoomType"), rs.getInt("capacity"), rs.getInt("IsAvailable")));
+            }
+            con.close();
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public static Room bookRoom(String roomID) {
@@ -125,7 +144,6 @@ public class RoomDB implements DatabaseInfo {
 //        return id;
 //    }
 //-----------------------------------------------------------------------------------
-
     //--------------------------------------------------------------------------------------------
 //
 //    public static void main(String[] a) {

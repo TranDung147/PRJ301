@@ -42,6 +42,15 @@
             font-size: 35px;
             transition: color 0.3s ease; /* Thêm hiệu ứng transition cho màu sắc */
         }
+        
+        .topbar-details {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 10px;
+        }
 
         .navigation-admin ul li:nth-child(1) {
             margin-bottom: 40px;
@@ -165,6 +174,13 @@
             box-shadow: 35px -35px 0 10px var(--white);
             pointer-events: none;
         }
+        
+        .navigation-admin ul li.logo:hover a::before,
+        .navigation-admin ul li.logo.hovered a::before,
+        .navigation-admin ul li.logo:hover a::after,
+        .navigation-admin ul li.logo.hovered a::after {
+            content: none;
+        }
 
         /* ===================== Main ===================== */
         .main-admin {
@@ -177,6 +193,19 @@
             overflow: hidden;
         }
         .main-admin.active {
+            width: 95%;
+            left: 10px;
+        }
+        
+        .main-details {
+            position: relative;
+            width: calc(100% - 300px);
+            left: 300px;
+            background: var(--white);
+            transition: 0.5s;
+            overflow: hidden;
+        }
+        .main-details.active {
             width: 95%;
             left: 10px;
         }
@@ -205,6 +234,10 @@
         }
 
         .main-admin.active {
+            margin-left: 80px; /* Adjust based on the width of the navigation bar */
+        }
+        
+        .main-details.active {
             margin-left: 80px; /* Adjust based on the width of the navigation bar */
         }
 

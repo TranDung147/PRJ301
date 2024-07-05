@@ -4,12 +4,10 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
-import static Model.RoomDB.getConnect;
 import java.sql.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -134,7 +132,7 @@ public class HotelDB implements DatabaseInfo {
 //    }
 //--------------------------------------------------------------------------------------------
 
-    public static ArrayList<Hotel> listAll() {
+    public ArrayList<Hotel> listAll() {
         ArrayList<Hotel> list = new ArrayList<>();//vì cái trả về là một danh sách nên lưu và truyền nó ở dạng arraylist
 
         try (Connection con = getConnect()) {
@@ -145,6 +143,7 @@ public class HotelDB implements DatabaseInfo {
                         rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)));
             }
             con.close();
+            System.out.println(list);
             return list;
         } catch (Exception ex) {
             Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);

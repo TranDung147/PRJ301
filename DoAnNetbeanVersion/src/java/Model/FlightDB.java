@@ -58,18 +58,18 @@ public class FlightDB implements DatabaseInfo{
         }
         return flights;
     }
-    public static void main(String[] args) {
-        List<Flight> flights = FlightDB.getAllFlights();
-        
-        // In ra thông tin của từng chuyến bay
-        for (Flight flight : flights) {
-            System.out.println("Flight ID: " + flight.getFlightID());
-            System.out.println("Plane ID: " + flight.getPlaneID());
-            System.out.println("Date Start: " + flight.getDateStart());
-            System.out.println("Date End: " + flight.getDateEnd());
-            System.out.println("Departure City: " + flight.getDepartureCity());
-            System.out.println("Arrival City: " + flight.getArrivalCity());
-            System.out.println("------------------------");
-        }
-    }
+//    public static void main(String[] args) {
+//        List<Flight> flights = FlightDB.getAllFlights();
+//        
+//        // In ra thông tin của từng chuyến bay
+//        for (Flight flight : flights) {
+//            System.out.println("Flight ID: " + flight.getFlightID());
+//            System.out.println("Plane ID: " + flight.getPlaneID());
+//            System.out.println("Date Start: " + flight.getDateStart());
+//            System.out.println("Date End: " + flight.getDateEnd());
+//            System.out.println("Departure City: " + flight.getDepartureCity());
+//            System.out.println("Arrival City: " + flight.getArrivalCity());
+//            System.out.println("------------------------");
+//        }
+//    }
 }

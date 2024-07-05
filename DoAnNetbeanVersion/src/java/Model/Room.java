@@ -3,8 +3,10 @@ package Model;
 
 public class Room {
     private String roomID;
+    private String hotelID;
     private int roomNumber;
     private String roomType;
+    private int capacity;
     private int isAvailable;
 
     public Room() {
@@ -16,6 +18,35 @@ public class Room {
         this.roomType = roomType;
         this.isAvailable = isAvailable;
     }
+
+    public Room(String roomID, String hotelID, int roomNumber, String roomType, int capacity, int isAvailable) {
+        this.roomID = roomID;
+        this.hotelID = hotelID;
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.capacity = capacity;
+        this.isAvailable = isAvailable;
+    }
+    
+    
+
+    public String getHotelID() {
+        return hotelID;
+    }
+
+    public void setHotelID(String hotelID) {
+        this.hotelID = hotelID;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+    
+    
 
     public String getRoomID() {
         return roomID;
