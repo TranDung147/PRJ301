@@ -4,21 +4,19 @@
  */
 package Controller;
 
-import Model.Hotel;
-import Model.HotelDB;
+import Model.AllBookingDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 /**
  *
  * @author NOMNOM
  */
-public class AdminDetailsServlet extends HttpServlet {
+public class AdminRemoveOrderHistoryServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,16 +29,20 @@ public class AdminDetailsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String detailType = request.getParameter("detailType");
+        String bookingId = request.getParameter("bookingId");
+        String bookingType = request.getParameter("bookingType");
 
-        if ("Hotel".equals(detailType)) {
-            List<Hotel> hotels = HotelDB.listAll();
-            System.out.println(hotels);
-            request.setAttribute("hotels", hotels);
+        AllBookingDB db = new AllBookingDB();
+
+        // Determine the type of booking and perform the removal
+        if ("room".equals(bookingType)) {
+            db.removeBookingRoom(bookingId);
+        } else if ("ticket".equals(bookingType)) {
+            db.removeBookingTicket(bookingId);
         }
-        // Add similar logic for Plane, Flight, Room, Seat
 
-        request.getRequestDispatcher("adminDetails.jsp").forward(request, response);
+        // Redirect back to adminOrderHistory.jsp or any other appropriate page
+        response.sendRedirect("adminOrderHistory.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

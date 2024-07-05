@@ -51,6 +51,7 @@ CREATE TABLE Booking_Room (
     UserID CHAR(6),
     TotalPrice DECIMAL(10, 2),
 	CreatedDate DATE DEFAULT CAST(GETDATE() AS DATE),
+	Status VARCHAR(50),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 GO
@@ -106,6 +107,7 @@ CREATE TABLE Booking_Ticket (
 	UserID CHAR(6),
 	TotalPrice DECIMAL(10, 2),	
 	CreatedDate DATE DEFAULT CAST(GETDATE() AS DATE),
+	Status VARCHAR(50),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
@@ -357,4 +359,6 @@ VALUES
 
 UPDATE Users SET pass='4', email='asmith@example.com', fName='Alice', lName='Smith', address='456 Oak St, Othertown', phone='2345678901', sex='Male', DateOfBirth='1985-02-15', username='user' WHERE userID='US0002'
 
+SELECT RoomBookingID FROM Booking_Room WHERE UserID = 'US0002' AND CreatedDate = CAST(GETDATE() AS DATE)
 
+Select HotelID, HotelName, HotelAddress, Description, productImage, City, Country from Hotel

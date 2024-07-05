@@ -4,17 +4,14 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -93,55 +90,7 @@ public class SeatDB implements DatabaseInfo {
         }
         return bookedSeat;
     }
+    
+    
 
-    public static String insertBookingSeat(String userID, String totalPrice) {
-        String seatBookingID = null;
-        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, GETDATE())";
-        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingSeatSQL)) {
-            seatBookingID = generateUniqueBookingID();
-            pstmt.setString(1, seatBookingID);
-            pstmt.setString(2, userID);
-            pstmt.setString(3, totalPrice);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error inserting booking seat: " + userID, e);
-        }
-        return seatBookingID;
-    }
-
-    public static boolean insertBookingTicketDetail(String bookingTicketID, String seatID, String price, String status) throws ParseException {
-        String insertBookingTicketDetailSQL = "INSERT INTO Booking_Ticket_Detail (BookingTicketID, SeatID, Price, Status) VALUES (?, ?, ?, ?)";
-        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingTicketDetailSQL)) {
-            pstmt.setString(1, bookingTicketID);
-            pstmt.setString(2, seatID);
-            pstmt.setString(3, price);
-            pstmt.setString(4, status);
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public List<String> getBookingTicketIDBySeatID(String seatID) {
-        List<String> bookingTicketID = new ArrayList<>();
-        String query = "SELECT BookingTicketID FROM Booking_Ticket_Detail WHERE seatID = ?";
-        try (Connection conn = getConnect(); PreparedStatement preparedStatement = conn.prepareStatement(query)) {
-            preparedStatement.setString(1, seatID);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    bookingTicketID.add(resultSet.getString("BookingTicketID"));
-                }
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error fetching BookingTicketIDs by SeatID: " + seatID, e);
-        }
-        return bookingTicketID;
-    }
-
-    private static String generateUniqueBookingID() {
-        String uniqueID = UUID.randomUUID().toString().substring(0, 6);
-        return uniqueID;
-    }
 }

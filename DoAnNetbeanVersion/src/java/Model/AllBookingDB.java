@@ -126,6 +126,36 @@ public class AllBookingDB implements DatabaseInfo {
         return bookingTicketDetails;
     }
 
+    public static String getTodayBookingRoomID(String userID) {
+        String bookingRoomID = null;
+        String getBookingRoomIDSQL = "SELECT RoomBookingID FROM Booking_Room WHERE UserID = ? AND CreatedDate = CAST(GETDATE() AS DATE)";
+
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(getBookingRoomIDSQL)) {
+            pstmt.setString(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                bookingRoomID = rs.getString("RoomBookingID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ SQL
+        }
+        return bookingRoomID;
+    }
+    
+    public static boolean updateTotalPrice(String bookingRoomID, String additionalPrice) {
+    String updateTotalPriceSQL = "UPDATE Booking_Room SET TotalPrice = ISNULL(TotalPrice, 0) + ? WHERE RoomBookingID = ?";
+
+    try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(updateTotalPriceSQL)) {
+        pstmt.setString(1, additionalPrice);
+        pstmt.setString(2, bookingRoomID);
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace(); // Xử lý ngoại lệ SQL
+        return false;
+    }
+}
+
     //------------------------------------------------------------------------------------------------------------------------
     // Lấy tất cả các roomBookingID hiện có từ cơ sở dữ liệu
     private static List<Integer> getExistingBookingIDs() {
@@ -167,7 +197,7 @@ public class AllBookingDB implements DatabaseInfo {
         // Chọn ID nhỏ nhất chưa được sử dụng hoặc ID lớn nhất hiện tại + 1
         int newID = Math.max(nextUnusedID, largestID + 1);
 
-        return String.format("RB%04d", newID); // Định dạng thành RBxxxx
+        return String.format("BR%04d", newID); // Định dạng thành RBxxxx
     }
 
     // Phương thức để chèn một booking mới vào cơ sở dữ liệu
@@ -213,10 +243,6 @@ public class AllBookingDB implements DatabaseInfo {
             e.printStackTrace(); // In ra stack trace khi xảy ra lỗi SQL
             return false;
         }
-//        } catch (ParseException e) {
-//            e.printStackTrace(); // In ra stack trace khi xảy ra lỗi phân tích cú pháp
-//            return false;
-//        }
     }
 
     public List<java.sql.Date[]> getDateFromToDateByRoomBookingID(String roomBookingID) {
@@ -252,6 +278,90 @@ public class AllBookingDB implements DatabaseInfo {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error fetching RoomBookingIDs by RoomID: " + roomID, e);
         }
         return roomBookingIDs;
+    }
+    
+    //--------------------------------------------------------------------------------------------------------
+    
+    public static String getTodayBookingSeatID(String userID) {
+    String seatBookingID = null;
+    String getBookingSeatIDSQL = "SELECT TicketBookingID FROM Booking_Ticket WHERE UserID = ? AND CreatedDate = CAST(GETDATE() AS DATE)";
+
+    try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(getBookingSeatIDSQL)) {
+        pstmt.setString(1, userID);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            seatBookingID = rs.getString("TicketBookingID");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Xử lý ngoại lệ SQL
+    }
+    return seatBookingID;
+}
+    
+    public static boolean updateSeatTotalPrice(String bookingSeatID, String additionalPrice) {
+    String updateTotalPriceSQL = "UPDATE Booking_Ticket SET TotalPrice = ISNULL(TotalPrice, 0) + ? WHERE TicketBookingID = ?";
+
+    try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(updateTotalPriceSQL)) {
+        pstmt.setString(1, additionalPrice);
+        pstmt.setString(2, bookingSeatID);
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace(); // Xử lý ngoại lệ SQL
+        return false;
+    }
+}
+
+
+    public static String insertBookingSeat(String userID, String totalPrice) {
+        String seatBookingID = null;
+        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, GETDATE())";
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingSeatSQL)) {
+            seatBookingID = generateUniqueBookingID();
+            pstmt.setString(1, seatBookingID);
+            pstmt.setString(2, userID);
+            pstmt.setString(3, totalPrice);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error inserting booking seat: " + userID, e);
+        }
+        return seatBookingID;
+    }
+
+    public static boolean insertBookingTicketDetail(String bookingTicketID, String seatID, String price, String status) throws ParseException {
+        String insertBookingTicketDetailSQL = "INSERT INTO Booking_Ticket_Detail (BookingTicketID, SeatID, Price, Status) VALUES (?, ?, ?, ?)";
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingTicketDetailSQL)) {
+            pstmt.setString(1, bookingTicketID);
+            pstmt.setString(2, seatID);
+            pstmt.setString(3, price);
+            pstmt.setString(4, status);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<String> getBookingTicketIDBySeatID(String seatID) {
+        List<String> bookingTicketID = new ArrayList<>();
+        String query = "SELECT BookingTicketID FROM Booking_Ticket_Detail WHERE seatID = ?";
+        try (Connection conn = getConnect(); PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setString(1, seatID);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    bookingTicketID.add(resultSet.getString("BookingTicketID"));
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error fetching BookingTicketIDs by SeatID: " + seatID, e);
+        }
+        return bookingTicketID;
+    }
+
+    private static String generateUniqueBookingID() {
+        String uniqueID = UUID.randomUUID().toString().substring(0, 6);
+        return uniqueID;
     }
 
     //--------------------------------------------------------------------------------------------------------
@@ -327,9 +437,8 @@ public class AllBookingDB implements DatabaseInfo {
         }
         return bookings;
     }
-    
+
     //-------------------------------------------------------------------------------------
-    
     public static List<BookingRoomDetail> getRoomOrders() throws SQLException {
         List<BookingRoomDetail> roomOrders = new ArrayList<>();
 
@@ -372,6 +481,132 @@ public class AllBookingDB implements DatabaseInfo {
         }
 
         return ticketOrders;
+    }
+    
+    //-------------------------------------------------------------------------------------------------
+    
+    // In ra tất cả các Orders ở status Pending trong adminOders.jsp - nauQ
+    public List<BookingRoomDetail> getAllOrderBRD() {
+        List<BookingRoomDetail> list = new ArrayList<>();
+
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Room_Detail WHERE status = 'Pending'");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new BookingRoomDetail(rs.getString(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6)));
+            }
+            con.close();
+            return list;
+        } catch (Exception ex) {
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public List<BookingTicketDetail> getAllOrderBTD() {
+        List<BookingTicketDetail> list = new ArrayList<>();
+
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Ticket_Detail WHERE status = 'Pending'");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new BookingTicketDetail(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+            }
+            con.close();
+            return list;
+        } catch (Exception ex) {
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    // Cập nhật status Order (Pending -> Confirmed/Declined) trong adminDetails.jsp - nauQ
+    public boolean updateRoomOrderStatus(String orderId, String status) {
+        String sql = "UPDATE Booking_Room_Detail SET Status = ? WHERE RoomBookingID = ?";
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setString(2, orderId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateTicketOrderStatus(String orderId, String status) {
+        String sql = "UPDATE Booking_Ticket_Detail SET Status = ? WHERE BookingTicketID = ?";
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setString(2, orderId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // In ra tất cả các Order đã được duyệt trong adminOrder.jsp vào adminOrderHistory.jsp - nauQ
+    public List<BookingRoomDetail> getAllProcessedBookingRoomDetails() {
+        List<BookingRoomDetail> list = new ArrayList<>();
+
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Room_Detail where status = 'Approved' OR status = 'Declined'");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new BookingRoomDetail(rs.getString(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6)));
+            }
+            con.close();
+            return list;
+        } catch (Exception ex) {
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public List<BookingTicketDetail> getAllProcessedBookingTicketDetails() {
+        List<BookingTicketDetail> list = new ArrayList<>();
+
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Ticket_Detail where status = 'Approved' OR status = 'Declined'");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new BookingTicketDetail(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+            }
+            con.close();
+            return list;
+        } catch (Exception ex) {
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    // Xóa Order trong adminOrderHistory.jsp
+    public void removeBookingRoom(String bookingId) {
+        try (Connection con = getConnect()) {
+            String sql = "DELETE FROM Booking_Room_Detail WHERE RoomBookingID = ?";
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, bookingId);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void removeBookingTicket(String bookingId) {
+        try (Connection con = getConnect()) {
+            String sql = "DELETE FROM Booking_Ticket_Detail WHERE BookingTicketID = ?";
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, bookingId);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

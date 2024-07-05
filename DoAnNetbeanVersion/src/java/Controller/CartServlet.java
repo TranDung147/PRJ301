@@ -64,11 +64,26 @@ public class CartServlet extends HttpServlet {
     private void handleRoomBooking(HttpServletRequest request, HttpServletResponse response, String userID, String roomID) throws IOException {
         String checkInDate = request.getParameter("checkInDate");
         String checkOutDate = request.getParameter("checkOutDate");
+        String price = "50.00"; // Giá cố định
+        String id = null;
+        // Hàm để gắn giá trị cho id
 
         Room bookedRoom = RoomDB.bookRoom(roomID);
+
         if (bookedRoom != null) {
-            String roomBookingID = AllBookingDB.insertBookingRoom(userID, null);
-            boolean isBookingDetailInserted = AllBookingDB.insertBookingRoomDetail(roomBookingID, roomID, null, checkInDate, checkOutDate, "Pending");
+            // Kiểm tra nếu đã có bookingRoomID cho ngày hôm nay
+            String roomBookingID = AllBookingDB.getTodayBookingRoomID(userID);
+
+            if (roomBookingID == null) {
+                // Nếu không có, tạo mới với giá cố định
+                roomBookingID = AllBookingDB.insertBookingRoom(userID, price);
+            } else {
+                // Nếu có, cập nhật tổng giá với giá cố định
+                AllBookingDB.updateTotalPrice(roomBookingID, price);
+            }
+
+            // Thêm chi tiết booking cho roomBookingID hiện có hoặc mới tạo với giá cố định
+            boolean isBookingDetailInserted = AllBookingDB.insertBookingRoomDetail(roomBookingID, roomID, price, checkInDate, checkOutDate, "Pending");
             sendBookingResponse(request, response, isBookingDetailInserted, bookedRoom, null, "Room booked successfully.", "Failed to insert booking detail.");
         } else {
             sendErrorResponse(response, "Room not found or already booked.");
@@ -77,10 +92,22 @@ public class CartServlet extends HttpServlet {
 
     private void handleSeatBooking(HttpServletRequest request, HttpServletResponse response, String userID, String seatID) throws IOException {
         Seat bookedSeat = SeatDB.bookSeat(seatID);
+        String price = "50.00";
         if (bookedSeat != null) {
             try {
-                String seatBookingID = SeatDB.insertBookingSeat(userID, null);
-                boolean isBookingDetailInserted = SeatDB.insertBookingTicketDetail(seatBookingID, seatID, null, "Pending");
+                // Kiểm tra nếu đã có seatBookingID cho ngày hôm nay
+                String seatBookingID = AllBookingDB.getTodayBookingSeatID(userID);
+
+                if (seatBookingID == null) {
+                    // Nếu không có, tạo mới
+                    seatBookingID = AllBookingDB.insertBookingSeat(userID, price);
+                } else {
+                    // Nếu có, cập nhật tổng giá
+                    AllBookingDB.updateSeatTotalPrice(seatBookingID, price);
+                }
+
+                // Thêm chi tiết booking cho seatBookingID hiện có hoặc mới tạo
+                boolean isBookingDetailInserted = AllBookingDB.insertBookingTicketDetail(seatBookingID, seatID, price, "Pending");
                 List<BookingTicketDetail> bookingTicketDetails = AllBookingDB.getBookingTicketDetailsBySeatID(seatID);
                 sendBookingResponse(request, response, isBookingDetailInserted, bookedSeat, bookingTicketDetails, "Seat booked successfully.", "Failed to insert booking detail.");
             } catch (ParseException ex) {

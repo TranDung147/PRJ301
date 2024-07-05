@@ -9,7 +9,15 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Dashboard</title>
-        <link href="assets/css/admindb.css" rel="stylesheet"/> 
+        <link href="assets/css/admindb.css" rel="stylesheet"/>
+        <style>
+            .navigation-admin ul li.logo:hover a::before,
+            .navigation-admin ul li.logo.hovered a::before,
+            .navigation-admin ul li.logo:hover a::after,
+            .navigation-admin ul li.logo.hovered a::after {
+                content: none; /* Remove the curve motion effect for the QTALD logo */
+            }
+        </style>
     </head>
     <body>
         <!-- =============== Navigation ================ -->
@@ -40,6 +48,14 @@
                         </a>
                     </li>
                     <li>
+                        <a href="adminOrderHistory.jsp">
+                            <span class="icon">
+                                <img src="img/admin/orderHistory.png" alt="Order History">
+                            </span>
+                            <span class="title">Order History</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="adminDetails.jsp">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
@@ -48,7 +64,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="LogoutServlet">    <!-- Logout -->
+                        <a onclick="logout();">    <!-- Logout -->
                             <span class="icon">
                                 <img src="img/admin/logout.png" alt="Messages">
                             </span>
@@ -256,16 +272,24 @@
         <script src="assets/js/chartsJS.js"></script>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const burger = document.querySelector('.burger');
-                const navigation = document.querySelector('.navigation-admin');
-                const main = document.querySelector('.main-admin');
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const burger = document.querySelector('.burger');
+                                const navigation = document.querySelector('.navigation-admin');
+                                const main = document.querySelector('.main-admin');
 
-                burger.addEventListener('click', function () {
-                    navigation.classList.toggle('active');
-                    main.classList.toggle('active');
-                });
-            });
+                                burger.addEventListener('click', function () {
+                                    navigation.classList.toggle('active');
+                                    main.classList.toggle('active');
+                                });
+                            });
+
+                            function logout() {
+                                // Tạo một URL để gửi yêu cầu đăng xuất
+                                const url = "<%=response.encodeURL(request.getContextPath() + "/UserServlet?action=Log Out")%>";
+
+                                // Tạo một yêu cầu GET để đăng xuất
+                                window.location.href = url;
+                            }
         </script>
     </body>
 </html>

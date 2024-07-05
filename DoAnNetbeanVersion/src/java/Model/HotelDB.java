@@ -135,7 +135,7 @@ public class HotelDB implements DatabaseInfo {
 //--------------------------------------------------------------------------------------------
 
     public static ArrayList<Hotel> listAll() {
-        ArrayList<Hotel> list = new ArrayList<Hotel>();//vì cái trả về là một danh sách nên lưu và truyền nó ở dạng arraylist
+        ArrayList<Hotel> list = new ArrayList<>();//vì cái trả về là một danh sách nên lưu và truyền nó ở dạng arraylist
 
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement("Select HotelID, HotelName, HotelAddress, Description, productImage, City, Country from Hotel");

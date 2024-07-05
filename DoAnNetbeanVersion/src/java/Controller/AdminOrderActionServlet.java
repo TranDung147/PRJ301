@@ -4,21 +4,19 @@
  */
 package Controller;
 
-import Model.Hotel;
-import Model.HotelDB;
+import Model.AllBookingDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 /**
  *
  * @author NOMNOM
  */
-public class AdminDetailsServlet extends HttpServlet {
+public class AdminOrderActionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,16 +29,34 @@ public class AdminDetailsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String detailType = request.getParameter("detailType");
+        String orderId = request.getParameter("orderId");
+        String type = request.getParameter("type");
+        String action = request.getParameter("action"); // "approve" hoặc "decline"
 
-        if ("Hotel".equals(detailType)) {
-            List<Hotel> hotels = HotelDB.listAll();
-            System.out.println(hotels);
-            request.setAttribute("hotels", hotels);
+        AllBookingDB db = new AllBookingDB();
+        boolean success = false;
+        try {
+            String status = null;
+            if ("approve".equals(action)) {
+                status = "Approved";
+            } else if ("decline".equals(action)) {
+                status = "Declined";
+            }
+
+            if (status != null) {
+                if ("room".equals(type)) {
+                    success = db.updateRoomOrderStatus(orderId, status);
+                } else if ("ticket".equals(type)) {
+                    success = db.updateTicketOrderStatus(orderId, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // Add similar logic for Plane, Flight, Room, Seat
 
-        request.getRequestDispatcher("adminDetails.jsp").forward(request, response);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"success\":" + success + "}");
+        response.sendRedirect(request.getContextPath() + "/adminOrder.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

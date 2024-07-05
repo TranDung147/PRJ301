@@ -178,6 +178,13 @@
             box-shadow: 35px -35px 0 10px var(--white);
             pointer-events: none;
         }
+        
+        .navigation-admin ul li.logo:hover a::before,
+        .navigation-admin ul li.logo.hovered a::before,
+        .navigation-admin ul li.logo:hover a::after,
+        .navigation-admin ul li.logo.hovered a::after {
+            content: none; /* Remove the curve motion effect for the QTALD logo */
+        }
 
         /* ===================== Main ===================== */
         .main-details {
@@ -423,6 +430,7 @@
                             </table>
                             <a href="adminAddHotel.jsp" class="btn">Add Hotel</a>
                         </c:when>
+                            
                         <c:when test="${param.detailType == 'Plane'}">
                             <table>
                                 <thead>

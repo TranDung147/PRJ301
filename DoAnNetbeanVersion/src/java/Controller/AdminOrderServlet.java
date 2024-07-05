@@ -33,7 +33,7 @@ public class AdminOrderServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         List<BookingRoomDetail> roomOrders = new ArrayList<>();
+        List<BookingRoomDetail> roomOrders = new ArrayList<>();
         List<BookingTicketDetail> ticketOrders = new ArrayList<>();
         AllBookingDB a = new AllBookingDB();
         AllBookingDB b = new AllBookingDB();
@@ -50,19 +50,27 @@ public class AdminOrderServlet extends HttpServlet {
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    protected void acceptOrder(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String roomBookingIDStr = request.getParameter("roomBookingID");
+        int roomBookingID = Integer.parseInt(roomBookingIDStr);
+
+        // Update database logic here
+        // Example: Update the order status to "Confirmed" using your DAO methods
+        // Redirect back to adminOrder.jsp after processing
+        response.sendRedirect(request.getContextPath() + "/adminOrder.jsp");
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+
+        if (action != null && action.equals("approve")) {
+            acceptOrder(request, response);
+        } else {
+            processRequest(request, response);
+        }
     }
 
     /**

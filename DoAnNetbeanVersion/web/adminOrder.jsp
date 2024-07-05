@@ -196,6 +196,13 @@
             pointer-events: none;
         }
 
+        .navigation-admin ul li.logo:hover a::before,
+        .navigation-admin ul li.logo.hovered a::before,
+        .navigation-admin ul li.logo:hover a::after,
+        .navigation-admin ul li.logo.hovered a::after {
+            content: none; /* Remove the curve motion effect for the QTALD logo */
+        }
+
         /* ===================== Main ===================== */
         .main-order {
             position: relative;
@@ -246,7 +253,7 @@
             grid-template-columns: 2fr 1fr;
             grid-gap: 30px;
             position: relative;
-            min-height: 810px;
+            min-height: 150px;
             background: var(--white);
             box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
             border-radius: 20px;
@@ -293,55 +300,8 @@
         }
         .table-order table tr td {
             padding: 10px;
+            text-align: center; /* Căn chỉnh vị trí thông tin của bảng */
         }
-
-        /* Căn chỉnh vị trí thông tin của bảng */
-        .table-order table tr td:nth-child(1) {
-            text-align: left;
-        }
-        .table-order table tr td:nth-child(2) {
-            text-align: center;
-        }
-        .table-order table tr td:nth-child(3) {
-            text-align: center;
-        }
-        .table-order table tr td:nth-child(4) {
-            text-align: center;
-        }
-        .table-order table tr td:nth-child(5) {
-            text-align: center;
-        }
-        .table-order table tr td:last-child {
-            text-align: end;
-        }
-
-        /* PENDINGPENDINGPENDINGPENDINGPENDINGPENDINGPENDINGPENDINGPENDING */
-        .status.done {
-            padding: 2px 4px;
-            background: #8de02c;
-            color: var(--white);
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .status.processing {
-            padding: 2px 4px;
-            background: #e9b10a;
-            color: var(--white);
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .status.canceled {
-            padding: 2px 4px;
-            background: #f00;
-            color: var(--white);
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* PENDINGPENDINGPENDINGPENDINGPENDINGPENDINGPENDINGPENDINGPENDING */
 
         /* ====================== Responsive Design ========================== */
         @media (max-width: 991px) {
@@ -415,6 +375,14 @@
                         </a>
                     </li>
                     <li>
+                        <a href="adminOrderHistory.jsp">
+                            <span class="icon">
+                                <img src="img/admin/orderHistory.png" alt="Order History">
+                            </span>
+                            <span class="title">Order History</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="adminDetails.jsp">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
@@ -457,12 +425,13 @@
                                     <th>Date From</th>
                                     <th>Date To</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <%
                         AllBookingDB a = new AllBookingDB();
-                        List<BookingRoomDetail> bookingRooms = a.getAllBookingRoomDetails();
+                        List<BookingRoomDetail> bookingRooms = a.getAllOrderBRD();
                         request.setAttribute("bookingRooms", bookingRooms);
                                 %>
                                 <c:forEach var="order" items="${bookingRooms}">
@@ -472,7 +441,19 @@
                                         <td>${order.price}</td>
                                         <td>${order.dateFrom}</td>
                                         <td>${order.dateTo}</td>
-                                        <td>${order.status}</td>
+                                        <td class="status">${order.status}</td>
+                                        <td>
+                                            <c:if test="${order.status == 'Pending'}">
+                                                <form action="AdminOrderActionServlet" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="orderId" value="${order.roomBookingID}">
+                                                    <input type="hidden" name="type" value="room">
+                                                    <input type="hidden" name="action" value="approve">
+                                                    <button type="submit" style="border:none; background:none; padding:0;">
+                                                        <img src="img/admin/approve.png" alt="Approve" title="Approve" width="20px" height="20px" style="cursor:pointer;">
+                                                    </button>
+                                                </form>
+                                            </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -492,12 +473,13 @@
                                     <th>Seat ID</th>
                                     <th>Price</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <%
                         AllBookingDB d = new AllBookingDB();
-                        List<BookingTicketDetail> bookingTicketDetails = d.getAllBookingTicketDetails();
+                        List<BookingTicketDetail> bookingTicketDetails = d.getAllOrderBTD();
                         request.setAttribute("bookingTicketDetails", bookingTicketDetails);
                                 %>
                                 <c:forEach var="order" items="${bookingTicketDetails}">
@@ -505,7 +487,19 @@
                                         <td>${order.bookingTicketID}</td>
                                         <td>${order.seatID}</td>
                                         <td>${order.price}</td>
-                                        <td>${order.status}</td>
+                                        <td class="status">${order.status}</td>
+                                        <td>
+                                            <c:if test="${order.status == 'Pending'}">
+                                                <form action="AdminOrderActionServlet" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="orderId" value="${order.bookingTicketID}">
+                                                    <input type="hidden" name="type" value="ticket">
+                                                    <input type="hidden" name="action" value="approve">
+                                                    <button type="submit" style="border:none; background:none; padding:0;">
+                                                        <img src="img/admin/approve.png" alt="Approve" title="Approve" width="20px" height="20px" style="cursor:pointer;">
+                                                    </button>
+                                                </form>
+                                            </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>

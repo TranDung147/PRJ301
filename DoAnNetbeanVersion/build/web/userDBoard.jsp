@@ -15,6 +15,33 @@
         <link href="assets/css/userdb.css" rel="stylesheet"/>
         <link href="assets/css/customer.css" rel="stylesheet"/> 
     </head>
+     <style>
+        /* Booking Tables */
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .booking-table th, .booking-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .booking-table th {
+            background-color: #f2f2f2;
+        }
+
+        .hotel-bookings, .plane-bookings {
+            margin-top: 30px;
+        }
+
+        .hotel-bookings h2, .plane-bookings h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
     <body>
         <!-- =============== Navigation ================ -->
         <div class="container">
@@ -85,7 +112,71 @@
                                 </div>
                                 <div>
                                     <h1>User Dashboard</h1>
+                                </div>
+                                <!-- Hotel Bookings Section -->
+                                <div class="hotel-bookings">
+                                    <h2>Your Hotel Bookings</h2>
+                                    <table class="booking-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Hotel Name</th>
+                                                <th>Hotel Address</th>
+                                                <th>Room Number</th>
+                                                <th>Room Type</th>
+                                                <th>Price</th>
+                                                <th>Date From</th>
+                                                <th>Date To</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="booking" items="${hotelBookings}">
+                                                <tr>
+                                                    <td><c:out value="${booking.hotelName}" /></td>
+                                                    <td><c:out value="${booking.hotelAddress}" /></td>
+                                                    <td><c:out value="${booking.roomNumber}" /></td>
+                                                    <td><c:out value="${booking.roomType}" /></td>
+                                                    <td><c:out value="${booking.price}" /></td>
+                                                    <td><c:out value="${booking.dateFrom}" /></td>
+                                                    <td><c:out value="${booking.dateTo}" /></td>
+                                                    <td><c:out value="${booking.status}" /></td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
 
+                                <!-- Plane Bookings Section -->
+                                <div class="plane-bookings">
+                                    <h2>Your Plane Bookings</h2>
+                                    <table class="booking-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Plane Name</th>
+                                                <th>Departure City</th>
+                                                <th>Arrival City</th>
+                                                <th>Start Time</th>
+                                                <th>Seat Number</th>
+                                                <th>Seat Type</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="booking" items="${planeBookings}">
+                                                <tr>
+                                                    <td><c:out value="${booking.planeName}" /></td>
+                                                    <td><c:out value="${booking.locationFrom}" /></td>
+                                                    <td><c:out value="${booking.locationTo}" /></td>
+                                                    <td><c:out value="${booking.startTime}" /></td>
+                                                    <td><c:out value="${booking.seatNumber}" /></td>
+                                                    <td><c:out value="${booking.seatType}" /></td>
+                                                    <td><c:out value="${booking.price}" /></td>
+                                                    <td><c:out value="${booking.status}" /></td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </c:otherwise>
                         </c:choose>

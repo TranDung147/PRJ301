@@ -51,6 +51,14 @@
         <servlet-name>AdminDetailsServlet</servlet-name>
         <servlet-class>Controller.AdminDetailsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminOrderActionServlet</servlet-name>
+        <servlet-class>Controller.AdminOrderActionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminRemoveOrderHistoryServlet</servlet-name>
+        <servlet-class>Controller.AdminRemoveOrderHistoryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
@@ -115,6 +123,14 @@
     <servlet-mapping>
         <servlet-name>AdminDetailsServlet</servlet-name>
         <url-pattern>/adminDetails</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminOrderActionServlet</servlet-name>
+        <url-pattern>/AdminOrderActionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminRemoveOrderHistoryServlet</servlet-name>
+        <url-pattern>/AdminRemoveOrderHistoryServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
