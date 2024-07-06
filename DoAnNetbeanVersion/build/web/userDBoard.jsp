@@ -85,11 +85,11 @@
             <div class="main-admin">
                 <!-- =============== Header ================ -->
                 <div class="information">
-                    <jsp:useBean id="userDB" class="Model.UserDB" scope="request" />
+                    <jsp:useBean id="userDB" class="Model.UserDB" scope="session" />
                     <% 
                         // Gọi phương thức getUserFromSession từ UserDB
                         User user = userDB.getUserFromSession(session, request);
-                    
+                        
                         if (user == null) {
                             response.sendRedirect("index.jsp");
                         } else {

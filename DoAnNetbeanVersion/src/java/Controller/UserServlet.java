@@ -50,6 +50,8 @@ public class UserServlet extends HttpServlet {
             case "update":
                 handleUpdate(request, response);
                 break;
+            case "booking":
+                handleBooking(request, response);
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -60,7 +62,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         String user = request.getParameter("uname");
         String pass = request.getParameter("psw");
-
+        
         UserDB db = new UserDB();
         User a = db.getUsers(user, pass);
 
@@ -197,6 +199,18 @@ public class UserServlet extends HttpServlet {
             // Xử lý nếu cập nhật thất bại
             response.sendRedirect("updateinfo.jsp?error=UpdateFailed");
         }
+    }
+    
+    private void handleBooking(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        String user = request.getParameter("uname");
+        String pass = request.getParameter("psw");
+
+        UserDB db = new UserDB();
+        User a = db.getUsers(user, pass);
+        String id =a.getUserID();
+            
     }
 
     @Override

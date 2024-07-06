@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -124,21 +125,21 @@
         .leftht label{
             width: 250px;
         }
-        
+
         .leftht select{
             width: 250px;
             height: 50px;
-            
+
             font-size: 14px;
             color: #666;
             margin-bottom: 5px;
-            
+
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
             width: 100%;
-            
+
             margin-top: 25px;
         }
 
@@ -214,7 +215,72 @@
             margin-bottom: 10px;
         }
 
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
 
+        .card-custom {
+            width: 18rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-custom img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body-custom {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-body-custom h5 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-body-custom p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .card-body-custom .price {
+            font-size: 18px;
+            color: red;
+            margin: 10px 0;
+        }
+
+        .pagination {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
     </style>
     <main class="mainht">
         <div class="bodyht">
@@ -222,55 +288,96 @@
                 <div class="headerht">
                     <h1>Đặt khách sạn của bạn ngay hôm nay!</h1>
                 </div>
-                <div class="boxht">
-                    <div class="leftht">
-                        <div><img src="img/people.png" alt=""></div>
-                        <div class="startht">
-                            <label for="city">Thành phố:</label>
-                            <input type="text" id="city" placeholder="Nhập thành phố">
+                <form action="HotelServlet">
+                    <div class="boxht">
+                        <div class="leftht">
+                            <div><img src="img/people.png" alt=""></div>
+                            <div class="startht">
+                                <label for="city">Thành phố:</label>
+                                <input type="text" id="city" name="city" placeholder="Nhập thành phố">
+                            </div>
+                        </div>
+                        <div class="leftht">
+                            <div><img src="img/people.png" alt=""></div>
+                            <div class="startht">
+                                <select name="roomType" id="roomType">
+                                    <option value="">Chọn loại phòng</option>
+                                    <option value="VIP">Phòng đặc biệt</option>
+                                    <option value="Standard">Phòng thường</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="leftht">
+                            <div><img src="img/people.png" alt=""></div>
+                            <div class="peopleht">
+                                <label for="rooms">Số phòng:</label>
+                                <input type="number" id="rooms" placeholder="Số phòng cần đặt">
+                            </div>
                         </div>
                     </div>
-                    <div class="leftht">
-                        <div><img src="img/people.png" alt=""></div>
-                        <div class="startht">
-                            <select name="roomType" id="roomType">
-                                
-                                <option value="">Chọn loại phòng</option>
-                                <option value="VIP">Phòng đặc biệt</option>
-                                <option value="Standard">Phòng thường</option>
-                            </select>
+
+                    <div class="boxht">
+                        <div class="leftht">
+                            <div><img src="img/calendar.png" alt=""></div>
+                            <div class="roomht">
+                                <label for="checkin">Ngày nhận phòng:</label>
+                                <input type="date" id="checkin">
+                            </div>
+                        </div>
+                        <div class="leftht">
+                            <div><img src="img/calendar.png" alt=""></div>
+                            <div class="roomht">
+                                <label for="checkout">Ngày trả phòng:</label>
+                                <input type="date" id="checkout">
+                            </div>
                         </div>
                     </div>
-                    <div class="leftht">
-                        <div><img src="img/people.png" alt=""></div>
-                        <div class="peopleht">
-                            <label for="rooms">Số phòng:</label>
-                            <input type="number" id="rooms" placeholder="Số phòng cần đặt">
-                        </div>
-                    </div>
-                </div>
-                <div class="boxht">
-                    <div class="leftht">
-                        <div><img src="img/calendar.png" alt=""></div>
-                        <div class="roomht">
-                            <label for="checkin">Ngày nhận phòng:</label>
-                            <input type="date" id="checkin">
-                        </div>
-                    </div>
-                    <div class="leftht">
-                        <div><img src="img/calendar.png" alt=""></div>
-                        <div class="roomht">
-                            <label for="checkout">Ngày trả phòng:</label>
-                            <input type="date" id="checkout">
-                        </div>
-                    </div>
-                </div>
-                <div class="submit-rowht">
-                    <form action="roomServlet" method="post" id="bookingForm">
-                        <input type="hidden" name="action" value="bookRoom">
-                        <input type="hidden" name="rooms" id="hiddenRooms">
+                    <div class="submit-rowht">
+
+                        <input type="hidden" name="action" value="searchHotel">
+                        <input type="hidden" name="page" value="1">
                         <button type="submit" class="btnsht">ĐẶT NGAY</button>
-                    </form>
+
+                    </div>
+                </form>
+                <div class="card-container">
+
+                    <c:if test="${hotelList != null}">
+                        <c:forEach var="h" items="${hotelList}">   
+                            <form action="roomServlet" method="get">
+                                <div class="card-custom">
+                                    <input type="hidden" name="hotelID" value="${h.hotelId}">
+                                    <input type="hidden" name="hotelName" value="${h.hotelName}">      
+                                    <img src="img/${h.productImage}" alt="${h.productImage}">
+                                    <div class="card-body-custom">
+                                        <h5> ${h.hotelName} </h5>
+                                        <p>Địa chỉ: ${h.hotelAddress}, ${h.country} </p>
+                                        <div class="cc">
+                                            <button class="btn bg-primary text-white mx-auto xemphongbut" type="submit">Xem phòng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </c:forEach>
+                    </c:if>
+                    <c:if test="${hotelList == null}">
+                        <div class="alert alert-warning" role="alert">
+                            No Hotel Found.
+                        </div>
+                    </c:if>
+
+                </div>
+                <div class="pagination">
+                    <c:if test="${curPage > 1}">
+                        <a href="HotelServlet?action=loadPage&page=${curPage - 1}">&laquo;</a>
+                    </c:if>
+                    <c:forEach var="p" items="${pageList}">
+                        <a href="HotelServlet?action=loadPage&page=${p}" <c:if test="${curPage == p}">class="active"</c:if>>${p}</a>
+                    </c:forEach>
+                    <c:if test="${curPage < pageList.size()}">
+                        <a href="HotelServlet?action=loadPage&page=${curPage + 1}">&raquo;</a>
+                    </c:if>
+
                 </div>
             </div>
         </div>

@@ -196,15 +196,15 @@ VALUES
     ('RM0019', 'HT0010', '1001', 'VIP', 1),
     ('RM0020', 'HT0010', '1002', 'Standard', 1),
     -- Hotel HT0009: 4 rooms
-    ('RM0021', 'HT0009', '901', 'Standard', 1),
-    ('RM0022', 'HT0009', '902', 'Double', 1),
-    ('RM0023', 'HT0009', '903', 'Suite', 1),
-    ('RM0024', 'HT0009', '904', 'Deluxe', 1),
+    ('RM0021', 'HT0009', '903', 'Standard', 1),
+    ('RM0022', 'HT0009', '904', 'VIP', 1),
+    ('RM0023', 'HT0009', '905', 'VIP', 1),
+    ('RM0024', 'HT0009', '906', 'Standard', 1),
 
     -- Hotel HT0010: 3 rooms
-    ('RM0025', 'HT0010', '1001', 'Standard', 1),
-    ('RM0026', 'HT0010', '1002', 'VIP', 1),
-    ('RM0027', 'HT0010', '1003', 'VIP', 1),
+    ('RM0025', 'HT0010', '1003', 'Standard', 1),
+    ('RM0026', 'HT0010', '1004', 'VIP', 1),
+    ('RM0027', 'HT0010', '1005', 'VIP', 1),
 
     -- Hotel HT0011: 2 rooms
     ('RM0028', 'HT0011', '1101', 'Standard', 1),
@@ -360,5 +360,3 @@ VALUES
 UPDATE Users SET pass='4', email='asmith@example.com', fName='Alice', lName='Smith', address='456 Oak St, Othertown', phone='2345678901', sex='Male', DateOfBirth='1985-02-15', username='user' WHERE userID='US0002'
 
 SELECT RoomBookingID FROM Booking_Room WHERE UserID = 'US0002' AND CreatedDate = CAST(GETDATE() AS DATE)
-
-Select HotelID, HotelName, HotelAddress, Description, productImage, City, Country from Hotel

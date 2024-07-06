@@ -6,10 +6,17 @@
             <div class="upfloor row">
                 <h3 class="col-md-2">QTALD</h3>
 
-                <form class="search-bar col-md-6 row" action="hotelPage1.jsp">
-                    <input class="col-md-8 headsearch" type="text" placeholder="Tìm kiếm" />
-                    <button class="col-md-3 submitbut" type="submit">Search</button>
-                </form>
+                <div class="col-md-6 botfloor nav-links text-center custom-nav">
+
+                    <nav class="nav justify-content-center" id="hidden-buttons">
+                        <a class="nav-link active" href="index.jsp">Trang chủ</a>
+                        <a class="nav-link" href="FlightServlet?page=1&action=loadAllDB">Chuyến bay</a>
+                        <a class="nav-link" href="HotelServlet?action=loadAllHotelDB&page=1">Khách sạn</a>
+                        <!--  <a class="nav-link" href="PlaneServlet?page=1">Thuê xe</a>
+                              <a class="nav-link" href="#">Tham quan</a>
+                              <a class="nav-link" href="#">Taxi sân bay</a> -->
+                    </nav>
+                </div>
 
                 <div class="log col-md-4">
 
@@ -73,18 +80,6 @@
                         <button class="buthidden" id="menu-button">Menu</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="botfloor nav-links text-center custom-nav">
-
-                <nav class="nav justify-content-center" id="hidden-buttons">
-                    <a class="nav-link active" href="index.jsp">Trang chủ</a>
-                    <a class="nav-link" href="FlightServlet?page=1&action=loadAllDB">Chuyến bay</a>
-                    <a class="nav-link" href="hotel.jsp">Khách sạn</a>
-                    <a class="nav-link" href="PlaneServlet?page=1">Thuê xe</a>
-                    <a class="nav-link" href="#">Tham quan</a>
-                    <a class="nav-link" href="#">Taxi sân bay</a>
-                </nav>
             </div>
     </header>
 

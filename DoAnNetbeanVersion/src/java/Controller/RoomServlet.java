@@ -91,8 +91,9 @@ public class RoomServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String roomType = request.getParameter("rooms"); // Lấy giá trị từ select box "roomType"
+        String city = request.getParameter("city"); // Lấy giá trị từ select box "roomType"
 
-        List<Hotel> hotels = HotelDB.getAvailableRooms(roomType);
+        List<Hotel> hotels = HotelDB.searchHotel(roomType, city);
         request.setAttribute("hotels", hotels);
         request.setAttribute("roomType", roomType);
 

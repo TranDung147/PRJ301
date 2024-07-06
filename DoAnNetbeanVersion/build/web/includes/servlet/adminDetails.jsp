@@ -423,6 +423,13 @@
                     main.classList.toggle('active');
                 });
             });
+            function logout() {
+                                // Tạo một URL để gửi yêu cầu đăng xuất
+                                const url = "<%=response.encodeURL(request.getContextPath() + "/UserServlet?action=Log Out")%>";
+
+                                // Tạo một yêu cầu GET để đăng xuất
+                                window.location.href = url;
+                            }
         </script>
     </body>
 </html>
