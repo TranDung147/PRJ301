@@ -56,8 +56,9 @@ public class AllBookingDB implements DatabaseInfo {
         List<BookingRoom> list = new ArrayList<>();
 
         try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Room WHERE UserID = ?");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Room WHERE UserID = ? and status = ?");
             stmt.setString(1, id);
+            stmt.setString(2, "None");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(new BookingRoom(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
@@ -109,8 +110,9 @@ public class AllBookingDB implements DatabaseInfo {
         List<BookingTicket> list = new ArrayList<>();
 
         try (Connection con = getConnect()) {
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Ticket WHERE UserID = ?");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Booking_Ticket WHERE UserID = ? and status = ?");
             stmt.setString(1, id);
+            stmt.setString(2, "None");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(new BookingTicket(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
@@ -239,7 +241,7 @@ public class AllBookingDB implements DatabaseInfo {
     // Phương thức để chèn một booking mới vào cơ sở dữ liệu
     public static String insertBookingRoom(String userID, String totalPrice) {
         String roomBookingID = null;
-        String insertBookingRoomSQL = "INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, GETDATE())";
+        String insertBookingRoomSQL = "INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate, Status) VALUES (?, ?, ?, GETDATE(), ?)";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingRoomSQL)) {
             // Tạo roomBookingID mới dựa trên ID hiện tại hoặc ID nhỏ nhất bị thiếu
@@ -247,6 +249,7 @@ public class AllBookingDB implements DatabaseInfo {
             pstmt.setString(1, roomBookingID);
             pstmt.setString(2, userID);
             pstmt.setString(3, totalPrice);
+            pstmt.setString(4, "None");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(); // Xử lý ngoại lệ SQL
@@ -349,12 +352,13 @@ public class AllBookingDB implements DatabaseInfo {
 
     public static String insertBookingSeat(String userID, String totalPrice) {
         String seatBookingID = null;
-        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, CreatedDate) VALUES (?, ?, ?, GETDATE())";
+        String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, CreatedDate, Status) VALUES (?, ?, ?, GETDATE(), ?)";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingSeatSQL)) {
             seatBookingID = generateUniqueBookingID();
             pstmt.setString(1, seatBookingID);
             pstmt.setString(2, userID);
             pstmt.setString(3, totalPrice);
+            pstmt.setString(4, "None");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error inserting booking seat: " + userID, e);
@@ -397,82 +401,8 @@ public class AllBookingDB implements DatabaseInfo {
         String uniqueID = UUID.randomUUID().toString().substring(0, 6);
         return uniqueID;
     }
-
-    //--------------------------------------------------------------------------------------------------------
-    // Lấy danh sách các đơn đặt phòng khách sạn
-    public List<HotelBooking> getAllHotelBookings(String id) {
-        List<HotelBooking> bookings = new ArrayList<>();
-        String query = "SELECT br.RoomBookingID, u.Username, h.HotelName, h.HotelAddress, r.RoomNumber, "
-                + "r.RoomType, brd.Price, brd.DateFrom, brd.DateTo, brd.Status "
-                + "FROM Booking_Room br "
-                + "JOIN Booking_Room_Detail brd ON br.RoomBookingID = brd.RoomBookingID "
-                + "JOIN Room r ON brd.RoomID = r.RoomID "
-                + "JOIN Hotel h ON r.HotelID = h.HotelID "
-                + "JOIN Users u ON br.UserID = u.UserID "
-                + "WHERE u.UserID = ? "
-                + "ORDER BY br.CreatedDate DESC";
-
-        try (Connection connection = getConnect(); PreparedStatement ps = connection.prepareStatement(query)) {
-
-            ps.setString(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    HotelBooking booking = new HotelBooking();
-                    booking.setHotelName(rs.getString("HotelName"));
-                    booking.setHotelAddress(rs.getString("HotelAddress"));
-                    booking.setRoomNumber(rs.getString("RoomNumber"));
-                    booking.setRoomType(rs.getString("RoomType"));
-                    booking.setPrice(rs.getDouble("Price"));
-                    booking.setDateFrom(rs.getString("DateFrom"));
-                    booking.setDateTo(rs.getString("DateTo"));
-                    booking.setStatus(rs.getString("Status"));
-                    bookings.add(booking);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return bookings;
-    }
-
-    // Lấy danh sách các đơn đặt vé máy bay
-    public List<PlaneBooking> getAllPlaneBookings(String id) {
-        List<PlaneBooking> bookings = new ArrayList<>();
-        String query = "SELECT bt.TicketBookingID, u.Username, p.PlaneName, f.DepartureCity, f.ArrivalCity, "
-                + "f.DateStart, f.DateEnd, s.SeatNumber, s.SeatType, btd.Price, btd.Status "
-                + "FROM Booking_Ticket bt "
-                + "JOIN Booking_Ticket_Detail btd ON bt.TicketBookingID = btd.BookingTicketID "
-                + "JOIN Seat s ON btd.SeatID = s.SeatID "
-                + "JOIN Flight f ON s.FlightID = f.FlightID "
-                + "JOIN Plane p ON f.PlaneID = p.PlaneID "
-                + "JOIN Users u ON bt.UserID = u.UserID "
-                + "WHERE u.UserID = ? "
-                + "ORDER BY bt.CreatedDate DESC";
-
-        try (Connection connection = getConnect(); PreparedStatement ps = connection.prepareStatement(query)) {
-
-            ps.setString(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    PlaneBooking booking = new PlaneBooking();
-                    booking.setPlaneName(rs.getString("PlaneName"));
-                    booking.setStartTime(rs.getString("DateStart"));
-                    booking.setLocationFrom(rs.getString("DepartureCity"));
-                    booking.setLocationTo(rs.getString("ArrivalCity"));
-                    booking.setSeatNumber(rs.getString("SeatNumber"));
-                    booking.setSeatType(rs.getString("SeatType"));
-                    booking.setPrice(rs.getDouble("Price"));
-                    booking.setStatus(rs.getString("Status"));
-                    bookings.add(booking);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return bookings;
-    }
-
     //-------------------------------------------------------------------------------------
+
     public static List<BookingRoomDetail> getRoomOrders() throws SQLException {
         List<BookingRoomDetail> roomOrders = new ArrayList<>();
 

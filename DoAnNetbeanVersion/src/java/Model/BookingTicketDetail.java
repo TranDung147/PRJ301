@@ -52,5 +52,12 @@ public class BookingTicketDetail implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "BookingTicketDetail{" + "bookingTicketID=" + bookingTicketID + ", seatID=" + seatID + ", price=" + price + ", status=" + status + '}';
+    }
+    
+    
 }
 

@@ -55,7 +55,7 @@
                         </div>
                     </li>
                     <li>
-                        <a href="UserServlet?action=booking">
+                        <a href="booking">
                             <span class="icon">
                                 <img src="img/admin/dashboard.png" alt="Dashboard">
                             </span>
@@ -71,7 +71,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="booking">
+                        <a href="UserServlet?action=booking">
                             <span class="icon">
                                 <img src="img/admin/order.png" alt="Booking Cart">
                             </span>

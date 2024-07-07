@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="Model.User"%>
 <%@ page import="Model.UserDB"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -8,7 +8,6 @@
 
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Profile Details</title>
@@ -55,14 +54,6 @@
                         </div>
                     </li>
                     <li>
-                        <a href="booking">
-                            <span class="icon">
-                                <img src="img/admin/dashboard.png" alt="Dashboard">
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="customer.jsp">
                             <span class="icon">
                                 <img src="img/admin/customer.png" alt="Information">
@@ -97,7 +88,7 @@
                     <% 
                         // Gọi phương thức getUserFromSession từ UserDB
                         User user = userDB.getUserFromSession(session, request);
-                        
+                    
                         if (user == null) {
                             response.sendRedirect("index.jsp");
                         } else {
@@ -118,89 +109,97 @@
                                         <div class="line3"></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <h1>User Dashboard</h1>
-                                </div>
-                                <!-- Hotel Bookings Section -->
-                                <div class="hotel-bookings">
-                                    <h2>Your Hotel Bookings</h2>
-                                    <div>
-                                        <table class="booking-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Room Booking ID</th>
-                                                    <th>Total Price</th>
-                                                    <th>Created Date</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="booking" items="${roombookings}">
-                                                    <tr>
-                                                        <td><c:out value="${booking.roomBookingID}" /></td>
-                                                        <td><c:out value="${booking.totalPrice}" /></td>
-                                                        <td><c:out value="${booking.createdDate}" /></td>
-                                                        <td>
-                                                            <a href="updateHotel.jsp?id=${booking.roomBookingID}">View</a>
-                                                            <a href="deleteHotel?id=${booking.roomBookingID}">Order</a>
-                                                            <a href="deleteHotel?id=${booking.roomBookingID}">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
 
-                                    <!-- Plane Bookings Section -->
-                                    <div class="plane-bookings">
-                                        <h2>Your Plane Bookings</h2>
+                                <!-- Hotel Bookings Section -->
+                                <c:if test="${not empty bookingDetails}">
+                                    <div class="hotel-bookings">
+                                        <h1>All booking of RoomBookingID: <c:out value="${roomBookingID}" /></h1>
                                         <table class="booking-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Ticket Booking ID</th>
-                                                    <th>Total Price</th>
-                                                    <th>Created Date</th>
-                                                    <th>Actions</th>
+                                                    <th>Hotel Name</th>
+                                                    <th>Hotel Address</th>
+                                                    <th>Room Number</th>
+                                                    <th>Room Type</th>
+                                                    <th>Price</th>
+                                                    <th>Date From</th>
+                                                    <th>Date To</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="booking" items="${ticketbooking}">
+                                                <c:forEach var="booking" items="${bookingDetails}">
                                                     <tr>
-                                                        <td><c:out value="${booking.ticketBookingID}" /></td>
-                                                        <td><c:out value="${booking.totalPrice}" /></td>
-                                                        <td><c:out value="${booking.createdDate}" /></td>
-                                                        <td>
-                                                            <a href="updateHotel.jsp?id=${booking.ticketBookingID}">View</a>
-                                                            <a href="deleteHotel?id=${booking.ticketBookingID}">Order</a>
-                                                            <a href="deleteHotel?id=${booking.ticketBookingID}">Delete</a>
-                                                        </td>
+                                                        <td><c:out value="${booking.hotelName}" /></td>
+                                                        <td><c:out value="${booking.hotelAddress}" /></td>
+                                                        <td><c:out value="${booking.roomNumber}" /></td>
+                                                        <td><c:out value="${booking.roomType}" /></td>
+                                                        <td><c:out value="${booking.price}" /></td>
+                                                        <td><c:out value="${booking.dateFrom}" /></td>
+                                                        <td><c:out value="${booking.dateTo}" /></td>
+                                                        <td><c:out value="${booking.status}" /></td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
+                                </c:if>
+
+                                <!-- Plane Bookings Section -->
+                                <c:if test="${not empty ticketDetails}">
+                                    <div class="plane-bookings">
+                                        <h1>All booking of RoomBookingID: <c:out value="${ticketBookingID}" /></h1>
+                                        <table class="booking-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Plane Name</th>
+                                                    <th>Departure City</th>
+                                                    <th>Arrival City</th>
+                                                    <th>Start Time</th>
+                                                    <th>Seat Number</th>
+                                                    <th>Seat Type</th>
+                                                    <th>Price</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="booking" items="${ticketDetails}">
+                                                    <tr>
+                                                        <td><c:out value="${booking.planeName}" /></td>
+                                                        <td><c:out value="${booking.locationFrom}" /></td>
+                                                        <td><c:out value="${booking.locationTo}" /></td>
+                                                        <td><c:out value="${booking.startTime}" /></td>
+                                                        <td><c:out value="${booking.seatNumber}" /></td>
+                                                        <td><c:out value="${booking.seatType}" /></td>
+                                                        <td><c:out value="${booking.price}" /></td>
+                                                        <td><c:out value="${booking.status}" /></td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </c:if>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
+        </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const burger = document.querySelector('.burger');
-                    const navigation = document.querySelector('.navigation-admin');
-                    const main = document.querySelector('.main-admin');
-                    const profileCard = document.querySelector('.profile-card'); // Select the profile card
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const burger = document.querySelector('.burger');
+                const navigation = document.querySelector('.navigation-admin');
+                const main = document.querySelector('.main-admin');
+                const profileCard = document.querySelector('.profile-card'); // Select the profile card
 
-                    burger.addEventListener('click', function () {
-                        navigation.classList.toggle('active');
-                        main.classList.toggle('active');
-                        profileCard.classList.toggle('active'); // Toggle the active class on the profile card
-                    });
+                burger.addEventListener('click', function () {
+                    navigation.classList.toggle('active');
+                    main.classList.toggle('active');
+                    profileCard.classList.toggle('active'); // Toggle the active class on the profile card
                 });
-            </script>
-
+            });
+        </script>
 
     </body>
 </html>

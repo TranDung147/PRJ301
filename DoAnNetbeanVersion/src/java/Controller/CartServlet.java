@@ -65,10 +65,11 @@ public class CartServlet extends HttpServlet {
         String checkInDate = request.getParameter("checkInDate");
         String checkOutDate = request.getParameter("checkOutDate");
         String price = "50.00"; // Giá cố định
-        String id = null;
         // Hàm để gắn giá trị cho id
 
-        Room bookedRoom = RoomDB.bookRoom(roomID);
+        //Room bookedRoom = RoomDB.bookRoom(roomID);
+        Room bookedRoom = RoomDB.getRoom(roomID);
+        
 
         if (bookedRoom != null) {
             // Kiểm tra nếu đã có bookingRoomID cho ngày hôm nay
@@ -91,7 +92,8 @@ public class CartServlet extends HttpServlet {
     }
 
     private void handleSeatBooking(HttpServletRequest request, HttpServletResponse response, String userID, String seatID) throws IOException {
-        Seat bookedSeat = SeatDB.bookSeat(seatID);
+        //Seat bookedSeat = SeatDB.bookSeat(seatID);
+        Seat bookedSeat = SeatDB.getSeat(seatID);
         String price = "50.00";
         if (bookedSeat != null) {
             try {

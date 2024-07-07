@@ -29,6 +29,7 @@
 
             .bodyht {
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
@@ -41,11 +42,26 @@
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 padding: 20px;
-                margin-top: 30px;
+                margin-top: 57px;
                 width: 60%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                justify-content: center;
+            }
+
+            .containerht {
+                box-sizing: border-box;
+                background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                margin-top: 57px;
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
 
             /* Header styling */
@@ -194,9 +210,6 @@
                 background-color: #0056b3;
             }
 
-            .timeht input{
-                width: 127%;
-            }
             .card-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -300,17 +313,118 @@
 
                 margin-top: 25px;
             }
+
+
+            /* Media queries */
+            @media only screen and (min-width: 1055px) {
+                /* Styles for screens wider than 1055px */
+                .containerht {
+                    width: 50%;
+                }
+
+                .containerht2 {
+                    width: 90%;
+                }
+            }
+
+            @media only screen and (min-width: 1024px) and (max-width: 1254px) {
+                /* Styles for screens between 1024px and 1254px */
+                .containerht {
+                    width: 70%;
+                }
+
+                .containerht2 {
+                    width: 80%;
+                }
+            }
+
+            @media only screen and (min-width: 768px) and (max-width: 1023px) {
+                /* Styles for screens between 768px and 1023px */
+                .btnsht {
+                    width: 202px;
+                    margin-left: 30px;
+                }
+            }
+
+            @media only screen and (min-width: 425px) and (max-width: 767px) {
+                /* Styles for screens between 425px and 767px */
+                .containerht {
+                    width: 95%;
+                }
+
+                .containerht2 {
+                    width: 95%;
+                }
+
+                .boxht {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .card-custom {
+                    width: 100%;
+                }
+
+                .pagination a {
+                    display: block;
+                    margin: 5px 0;
+                }
+
+                .bodyht{
+                    margin-top: 15px;
+                }
+                #date, .btnsht {
+                    width: 202px;
+                }
+                .btnsht {
+                    margin-left: 30px;
+                }
+            }
+
+            @media only screen and (max-width: 424px) {
+                /* Styles for screens smaller than 425px */
+                .containerht {
+                    width: 95%;
+                }
+
+                .containerht2 {
+                    width: 95%;
+                }
+
+                .boxht {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .card-custom {
+                    width: 100%;
+                }
+
+                .pagination a {
+                    display: block;
+                    margin: 5px 0;
+                }
+                .bodyht{
+                    margin-top: 15px;
+                }
+                #date, .btnsht {
+                    width: 202px;
+                }
+                .btnsht {
+                    margin-left: 30px;
+                }
+            }
         </style>
     </head>
 
 
-    <% 
-    String user = (String) session.getAttribute("user");
-    if (user == null) { %>
+    <%
+        String user = (String) session.getAttribute("user");
+        if (user == null) { %>
     <%@include file="includes/header.jsp" %>
     <% } else { %>
     <%@include file="includes/header_user.jsp" %>
-    <% } %>
+    <% }%>
 
     <main class="mainht">
         <div class="bodyht">
@@ -375,7 +489,8 @@
                         </div>
                     </div>
                 </form>
-
+            </div>
+            <div class="containerht containerht2">
                 <div class="card-container">
                     <c:if test="${flightList != null}">
                         <c:forEach var="f" items="${flightList}">
@@ -407,7 +522,7 @@
                         <a href="FlightServlet?action=loadPage&page=${p}" <c:if test="${curPage == p}">class="active"</c:if>>${p}</a>
                     </c:forEach>
                     <c:if test="${curPage < pageList.size()}">
-                    <a href="FlightServlet?action=loadPage&page=${curPage + 1}">&raquo;</a>
+                        <a href="FlightServlet?action=loadPage&page=${curPage + 1}">&raquo;</a>
                     </c:if>
 
                 </div>

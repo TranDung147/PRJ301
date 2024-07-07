@@ -28,14 +28,6 @@
                         </div>
                     </li>
                     <li>
-                        <a href="UserServlet?action=booking">
-                            <span class="icon">
-                                <img src="img/admin/dashboard.png" alt="Dashboard">
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="customer.jsp">
                             <span class="icon">
                                 <img src="img/admin/customer.png" alt="Information">
@@ -44,11 +36,19 @@
                         </a>
                     </li>
                     <li>
-                        <a href="booking">
+                        <a href="UserServlet?action=booking">
                             <span class="icon">
                                 <img src="img/admin/order.png" alt="Booking Cart">
                             </span>
                             <span class="title">Cart</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="thanhtoan">
+                            <span class="icon">
+                                <img src="img/admin/order.png" alt="Order Cart">
+                            </span>
+                            <span class="title">Your Order</span>
                         </a>
                     </li>
                 </ul>

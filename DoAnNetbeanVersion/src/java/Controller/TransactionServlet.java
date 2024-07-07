@@ -66,7 +66,7 @@ public class TransactionServlet extends HttpServlet {
         request.setAttribute("transactions", t);
 
         // Chuyển tiếp yêu cầu tới JSP
-        request.getRequestDispatcher("transactionUser.jsp").forward(request, response);
+        request.getRequestDispatcher("includes/servlet/userdb/transactionUser.jsp").forward(request, response);
     } else {
         // Nếu người dùng không tồn tại, chuyển hướng về trang đăng nhập hoặc báo lỗi
         response.sendRedirect("index.jsp");

@@ -118,9 +118,9 @@
                     </div>
                     <div id="dropdown" class="dropdown-content">
                         <div class="menu-header">
-                            <img src="img/avtvodanh.png" alt="User Avatar">
-                            <span>admin</span>
-                            <a href="userDBoard.jsp">Xem tất cả trang cá nhân</a>
+                            <a href="customer.jsp">
+                                <img src="img/avtvodanh.png" alt="User Avatar">
+                            </a>
                         </div>
                         <a href="#" id="settings-privacy">
                             <img src="img/settings_privacy.png" alt="Settings & Privacy"> Cài đặt & quyền riêng tư

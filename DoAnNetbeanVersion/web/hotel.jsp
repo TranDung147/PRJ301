@@ -39,6 +39,7 @@
 
         .bodyht {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -53,6 +54,19 @@
             padding: 20px;
             margin-top: 57px;
             width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .containerht2 {
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 57px;
+            width: 90%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -115,6 +129,10 @@
             gap: 10px;
         }
 
+        .boxht .leftht{
+            margin: 10px 0;
+        }
+
         .leftht, .rightht, .leftt, .rightt {
             flex: 1;
             display: flex;
@@ -123,11 +141,11 @@
         }
 
         .leftht label{
-            width: 250px;
+            width: 200px;
         }
 
         .leftht select{
-            width: 250px;
+            width: 200px;
             height: 50px;
 
             font-size: 14px;
@@ -238,6 +256,7 @@
         .card-body-custom {
             padding: 20px;
             text-align: center;
+            height: 165px;
         }
 
         .card-body-custom h5 {
@@ -281,6 +300,120 @@
         .pagination a:hover:not(.active) {
             background-color: #ddd;
         }
+
+        .boxht .rightss{
+            justify-content: flex-end;
+        }
+
+        /* Media queries */
+        @media only screen and (min-width: 1055px) {
+            /* Styles for screens wider than 1055px */
+            .containerht {
+                width: 50%;
+            }
+
+            .containerht2 {
+                width: 90%;
+            }
+        }
+
+        @media only screen and (min-width: 1024px) and (max-width: 1254px) {
+            /* Styles for screens between 1024px and 1254px */
+            .containerht {
+                width: 70%;
+            }
+
+            .containerht2 {
+                width: 80%;
+            }
+        }
+
+        @media only screen and (min-width: 768px) and (max-width: 1023px) {
+            /* Styles for screens between 768px and 1023px */
+            .containerht {
+                width: 90%;
+            }
+
+            .containerht2 {
+                width: 90%;
+            }
+
+            
+            .btnsht {
+                
+            }
+        }
+
+        @media only screen and (min-width: 425px) and (max-width: 767px) {
+            /* Styles for screens between 425px and 767px */
+            .containerht {
+                width: 95%;
+            }
+
+            .containerht2 {
+                width: 95%;
+            }
+
+            .boxht {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card-custom {
+                width: 100%;
+            }
+
+            .pagination a {
+                display: block;
+                margin: 5px 0;
+            }
+
+            .bodyht{
+                margin-top: 15px;
+            }
+            .leftht label, .leftht select{
+                width: 202px;
+            }
+            .btnsht {
+                width: 202px;
+                margin-left: 30px;
+            }
+        }
+
+        @media only screen and (max-width: 424px) {
+            /* Styles for screens smaller than 425px */
+            .containerht {
+                width: 95%;
+            }
+
+            .containerht2 {
+                width: 95%;
+            }
+
+            .boxht {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card-custom {
+                width: 100%;
+            }
+
+            .pagination a {
+                display: block;
+                margin: 5px 0;
+            }
+            .bodyht{
+                margin-top: 15px;
+            }
+            .leftht label, .leftht select{
+                width: 202px;
+            }
+            .btnsht {
+                width: 202px;
+                margin-left: 30px;
+            }
+        }
     </style>
     <main class="mainht">
         <div class="bodyht">
@@ -317,7 +450,7 @@
                     </div>
 
                     <div class="boxht">
-                        <div class="leftht">
+                        <div class="leftht rightss">
                             <div><img src="img/calendar.png" alt=""></div>
                             <div class="roomht">
                                 <label for="checkin">Ngày nhận phòng:</label>
@@ -340,12 +473,14 @@
 
                     </div>
                 </form>
+            </div>
+            <div class="containerht containerht2">
                 <div class="card-container">
 
                     <c:if test="${hotelList != null}">
                         <c:forEach var="h" items="${hotelList}">   
-                            <form action="roomServlet" method="get">
-                                <div class="card-custom">
+                            <div class="card-custom">
+                                <form action="roomServlet" method="get">
                                     <input type="hidden" name="hotelID" value="${h.hotelId}">
                                     <input type="hidden" name="hotelName" value="${h.hotelName}">      
                                     <img src="img/${h.productImage}" alt="${h.productImage}">
@@ -356,8 +491,8 @@
                                             <button class="btn bg-primary text-white mx-auto xemphongbut" type="submit">Xem phòng</button>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </c:forEach>
                     </c:if>
                     <c:if test="${hotelList == null}">

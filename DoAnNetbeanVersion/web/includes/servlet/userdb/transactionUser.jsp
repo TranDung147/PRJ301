@@ -55,14 +55,6 @@
                         </div>
                     </li>
                     <li>
-                        <a href="UserServlet?action=booking">
-                            <span class="icon">
-                                <img src="img/admin/dashboard.png" alt="Dashboard">
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="customer.jsp">
                             <span class="icon">
                                 <img src="img/admin/customer.png" alt="Information">
@@ -71,7 +63,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="booking">
+                        <a href="UserServlet?action=booking">
                             <span class="icon">
                                 <img src="img/admin/order.png" alt="Booking Cart">
                             </span>
@@ -119,21 +111,20 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h1>User Dashboard</h1>
+                                    <h1>Transaction History</h1>
                                 </div>
                                 <!-- Hotel Bookings Section -->
                                 <div class="hotel-bookings">
-                                    <h2>Your Hotel Bookings</h2>
                                     <div>
                                         <table class="booking-table">
                                             <thead>
                                                 <tr>
+                                                    <th>Transaction ID</th>
                                                     <th>Room Booking ID</th>
-                                                    <th>Total Price</th>
+                                                    <th>Ticket Booking ID</th>
                                                     <th>Created Date</th>
-                                                    <th>Created Date</th>
-                                                    <th>Created Date</th>
-                                                    <th>Created Date</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -141,7 +132,6 @@
                                                 <c:forEach var="tran" items="${transactions}">
                                                     <tr>
                                                         <td><c:out value="${tran.transactionId}" /></td>
-                                                        <td><c:out value="${tran.userId}" /></td>
                                                         <td><c:out value="${tran.roomBookingId}" /></td>
                                                         <td><c:out value="${tran.ticketBookingId}" /></td>
                                                         <td><c:out value="${tran.transactionDate}" /></td>
@@ -149,8 +139,6 @@
                                                         <td><c:out value="${tran.status}" /></td>
                                                         <td>
                                                             <a href="updateHotel.jsp?id=${tran.transactionId}">View</a>
-                                                            <a href="deleteHotel?id=${tran.transactionId}">Order</a>
-                                                            <a href="deleteHotel?id=${tran.transactionId}">Delete</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

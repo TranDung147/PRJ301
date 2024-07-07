@@ -231,7 +231,7 @@ public class UserServlet extends HttpServlet {
         request.setAttribute("ticketbooking", t);
 
         // Chuyển tiếp yêu cầu tới JSP
-        request.getRequestDispatcher("userDBoard.jsp").forward(request, response);
+        request.getRequestDispatcher("bookingCart.jsp").forward(request, response);
 
     }
 

@@ -44,10 +44,6 @@
         <servlet-class>Controller.AdminOrderServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserBookingServlet</servlet-name>
-        <servlet-class>Controller.UserBookingServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>AdminDetailsServlet</servlet-name>
         <servlet-class>Controller.AdminDetailsServlet</servlet-class>
     </servlet>
@@ -62,6 +58,10 @@
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>Controller.AdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookingServlet</servlet-name>
+        <servlet-class>Controller.BookingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
@@ -121,10 +121,6 @@
         <url-pattern>/AdminOrderServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UserBookingServlet</servlet-name>
-        <url-pattern>/booking</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>AdminDetailsServlet</servlet-name>
         <url-pattern>/adminDetails</url-pattern>
     </servlet-mapping>
@@ -139,6 +135,10 @@
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingServlet</servlet-name>
+        <url-pattern>/BookingServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

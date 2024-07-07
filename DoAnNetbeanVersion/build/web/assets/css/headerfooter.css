@@ -120,7 +120,7 @@ header button:hover {
     color: #fffdfde7;
     border: 2px solid white;
     border-radius: 5px;
-    margin-left: 1%;
+    margin-left: 10px;
     margin-bottom: 10px;
     text-decoration: none;
     transition: background-color 0.2s;
@@ -144,12 +144,24 @@ header button:hover {
     header .log{
         padding-left: 0px;
     }
-
-    .botfloor a{
-        width: 15%;
-        text-align: center;
+    .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     
+    .nav-link {
+        width: auto; 
+        min-width: 50px; 
+        padding: 10px 20px; 
+        border-bottom: none; 
+
+    }
+    
+    .botfloor a {
+        width: 140px; 
+        text-align: center;
+    }
     .buthidden{
         display: none;
     }
@@ -167,39 +179,112 @@ header button:hover {
     }
 
     .botfloor a{
-        width: 15%;
-        display: flex;            /* Sử dụng Flexbox */
-        align-items: center;      /* Căn giữa theo chiều dọc */
-        justify-content: center;  /* Căn giữa theo chiều ngang (nếu cần) */
-        text-align: center;       /* Căn giữa văn bản (thường không cần thiết khi dùng flex) */
-        padding: 0 10px;          /* Khoảng cách giữa nội dung và biên */
+        display: flex;
+        width: 100px;
+        align-items: center;     
+        justify-content: center; 
+        text-align: center;     
+        padding: 0 10px;      
+        margin-left: 10px;
     }
     
     .buthidden{
         display: none;
     }
+    .footer-social-links img{
+        margin-top: 10px;
+    }
+    
 
 }
 
 @media only screen and (min-width: 425px) and (max-width: 767px){
-    
-    header h3{
-        text-align: center; 
+    header {
+        position: relative;
     }
-    
-    header .log{
+
+    header h3 {
+        text-align: center;
+    }
+
+    header .log {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
         margin-top: 12px;
         margin-bottom: 0;
-        padding: 0;
-        justify-content: flex-start;
         margin-left: 5%;
     }
     
-    .menu-container{
-        width: 50px;
+    main{
+        margin-top: 0px;
+    }
+
+    .menu-container {
+        margin-left: 15px;
+        margin-right: 10px;
+    }
+
+    .loginout {
+        margin-left: 10px;
+    }
+
+     .buthidden {
+        margin-bottom: 12px;
+        display: inline-block;
+        font-size: 20px; 
+        cursor: pointer;
+        color: #fff;
+        padding: 2px 10px; 
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .nav {
+        display: flex;
+        flex-direction: column;  
+        align-items: center; 
+        width: 100%;
+        background-color: #1b3661;
+      
+    }
+
+    .nav-link {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #fff; 
+    }
+
+    .menu-icon {
+        display: none; 
+    }
+    
+     #footer {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center; 
+    }
+
+    .footer-title {
+        text-align: center; /* Để căn giữa tiêu đề */
+    }
+
+    .footer-linklists {
+        text-align: center; /* Để căn giữa danh sách các liên kết */
+    }
+
+    .footer-social-links {
+        text-align: center; /* Để căn giữa các liên kết xã hội */
+    }
+    .about-footer{
+        text-align: center;
     }
     
 }
+
 
 /*--------------------LOGIN LOGOUT--------------------*/
 
