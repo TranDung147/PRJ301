@@ -8,11 +8,14 @@ import static Model.DatabaseInfo.DBURL;
 import static Model.DatabaseInfo.DRIVERNAME;
 import static Model.DatabaseInfo.PASSDB;
 import static Model.DatabaseInfo.USERDB;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -36,19 +39,21 @@ public class TransactionDB implements DatabaseInfo{
     }
     
     public List<Transaction> getAllUserTransactions(String id) {
-        List<BookingRoom> list = new ArrayList<>();
+        List<Transaction> list = new ArrayList<>();
 
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM Transactions WHERE UserID = ?");
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                list.add(new BookingRoom(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+                list.add(new Transaction(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                rs.getString(6),rs.getString(7)));
             }
             con.close();
             return list;
+            
         } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         return null;
     }

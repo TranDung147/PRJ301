@@ -38,29 +38,39 @@ public class TransactionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        String userName = (String) session.getAttribute("user");
-        String pass = (String) session.getAttribute("pass");
+          HttpSession session = request.getSession();
+    String userName = (String) session.getAttribute("user");
+    String pass = (String) session.getAttribute("pass");
 
-        if (userName == null || pass == null) {
-            response.sendRedirect("index.jsp");
-            return;
-        }
+    UserDB userDB = new UserDB();
+    User user = userDB.getUsers(userName, pass);
 
-        UserDB userDB = new UserDB();
-        User user = userDB.getUsers(userName, pass);
-
+    if (user != null) {
         String id = user.getUserID();
 
         TransactionDB tran = new TransactionDB();
         List<Transaction> t = tran.getAllUserTransactions(user.getUserID());
 
+        // Kiểm tra xem danh sách giao dịch có dữ liệu không
+        if (t == null || t.isEmpty()) {
+            System.out.println("No transactions found for user ID: " + id);
+        } else {
+            // In ra danh sách giao dịch để kiểm tra
+            for (Transaction transaction : t) {
+                System.out.println(transaction);
+            }
+        }
+
         // Đặt thuộc tính cho JSP
         request.setAttribute("user", user);
-        request.setAttribute("roombookings", r);
+        request.setAttribute("transactions", t);
 
         // Chuyển tiếp yêu cầu tới JSP
-        request.getRequestDispatcher("userDBoard.jsp").forward(request, response);
+        request.getRequestDispatcher("transactionUser.jsp").forward(request, response);
+    } else {
+        // Nếu người dùng không tồn tại, chuyển hướng về trang đăng nhập hoặc báo lỗi
+        response.sendRedirect("index.jsp");
+    }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

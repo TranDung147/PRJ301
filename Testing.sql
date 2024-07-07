@@ -357,6 +357,19 @@ VALUES
 ('BT0002', 'ST0003', 50.00, 'Pending'),
 ('BT0002', 'ST0004', 50.00, 'Pending');
 
+-- Insert sample data into Transactions table
+INSERT INTO Transactions (TransactionID, UserID, RoomBookingID, TicketBookingID, TransactionDate, Amount, Status)
+VALUES 
+('TR0001', 'US0002', 'BR0001', NULL, '2024-07-07', 200.00, 'Pending'),
+('TR0002', 'US0002', NULL, 'BT0002', '2024-07-07', 500.00, 'Pending'),
+('TR0003', 'US0002', 'BR0001', 'BT0001', '2024-07-07', 700.00, 'Completed');
+
 UPDATE Users SET pass='4', email='asmith@example.com', fName='Alice', lName='Smith', address='456 Oak St, Othertown', phone='2345678901', sex='Male', DateOfBirth='1985-02-15', username='user' WHERE userID='US0002'
 
-SELECT * FROM Booking_Room WHERE UserID = 'US0002' AND CreatedDate = CAST(GETDATE() AS DATE)
+SELECT * FROM Booking_Ticket WHERE UserID = 'US0002' AND CreatedDate = CAST(GETDATE() AS DATE)
+
+SELECT * FROM Transactions WHERE UserID = 'US0002'
+
+select * from Booking_Room
+select * from Booking_Room_Detail
+select * from Room
