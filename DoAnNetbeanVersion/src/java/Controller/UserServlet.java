@@ -4,8 +4,11 @@
  */
 package Controller;
 
+import Model.AllBookingDB;
 import Model.UserDB;
 import Model.User;
+import Model.BookingRoom;
+import Model.BookingTicket;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -14,9 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.System.Logger;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  *
@@ -52,6 +54,7 @@ public class UserServlet extends HttpServlet {
                 break;
             case "booking":
                 handleBooking(request, response);
+                break;
             default:
                 response.sendRedirect("error.jsp");
                 break;
@@ -62,7 +65,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         String user = request.getParameter("uname");
         String pass = request.getParameter("psw");
-        
+
         UserDB db = new UserDB();
         User a = db.getUsers(user, pass);
 
@@ -200,17 +203,36 @@ public class UserServlet extends HttpServlet {
             response.sendRedirect("updateinfo.jsp?error=UpdateFailed");
         }
     }
-    
+
     private void handleBooking(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String user = request.getParameter("uname");
-        String pass = request.getParameter("psw");
 
-        UserDB db = new UserDB();
-        User a = db.getUsers(user, pass);
-        String id =a.getUserID();
-            
+        HttpSession session = request.getSession();
+        String userName = (String) session.getAttribute("user");
+        String pass = (String) session.getAttribute("pass");
+
+        if (userName == null || pass == null) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+
+        UserDB userDB = new UserDB();
+        User user = userDB.getUsers(userName, pass);
+
+        String id = user.getUserID();
+
+        AllBookingDB bookingDB = new AllBookingDB();
+        List<BookingRoom> r = bookingDB.getAllUserBookingRooms(user.getUserID());
+        List<BookingTicket> t = bookingDB.getAllUserBookingTickets(user.getUserID());
+
+        // Đặt thuộc tính cho JSP
+        request.setAttribute("user", user);
+        request.setAttribute("roombookings", r);
+        request.setAttribute("ticketbooking", t);
+
+        // Chuyển tiếp yêu cầu tới JSP
+        request.getRequestDispatcher("userDBoard.jsp").forward(request, response);
+
     }
 
     @Override

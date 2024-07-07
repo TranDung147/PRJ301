@@ -359,4 +359,4 @@ VALUES
 
 UPDATE Users SET pass='4', email='asmith@example.com', fName='Alice', lName='Smith', address='456 Oak St, Othertown', phone='2345678901', sex='Male', DateOfBirth='1985-02-15', username='user' WHERE userID='US0002'
 
-SELECT RoomBookingID FROM Booking_Room WHERE UserID = 'US0002' AND CreatedDate = CAST(GETDATE() AS DATE)
+SELECT * FROM Booking_Room WHERE UserID = 'US0002' AND CreatedDate = CAST(GETDATE() AS DATE)

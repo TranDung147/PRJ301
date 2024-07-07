@@ -58,7 +58,7 @@
                         </div>
                     </li>
                     <li>
-                        <a href="userDBoard.jsp">
+                        <a href="UserServlet?action=booking">
                             <span class="icon">
                                 <img src="img/admin/dashboard.png" alt="Dashboard">
                             </span>

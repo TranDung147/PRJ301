@@ -15,7 +15,7 @@
         <link href="assets/css/userdb.css" rel="stylesheet"/>
         <link href="assets/css/customer.css" rel="stylesheet"/> 
     </head>
-     <style>
+    <style>
         /* Booking Tables */
         .booking-table {
             width: 100%;
@@ -55,7 +55,7 @@
                         </div>
                     </li>
                     <li>
-                        <a href="userDBoard.jsp">
+                        <a href="UserServlet?action=booking">
                             <span class="icon">
                                 <img src="img/admin/dashboard.png" alt="Dashboard">
                             </span>
@@ -76,6 +76,14 @@
                                 <img src="img/admin/order.png" alt="Booking Cart">
                             </span>
                             <span class="title">Cart</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="thanhtoan">
+                            <span class="icon">
+                                <img src="img/admin/order.png" alt="Order Cart">
+                            </span>
+                            <span class="title">Your Order</span>
                         </a>
                     </li>
                 </ul>
@@ -116,89 +124,82 @@
                                 <!-- Hotel Bookings Section -->
                                 <div class="hotel-bookings">
                                     <h2>Your Hotel Bookings</h2>
-                                    <table class="booking-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Hotel Name</th>
-                                                <th>Hotel Address</th>
-                                                <th>Room Number</th>
-                                                <th>Room Type</th>
-                                                <th>Price</th>
-                                                <th>Date From</th>
-                                                <th>Date To</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="booking" items="${hotelBookings}">
+                                    <div>
+                                        <table class="booking-table">
+                                            <thead>
                                                 <tr>
-                                                    <td><c:out value="${booking.hotelName}" /></td>
-                                                    <td><c:out value="${booking.hotelAddress}" /></td>
-                                                    <td><c:out value="${booking.roomNumber}" /></td>
-                                                    <td><c:out value="${booking.roomType}" /></td>
-                                                    <td><c:out value="${booking.price}" /></td>
-                                                    <td><c:out value="${booking.dateFrom}" /></td>
-                                                    <td><c:out value="${booking.dateTo}" /></td>
-                                                    <td><c:out value="${booking.status}" /></td>
+                                                    <th>Room Booking ID</th>
+                                                    <th>Total Price</th>
+                                                    <th>Created Date</th>
+                                                    <th>Actions</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="booking" items="${roombookings}">
+                                                    <tr>
+                                                        <td><c:out value="${booking.roomBookingID}" /></td>
+                                                        <td><c:out value="${booking.totalPrice}" /></td>
+                                                        <td><c:out value="${booking.createdDate}" /></td>
+                                                        <td>
+                                                            <a href="updateHotel.jsp?id=${booking.roomBookingID}">View</a>
+                                                            <a href="deleteHotel?id=${booking.roomBookingID}">Order</a>
+                                                            <a href="deleteHotel?id=${booking.roomBookingID}">Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                                <!-- Plane Bookings Section -->
-                                <div class="plane-bookings">
-                                    <h2>Your Plane Bookings</h2>
-                                    <table class="booking-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Plane Name</th>
-                                                <th>Departure City</th>
-                                                <th>Arrival City</th>
-                                                <th>Start Time</th>
-                                                <th>Seat Number</th>
-                                                <th>Seat Type</th>
-                                                <th>Price</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="booking" items="${planeBookings}">
+                                    <!-- Plane Bookings Section -->
+                                    <div class="plane-bookings">
+                                        <h2>Your Plane Bookings</h2>
+                                        <table class="booking-table">
+                                            <thead>
                                                 <tr>
-                                                    <td><c:out value="${booking.planeName}" /></td>
-                                                    <td><c:out value="${booking.locationFrom}" /></td>
-                                                    <td><c:out value="${booking.locationTo}" /></td>
-                                                    <td><c:out value="${booking.startTime}" /></td>
-                                                    <td><c:out value="${booking.seatNumber}" /></td>
-                                                    <td><c:out value="${booking.seatType}" /></td>
-                                                    <td><c:out value="${booking.price}" /></td>
-                                                    <td><c:out value="${booking.status}" /></td>
+                                                    <th>Ticket Booking ID</th>
+                                                    <th>Total Price</th>
+                                                    <th>Created Date</th>
+                                                    <th>Actions</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="booking" items="${ticketbooking}">
+                                                    <tr>
+                                                        <td><c:out value="${booking.ticketBookingID}" /></td>
+                                                        <td><c:out value="${booking.totalPrice}" /></td>
+                                                        <td><c:out value="${booking.createdDate}" /></td>
+                                                        <td>
+                                                            <a href="updateHotel.jsp?id=${booking.ticketBookingID}">View</a>
+                                                            <a href="deleteHotel?id=${booking.ticketBookingID}">Order</a>
+                                                            <a href="deleteHotel?id=${booking.ticketBookingID}">Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-                    
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const burger = document.querySelector('.burger');
-                const navigation = document.querySelector('.navigation-admin');
-                const main = document.querySelector('.main-admin');
-                const profileCard = document.querySelector('.profile-card'); // Select the profile card
 
-                burger.addEventListener('click', function () {
-                    navigation.classList.toggle('active');
-                    main.classList.toggle('active');
-                    profileCard.classList.toggle('active'); // Toggle the active class on the profile card
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const burger = document.querySelector('.burger');
+                    const navigation = document.querySelector('.navigation-admin');
+                    const main = document.querySelector('.main-admin');
+                    const profileCard = document.querySelector('.profile-card'); // Select the profile card
+
+                    burger.addEventListener('click', function () {
+                        navigation.classList.toggle('active');
+                        main.classList.toggle('active');
+                        profileCard.classList.toggle('active'); // Toggle the active class on the profile card
+                    });
                 });
-            });
-        </script>
+            </script>
 
 
     </body>

@@ -8,17 +8,29 @@ public class BookingRoom implements Serializable{
     private String userID;
     private String totalPrice;
     private String createdDate;
+    private String status;
 
     // Constructors
     public BookingRoom() {
     }
 
-    public BookingRoom(String roomBookingID, String userID, String totalPrice, String createdDate) {
+    public BookingRoom(String roomBookingID, String userID, String totalPrice, String createdDate, String status) {
         this.roomBookingID = roomBookingID;
         this.userID = userID;
         this.totalPrice = totalPrice;
         this.createdDate = createdDate;
+        this.status = status;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    
 
     public String getUserID() {
         return userID;
