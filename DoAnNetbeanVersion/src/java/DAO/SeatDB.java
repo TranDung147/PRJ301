@@ -1,9 +1,11 @@
-package Model;
+package DAO;
 
-import static Model.DatabaseInfo.DBURL;
-import static Model.DatabaseInfo.DRIVERNAME;
-import static Model.DatabaseInfo.PASSDB;
-import static Model.DatabaseInfo.USERDB;
+import Model.Seat;
+import Model.BookingTicketDetail;
+import static DAO.DatabaseInfo.DBURL;
+import static DAO.DatabaseInfo.DRIVERNAME;
+import static DAO.DatabaseInfo.PASSDB;
+import static DAO.DatabaseInfo.USERDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -90,7 +92,7 @@ public class SeatDB implements DatabaseInfo {
         }
         return bookedSeat;
     }
-    
+
     public ArrayList<Seat> getAllSeats() {
         ArrayList<Seat> list = new ArrayList<>();
         try (Connection con = getConnect()) {
@@ -107,7 +109,62 @@ public class SeatDB implements DatabaseInfo {
         }
         return null;
     }
-    
-    
 
+    public static String BookingTicketDetail(String seatID) {
+        String price = null;
+        try (Connection con = getConnect()) {
+            String updateQuery = "select s.SeatType from Booking_Ticket_Detail btd\n"
+                    + "inner join Seat s on btd.SeatID = s.SeatID\n"
+                    + "where s.SeatID = ?";
+            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, seatID);
+                ResultSet rs = updateStmt.executeQuery();
+                if (rs.next()) {
+                    String seatType = rs.getString("seatType");
+                    if (seatType.equalsIgnoreCase("Standard")) {
+                        price = "99";
+                    } else if (seatType.equalsIgnoreCase("VIP")) {
+                        price = "199";
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking room with ID: " + seatID, ex);
+        }
+        return price;
+    }
+
+    public static List<BookingTicketDetail> getBookingTicketDetail() {
+        List<BookingTicketDetail> List = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT bookingTicketID, seatID, price, status FROM Booking_Ticket_Detail";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                BookingTicketDetail room = new BookingTicketDetail(rs.getString("bookingTicketID"),
+                        rs.getString("seatID"),
+                        rs.getString("price"),
+                        rs.getString("status"));
+                List.add(room);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return List;
+    }
+
+    public static void setPrice(String seatID, String price) {
+        try (Connection con = getConnect()) {
+            String updateQuery = "UPDATE Booking_Ticket_Detail SET price = ? WHERE seatID = ?";
+            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, price);
+                updateStmt.setString(2, seatID);
+                updateStmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error updating price for room with ID: " + seatID, ex);
+        }
+    }
+
+//---------------------------------------------------------------------------
 }

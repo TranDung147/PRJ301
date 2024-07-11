@@ -4,11 +4,11 @@
  */
 package Controller;
 
-import Model.AllBookingDB;
+import DAO.AllBookingDB;
 import Model.Transaction;
-import Model.TransactionDB;
+import DAO.TransactionDB;
 import Model.User;
-import Model.UserDB;
+import DAO.UserDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

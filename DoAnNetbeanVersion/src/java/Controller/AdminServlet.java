@@ -1,6 +1,13 @@
 
 package Controller;
 
+import DAO.BookingRoomDetailDB;
+import DAO.BookingTicketDetailDB;
+import DAO.RoomDB;
+import DAO.FlightDB;
+import DAO.HotelDB;
+import DAO.SeatDB;
+import DAO.PlaneDB;
 import Model.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -82,12 +89,13 @@ public class AdminServlet extends HttpServlet {
             throws ServletException, IOException {
         List<BookingRoomDetail> roomOrders = new ArrayList<>();
         List<BookingTicketDetail> ticketOrders = new ArrayList<>();
-        AllBookingDB a = new AllBookingDB();
-        AllBookingDB b = new AllBookingDB();
+        
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
 
         try {
-            roomOrders = a.getAllBookingRoomDetails();
-            ticketOrders = b.getAllBookingTicketDetails();
+            roomOrders = brd.getAllBookingRoomDetails();
+            ticketOrders = btd.getAllBookingTicketDetails();
 
             request.setAttribute("roomOrders", roomOrders);
             request.setAttribute("ticketOrders", ticketOrders);
@@ -104,7 +112,9 @@ public class AdminServlet extends HttpServlet {
         String type = request.getParameter("type");
         String action = request.getParameter("action"); // "approve" hoặc "decline"
 
-        AllBookingDB db = new AllBookingDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
+        
         boolean success = false;
         try {
             String status = null;
@@ -116,9 +126,9 @@ public class AdminServlet extends HttpServlet {
 
             if (status != null) {
                 if ("room".equals(type)) {
-                    success = db.updateRoomOrderStatus(orderId, status);
+                    success = brd.updateRoomOrderStatus(orderId, status);
                 } else if ("ticket".equals(type)) {
-                    success = db.updateTicketOrderStatus(orderId, status);
+                    success = btd.updateTicketOrderStatus(orderId, status);
                 }
             }
         } catch (Exception e) {
@@ -136,13 +146,14 @@ public class AdminServlet extends HttpServlet {
         String bookingId = request.getParameter("bookingId");
         String bookingType = request.getParameter("bookingType");
 
-        AllBookingDB db = new AllBookingDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
 
         // Determine the type of booking and perform the removal
         if ("room".equals(bookingType)) {
-            db.removeBookingRoom(bookingId);
+            brd.removeBookingRoom(bookingId);
         } else if ("ticket".equals(bookingType)) {
-            db.removeBookingTicket(bookingId);
+            btd.removeBookingTicket(bookingId);
         }
 
         // Redirect back to adminOrderHistory.jsp or any other appropriate page

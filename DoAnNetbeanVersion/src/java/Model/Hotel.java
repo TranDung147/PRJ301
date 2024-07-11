@@ -1,5 +1,6 @@
 package Model;
 
+import DAO.HotelDB;
 import java.io.Serializable;
 
 public class Hotel implements Serializable {

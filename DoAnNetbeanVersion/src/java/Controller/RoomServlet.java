@@ -5,9 +5,9 @@
 package Controller;
 
 import Model.Hotel;
-import Model.HotelDB;
+import DAO.HotelDB;
 import Model.Room;
-import Model.RoomDB;
+import DAO.RoomDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

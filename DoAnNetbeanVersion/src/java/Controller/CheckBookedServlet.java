@@ -4,14 +4,13 @@
  */
 package Controller;
 
-import Model.AllBookingDB;
-import Model.RoomDB;
+import DAO.BookingRoomDetailDB;
+import DAO.RoomDB;
 import Model.Room;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -82,16 +81,16 @@ public class CheckBookedServlet extends HttpServlet {
         // Lấy hotelID từ request hoặc từ cấu hình servlet
         String hotelID = request.getParameter("hotelID"); // Hoặc có thể lấy từ cấu hình servlet như getServletConfig().getInitParameter("hotelID");
 
-        AllBookingDB allDB = new AllBookingDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
         List<JSONObject> bookings = new ArrayList<>();
 
         // Lấy danh sách các phòng theo hotelID
         List<Room> rooms = RoomDB.getRoomsByHotel(hotelID);
         for (Room room : rooms) {
             String roomID = room.getRoomID();
-            List<String> roomBookingIDs = allDB.getRoomBookingIDsByRoomID(roomID);
+            List<String> roomBookingIDs = brd.getRoomBookingIDsByRoomID(roomID);
             for (String roomBookingID : roomBookingIDs) {
-                List<Date[]> bookedDates = allDB.getDateFromToDateByRoomBookingID(roomBookingID);
+                List<Date[]> bookedDates = brd.getDateFromToDateByRoomBookingID(roomBookingID);
                 for (Date[] dates : bookedDates) {
                     Date dateFrom = dates[0];
                     Date dateTo = dates[1];

@@ -4,7 +4,8 @@
  */
 package Controller;
 
-import Model.AllBookingDB;
+import DAO.BookingRoomDetailDB;
+import DAO.BookingTicketDetailDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,8 @@ public class AdminOrderActionServlet extends HttpServlet {
         String type = request.getParameter("type");
         String action = request.getParameter("action"); // "approve" hoặc "decline"
 
-        AllBookingDB db = new AllBookingDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
         boolean success = false;
         try {
             String status = null;
@@ -37,9 +39,9 @@ public class AdminOrderActionServlet extends HttpServlet {
 
             if (status != null) {
                 if ("room".equals(type)) {
-                    success = db.updateRoomOrderStatus(orderId, status);
+                    success = brd.updateRoomOrderStatus(orderId, status);
                 } else if ("ticket".equals(type)) {
-                    success = db.updateTicketOrderStatus(orderId, status);
+                    success = btd.updateTicketOrderStatus(orderId, status);
                 }
             }
         } catch (Exception e) {

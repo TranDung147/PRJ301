@@ -10,7 +10,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="Model.BookingRoomDetail" %>
 <%@ page import="Model.BookingTicketDetail" %>
-<%@ page import="Model.AllBookingDB" %>
+<%@ page import="DAO.*" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="vn">

@@ -1,9 +1,11 @@
-package Model;
+package DAO;
 
-import static Model.DatabaseInfo.DBURL;
-import static Model.DatabaseInfo.DRIVERNAME;
-import static Model.DatabaseInfo.PASSDB;
-import static Model.DatabaseInfo.USERDB;
+import Model.Room;
+import Model.BookingRoomDetail;
+import static DAO.DatabaseInfo.DBURL;
+import static DAO.DatabaseInfo.DRIVERNAME;
+import static DAO.DatabaseInfo.PASSDB;
+import static DAO.DatabaseInfo.USERDB;
 import java.sql.*;
 
 import java.util.ArrayList;
@@ -124,33 +126,82 @@ public class RoomDB implements DatabaseInfo {
         return roomList;
     }
 
-//--------------------------------------------------------------------------------------------
-//
-//    public static int newHotel(Hotel s) {
-//        int id = -1;
-//        try (Connection con = getConnect()) {
-//            PreparedStatement stmt = con.prepareStatement("Insert into Hotel(ProductID, ProductName, Description, Category, Price, StockQuantity, ProductImage, UnitOfMeasurement) output inserted.id values(?,?,?)");
-//            stmt.setString(1, s.getProductName());
-//            stmt.setString(2, s.getProductName());
-//
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                id = rs.getInt(1);
-//            }
-//            con.close();
-//        } catch (Exception ex) {
-//            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return id;
-//    }
-//-----------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------
-//
-//    public static void main(String[] a) {
-////        ArrayList<Hotel> list = HotelDB.listAll();
-////        for (Hotel item : list) {
-////            System.out.println(item);
-////        }
-////---------------------------------------------------------------------------
-//    }
+    public static String BookingRoomDetail(String roomID) {
+        String price = null;
+        try (Connection con = getConnect()) {
+            String updateQuery = "select r.RoomType, r.Capacity from Booking_Room_Detail brd\n"
+                    + "inner join Room r on brd.RoomID = r.RoomID\n"
+                    + "where r.RoomID = ?";
+            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, roomID);
+                ResultSet rs = updateStmt.executeQuery();
+                if (rs.next()) {
+                    String roomType = rs.getString("RoomType");
+                    int capacity = rs.getInt("Capacity");
+                    price = calculatePrice(roomType, capacity);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking room with ID: " + roomID, ex);
+        }
+        return price;
+    }
+
+    private static String calculatePrice(String roomType, int capacity) {
+        String price = null;
+        if (roomType.equalsIgnoreCase("Standard")) {
+            if (capacity == 1) {
+                price = "32";
+            } else if (capacity == 2) {
+                price = "49";
+            } else if (capacity == 3) {
+                price = "74";
+            }
+        } else if (roomType.equalsIgnoreCase("VIP")) {
+            if (capacity == 1) {
+                price = "199";
+            } else if (capacity == 2) {
+                price = "299";
+            } else if (capacity == 3) {
+                price = "599";
+            }
+        }
+        return price;
+    }
+
+    public static List<BookingRoomDetail> getBookingRoomDetail() {
+        List<BookingRoomDetail> roomList = new ArrayList<>();
+        try (Connection con = getConnect()) {
+            String query = "SELECT roomBookingID, roomID, price, dateFrom, dateTo, status FROM Booking_Room_Detail";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                BookingRoomDetail room = new BookingRoomDetail(rs.getString("roomBookingID"),
+                        rs.getString("roomID"),
+                        rs.getString("price"),
+                        rs.getString("dateFrom"),
+                        rs.getString("dateTo"),
+                        rs.getString("status"));
+                roomList.add(room);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return roomList;
+    }
+
+    public static void setPrice(String roomID, String price) {
+        try (Connection con = getConnect()) {
+            String updateQuery = "UPDATE Booking_Room_Detail SET price = ? WHERE roomID = ?";
+            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, price);
+                updateStmt.setString(2, roomID);
+                updateStmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error updating price for room with ID: " + roomID, ex);
+        }
+    }
+
+
 }

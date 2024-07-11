@@ -5,7 +5,7 @@
 package Controller;
 
 import Model.Flight;
-import Model.FlightDB;
+import DAO.FlightDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

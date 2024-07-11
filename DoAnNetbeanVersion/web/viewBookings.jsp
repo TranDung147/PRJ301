@@ -5,7 +5,7 @@
 <%@ page import="Model.BookingRoomDetail" %>
 <%@ page import="Model.BookingTicket" %>
 <%@ page import="Model.BookingTicketDetail" %>
-<%@ page import="Model.AllBookingDB" %>
+<%@ page import="DAO.*" %>
 <!DOCTYPE html>
 <html>
 <head>

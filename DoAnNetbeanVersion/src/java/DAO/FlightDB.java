@@ -1,9 +1,10 @@
-package Model;
+package DAO;
 
-import static Model.DatabaseInfo.DBURL;
-import static Model.DatabaseInfo.DRIVERNAME;
-import static Model.DatabaseInfo.PASSDB;
-import static Model.DatabaseInfo.USERDB;
+import Model.Flight;
+import static DAO.DatabaseInfo.DBURL;
+import static DAO.DatabaseInfo.DRIVERNAME;
+import static DAO.DatabaseInfo.PASSDB;
+import static DAO.DatabaseInfo.USERDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

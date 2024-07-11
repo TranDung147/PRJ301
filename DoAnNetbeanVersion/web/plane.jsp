@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="java.sql.*, Model.DatabaseInfo, Model.Plane"%>
+<%@page import="java.sql.*, DAO.DatabaseInfo, Model.Plane"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>

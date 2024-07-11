@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Model;
+package DAO;
 
-import static Model.DatabaseInfo.DBURL;
-import static Model.DatabaseInfo.DRIVERNAME;
-import static Model.DatabaseInfo.PASSDB;
-import static Model.DatabaseInfo.USERDB;
+import Model.Transaction;
+import static DAO.DatabaseInfo.DBURL;
+import static DAO.DatabaseInfo.DRIVERNAME;
+import static DAO.DatabaseInfo.PASSDB;
+import static DAO.DatabaseInfo.USERDB;
 import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;

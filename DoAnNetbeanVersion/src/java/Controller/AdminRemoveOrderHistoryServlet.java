@@ -4,7 +4,8 @@
  */
 package Controller;
 
-import Model.AllBookingDB;
+import DAO.BookingRoomDetailDB;
+import DAO.BookingTicketDetailDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,13 +33,14 @@ public class AdminRemoveOrderHistoryServlet extends HttpServlet {
         String bookingId = request.getParameter("bookingId");
         String bookingType = request.getParameter("bookingType");
 
-        AllBookingDB db = new AllBookingDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
 
         // Determine the type of booking and perform the removal
         if ("room".equals(bookingType)) {
-            db.removeBookingRoom(bookingId);
+            brd.removeBookingRoom(bookingId);
         } else if ("ticket".equals(bookingType)) {
-            db.removeBookingTicket(bookingId);
+            btd.removeBookingTicket(bookingId);
         }
 
         // Redirect back to adminOrderHistory.jsp or any other appropriate page

@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.Hotel;
-import Model.HotelDB;
+import DAO.HotelDB;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;

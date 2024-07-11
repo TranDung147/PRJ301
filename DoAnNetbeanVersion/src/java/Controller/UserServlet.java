@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package Controller;
 
-import Model.AllBookingDB;
-import Model.UserDB;
+import DAO.BookingRoomDB;
+import DAO.BookingTicketDB;
+import DAO.UserDB;
 import Model.User;
 import Model.BookingRoom;
 import Model.BookingTicket;
@@ -221,9 +219,11 @@ public class UserServlet extends HttpServlet {
 
         String id = user.getUserID();
 
-        AllBookingDB bookingDB = new AllBookingDB();
-        List<BookingRoom> r = bookingDB.getAllUserBookingRooms(user.getUserID());
-        List<BookingTicket> t = bookingDB.getAllUserBookingTickets(user.getUserID());
+        BookingRoomDB br = new BookingRoomDB();
+        BookingTicketDB bt = new BookingTicketDB();
+        
+        List<BookingRoom> r = br.getAllUserBookingRooms(user.getUserID());
+        List<BookingTicket> t = bt.getAllUserBookingTickets(user.getUserID());
 
         // Đặt thuộc tính cho JSP
         request.setAttribute("user", user);
@@ -232,7 +232,6 @@ public class UserServlet extends HttpServlet {
 
         // Chuyển tiếp yêu cầu tới JSP
         request.getRequestDispatcher("bookingCart.jsp").forward(request, response);
-
     }
 
     @Override

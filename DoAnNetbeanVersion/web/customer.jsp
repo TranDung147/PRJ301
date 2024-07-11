@@ -1,6 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="Model.User"%>
-<%@ page import="Model.UserDB"%>
+<%@ page import="DAO.UserDB"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -57,7 +57,7 @@
             <!-- ========================= Main ==================== -->
             <div class="main-admin">
                 <div class="information">
-                    <jsp:useBean id="userDB" class="Model.UserDB" scope="session" />
+                    <jsp:useBean id="userDB" class="DAO.UserDB" scope="session" />
                     <% 
                         // Gọi phương thức getUserFromSession từ UserDB
                         User user = userDB.getUserFromSession(session, request);

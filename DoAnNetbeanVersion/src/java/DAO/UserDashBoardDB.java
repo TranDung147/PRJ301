@@ -1,10 +1,12 @@
 
-package Model;
+package DAO;
 
-import static Model.DatabaseInfo.DBURL;
-import static Model.DatabaseInfo.DRIVERNAME;
-import static Model.DatabaseInfo.PASSDB;
-import static Model.DatabaseInfo.USERDB;
+import Model.HotelBooking;
+import Model.PlaneBooking;
+import static DAO.DatabaseInfo.DBURL;
+import static DAO.DatabaseInfo.DRIVERNAME;
+import static DAO.DatabaseInfo.PASSDB;
+import static DAO.DatabaseInfo.USERDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -120,7 +122,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             success = rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + roomBookingID, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + roomBookingID, ex);
         }
 
         return success;
@@ -138,7 +140,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             success = rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + roomBookingID, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + roomBookingID, ex);
         }
 
         return success;
@@ -156,7 +158,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             success = rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + ticketBookingID, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + ticketBookingID, ex);
         }
 
         return success;
@@ -174,7 +176,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             success = rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + ticketBookingID, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, "Error deleting room booking with ID: " + ticketBookingID, ex);
         }
 
         return success;
@@ -192,7 +194,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             return rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -208,7 +210,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             return rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -225,7 +227,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             return rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -245,7 +247,7 @@ public class UserDashBoardDB implements DatabaseInfo  {
             return rowsAffected > 0;
 
         } catch (SQLException ex) {
-            Logger.getLogger(AllBookingDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }

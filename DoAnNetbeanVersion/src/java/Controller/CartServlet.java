@@ -1,11 +1,14 @@
 package Controller;
 
-import Model.AllBookingDB;
+import DAO.BookingRoomDB;
+import DAO.BookingRoomDetailDB;
+import DAO.BookingTicketDB;
+import DAO.BookingTicketDetailDB;
 import Model.BookingTicketDetail;
 import Model.Room;
 import Model.Seat;
-import Model.RoomDB;
-import Model.SeatDB;
+import DAO.RoomDB;
+import DAO.SeatDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,21 +73,23 @@ public class CartServlet extends HttpServlet {
         //Room bookedRoom = RoomDB.bookRoom(roomID);
         Room bookedRoom = RoomDB.getRoom(roomID);
         
+        BookingRoomDB br = new BookingRoomDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
 
         if (bookedRoom != null) {
             // Kiểm tra nếu đã có bookingRoomID cho ngày hôm nay
-            String roomBookingID = AllBookingDB.getTodayBookingRoomID(userID);
+            String roomBookingID = br.getTodayBookingRoomID(userID);
 
             if (roomBookingID == null) {
                 // Nếu không có, tạo mới với giá cố định
-                roomBookingID = AllBookingDB.insertBookingRoom(userID, price);
+                roomBookingID = br.insertBookingRoom(userID, price);
             } else {
                 // Nếu có, cập nhật tổng giá với giá cố định
-                AllBookingDB.updateTotalPrice(roomBookingID, price);
+                br.updateTotalPrice(roomBookingID, price);
             }
 
             // Thêm chi tiết booking cho roomBookingID hiện có hoặc mới tạo với giá cố định
-            boolean isBookingDetailInserted = AllBookingDB.insertBookingRoomDetail(roomBookingID, roomID, price, checkInDate, checkOutDate, "Pending");
+            boolean isBookingDetailInserted = brd.insertBookingRoomDetail(roomBookingID, roomID, price, checkInDate, checkOutDate, "Pending");
             sendBookingResponse(request, response, isBookingDetailInserted, bookedRoom, null, "Room booked successfully.", "Failed to insert booking detail.");
         } else {
             sendErrorResponse(response, "Room not found or already booked.");
@@ -95,22 +100,26 @@ public class CartServlet extends HttpServlet {
         //Seat bookedSeat = SeatDB.bookSeat(seatID);
         Seat bookedSeat = SeatDB.getSeat(seatID);
         String price = "50.00";
+        
+        BookingTicketDB bt = new BookingTicketDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
+        
         if (bookedSeat != null) {
             try {
                 // Kiểm tra nếu đã có seatBookingID cho ngày hôm nay
-                String seatBookingID = AllBookingDB.getTodayBookingSeatID(userID);
+                String seatBookingID = bt.getTodayBookingSeatID(userID);
 
                 if (seatBookingID == null) {
                     // Nếu không có, tạo mới
-                    seatBookingID = AllBookingDB.insertBookingSeat(userID, price);
+                    seatBookingID = bt.insertBookingSeat(userID, price);
                 } else {
                     // Nếu có, cập nhật tổng giá
-                    AllBookingDB.updateSeatTotalPrice(seatBookingID, price);
+                    bt.updateSeatTotalPrice(seatBookingID, price);
                 }
 
                 // Thêm chi tiết booking cho seatBookingID hiện có hoặc mới tạo
-                boolean isBookingDetailInserted = AllBookingDB.insertBookingTicketDetail(seatBookingID, seatID, price, "Pending");
-                List<BookingTicketDetail> bookingTicketDetails = AllBookingDB.getBookingTicketDetailsBySeatID(seatID);
+                boolean isBookingDetailInserted = btd.insertBookingTicketDetail(seatBookingID, seatID, price, "Pending");
+                List<BookingTicketDetail> bookingTicketDetails = btd.getBookingTicketDetailsBySeatID(seatID);
                 sendBookingResponse(request, response, isBookingDetailInserted, bookedSeat, bookingTicketDetails, "Seat booked successfully.", "Failed to insert booking detail.");
             } catch (ParseException ex) {
                 Logger.getLogger(CartServlet.class.getName()).log(Level.SEVERE, null, ex);

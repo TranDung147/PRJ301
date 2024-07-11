@@ -1,6 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="Model.Hotel"%>
-<%@page import="Model.HotelDB"%>
+<%@page import="DAO.HotelDB"%>
 <%@page import="java.sql.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

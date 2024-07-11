@@ -5,7 +5,7 @@
 package Controller;
 
 import Model.Seat;
-import Model.SeatDB;
+import DAO.SeatDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

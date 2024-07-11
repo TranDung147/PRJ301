@@ -4,18 +4,14 @@
  */
 package Controller;
 
-import Model.UserDashBoardDB;
-import Model.BookingRoomDetail;
-import Model.BookingTicketDetail;
+import DAO.UserDashBoardDB;
 import Model.HotelBooking;
 import Model.PlaneBooking;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -120,10 +116,11 @@ public class BookingServlet extends HttpServlet {
     protected void orderRoomBooking(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String roomBookingID = request.getParameter("roomBookingID");
+        String userID = (String) request.getSession().getAttribute("userID");
         if (roomBookingID != null && !roomBookingID.trim().isEmpty()) {
             UserDashBoardDB a = new UserDashBoardDB();
-            boolean successa = a.deleteRoomBookingDetailByID(roomBookingID);
-            boolean successb = a.deleteRoomBookingByID(roomBookingID);
+            boolean successa = a.orderRoomBookingDetailByID(roomBookingID);
+            boolean successb = a.orderRoomBookingByID(roomBookingID);
 
             if (successa && successb) {
                 response.sendRedirect("UserServlet?action=booking");
@@ -159,14 +156,6 @@ public class BookingServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

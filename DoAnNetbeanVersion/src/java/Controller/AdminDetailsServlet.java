@@ -4,6 +4,11 @@
  */
 package Controller;
 
+import DAO.RoomDB;
+import DAO.FlightDB;
+import DAO.HotelDB;
+import DAO.SeatDB;
+import DAO.PlaneDB;
 import Model.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;

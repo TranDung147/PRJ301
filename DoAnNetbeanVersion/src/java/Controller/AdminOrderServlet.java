@@ -4,7 +4,8 @@
  */
 package Controller;
 
-import Model.AllBookingDB;
+import DAO.BookingRoomDetailDB;
+import DAO.BookingTicketDetailDB;
 import Model.BookingRoomDetail;
 import Model.BookingTicketDetail;
 import jakarta.servlet.ServletException;
@@ -35,12 +36,12 @@ public class AdminOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         List<BookingRoomDetail> roomOrders = new ArrayList<>();
         List<BookingTicketDetail> ticketOrders = new ArrayList<>();
-        AllBookingDB a = new AllBookingDB();
-        AllBookingDB b = new AllBookingDB();
+        BookingRoomDetailDB brd = new BookingRoomDetailDB();
+        BookingTicketDetailDB btd = new BookingTicketDetailDB();
 
         try {
-            roomOrders = a.getAllBookingRoomDetails();
-            ticketOrders = b.getAllBookingTicketDetails();
+            roomOrders = brd.getAllBookingRoomDetails();
+            ticketOrders = btd.getAllBookingTicketDetails();
 
             request.setAttribute("roomOrders", roomOrders);
             request.setAttribute("ticketOrders", ticketOrders);
