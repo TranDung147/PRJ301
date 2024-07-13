@@ -152,20 +152,22 @@ public class HotelDB implements DatabaseInfo {
         return null;
     }
 
-    public void insert(Hotel c) {
-        String sql = "INSERT INTO Hotel (HotelID, HotelName, HotelAddress, Description, City, Country)\n"
-                + "VALUES(?,?,?,?,?,?)";
+    public static void insert(Hotel c) {
+        String sql = "INSERT INTO Hotel (HotelID, HotelName, HotelAddress, Description, productImage, City, Country) VALUES(?,?,?,?,?,?,?)";
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, c.getHotelId());
             stmt.setString(2, c.getHotelName());
             stmt.setString(3, c.getHotelAddress());
             stmt.setString(4, c.getHotelDescription());
-            stmt.setString(5, c.getCity());
-            stmt.setString(6, c.getCountry());
+            stmt.setString(5, c.getProductImage());
+            stmt.setString(6, c.getCity());
+            stmt.setString(7, c.getCountry());
             stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, "SQL Error: " + ex.getMessage(), ex);
         } catch (Exception ex) {
-            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, "Error: " + ex.getMessage(), ex);
         }
     }
 
@@ -251,13 +253,107 @@ public class HotelDB implements DatabaseInfo {
         }
         return hotelList;
     }
-    //--------------------------------------------------------------------------------------------
 
-//    public static void main(String[] a) {
-//        List<Hotel> list = HotelDB.getAvailableRooms("Suite");
-//        for (Hotel item : list) {
-//            System.out.println(item);
-//        }
-//    }
-//---------------------------------------------------------------------------
+    public static boolean deleteHotel(String hotelId) {
+        boolean deleted = false;
+        Connection conn = null;
+        PreparedStatement deleteBookingRoomsStmt = null;
+        PreparedStatement deleteRoomsStmt = null;
+        PreparedStatement deleteHotelStmt = null;
+
+        try {
+            conn = getConnect();
+            conn.setAutoCommit(false);
+
+            String deleteBookingRoomsSQL = "DELETE FROM Booking_Room_Detail WHERE RoomID IN (SELECT RoomID FROM Room WHERE HotelID = ?)";
+            deleteBookingRoomsStmt = conn.prepareStatement(deleteBookingRoomsSQL);
+            deleteBookingRoomsStmt.setString(1, hotelId);
+            deleteBookingRoomsStmt.executeUpdate();
+            String deleteRoomsSQL = "DELETE FROM Room WHERE HotelID = ?";
+            deleteRoomsStmt = conn.prepareStatement(deleteRoomsSQL);
+            deleteRoomsStmt.setString(1, hotelId);
+            deleteRoomsStmt.executeUpdate();
+            String deleteHotelSQL = "DELETE FROM Hotel WHERE HotelID = ?";
+            deleteHotelStmt = conn.prepareStatement(deleteHotelSQL);
+            deleteHotelStmt.setString(1, hotelId);
+            int rowsDeleted = deleteHotelStmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                deleted = true;
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                }
+            }
+        } finally {
+            if (deleteBookingRoomsStmt != null) {
+                try {
+                    deleteBookingRoomsStmt.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (deleteRoomsStmt != null) {
+                try {
+                    deleteRoomsStmt.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (deleteHotelStmt != null) {
+                try {
+                    deleteHotelStmt.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        return deleted;
+    }
+
+    public static boolean updateHotel(String id, String name, String address, String description, String city, String country, String imageURL) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        boolean success = false;
+
+        try {
+            conn = getConnect();
+            String query = "UPDATE Hotel SET HotelName = ?, HotelAddress = ?, Description = ?, City = ?, Country = ?, ProductImage = ? WHERE hotelid = ?";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setString(3, description);
+            ps.setString(4, city);
+            ps.setString(5, country);
+            ps.setString(6, imageURL);
+            ps.setString(7, id);
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+            }
+        }
+        return success;
+    }
 }

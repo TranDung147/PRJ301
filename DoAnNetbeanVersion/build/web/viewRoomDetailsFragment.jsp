@@ -1,47 +1,41 @@
 <%-- 
-    Document   : adminOrderHistory
-    Created on : Jul 4, 2024, 5:48:09 PM
+    Document   : viewRoomDetailsFragment
+    Created on : Jul 11, 2024, 7:14:54 PM
     Author     : plmin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 <%@ page import="DAO.TransactionDB" %>
-<%@ page import="Model.Transaction" %>
+<%@ page import="Model.HotelBooking" %>
+<%@ page import="Model.PlaneBooking" %>
 <%@ page import="java.util.List" %>
 
+<% 
+    String transactionID = request.getParameter("transactionId");
+    if (transactionID == null || transactionID.isEmpty()) {
+        // Handle case when transactionID is not available
+        out.println("<p>Transaction ID is missing or invalid.</p>");
+    } else {
+        TransactionDB transactionDB = new TransactionDB();
+        List<HotelBooking> hotelBookings = transactionDB.getHotelBookingsByTransactionId(transactionID);
+        List<PlaneBooking> planeBookings = transactionDB.getPlaneBookingsByTransactionId(transactionID);
+        request.setAttribute("hotelBookings", hotelBookings);
+        request.setAttribute("planeBookings", planeBookings);
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Admin Order History Page</title>
+        <title>Details Page</title>
         <style>
-            /* =============== CHANGED IN THIS FILE ============== */
-            .action-buttons {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px; /* Adjust the gap between buttons */
+            /* =============== CHANGES FOR THIS FILE (UNDONE)============== */
+            .top-table p {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--blue);
             }
-
-            .action-buttons form {
-                margin: 0; /* Remove default form margins */
-            }
-
-            .action-buttons button {
-                border: none;
-                background: none;
-                padding: 0;
-                cursor: pointer;
-            }
-
-            .action-buttons button img {
-                vertical-align: middle; /* Align image vertically within the button */
-            }
-
             /* =============== Globals ============== */
             * {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -69,7 +63,7 @@
             }
 
             /* =============== Navigation ================ */
-            .topbar-history {
+            .topbar-admin {
                 width: 100%;
                 height: 60px;
                 display: flex;
@@ -78,7 +72,7 @@
                 margin: 0 10px;
             }
 
-            .topbar-history h3 {
+            .topbar-admin h3 {
                 color: #fffdfde7;
                 text-transform: uppercase;
                 letter-spacing: 5px;
@@ -217,7 +211,7 @@
             }
 
             /* ===================== Main ===================== */
-            .main-history {
+            .main-admin {
                 position: relative;
                 width: calc(100% - 300px);
                 left: 300px;
@@ -226,7 +220,7 @@
                 transition: 0.5s;
                 overflow: hidden;
             }
-            .main-history.active {
+            .main-admin.active {
                 width: 95%;
                 left: 10px;
             }
@@ -254,12 +248,12 @@
                 left: 0; /* Ensure the navigation bar slides in from the left */
             }
 
-            .main-history.active {
+            .main-admin.active {
                 margin-left: 80px; /* Adjust based on the width of the navigation bar */
             }
 
             /* ====================== Table ========================== */
-            .table-history {
+            .table-order {
                 width: 97%;
                 padding: 20px;
                 margin: 25px;
@@ -274,44 +268,44 @@
                 align-items: flex-start;
             }
 
-            .table-history h2 {
+            .table-order h2 {
                 font-weight: 600;
                 color: var(--blue);
             }
 
-            .table-history a {
+            .table-order a {
                 text-decoration: none;
                 color: var(--black1);
             }
 
-            .top-table-history {
+            .top-table-order {
                 display: flex;
             }
 
-            .bot-table-history {
+            .bot-table-order {
                 display: flex;
             }
 
-            .table-history table {
+            .table-order table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 15px;
             }
-            .table-history table thead td {
+            .table-order table thead td {
                 font-weight: 600;
             }
-            .table-history table tr {
+            .table-order table tr {
                 color: var(--black1);
                 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             }
-            .table-history table tr:last-child {
+            .table-order table tr:last-child {
                 border-bottom: none;
             }
-            .table-history table tbody tr:hover {
+            .table-order table tbody tr:hover {
                 background: var(--gray);
                 color: var(--black);
             }
-            .table-history table tr td {
+            .table-order table tr td {
                 padding: 10px;
                 text-align: center; /* Căn chỉnh vị trí thông tin của bảng */
             }
@@ -325,11 +319,11 @@
                     width: 300px;
                     left: 0;
                 }
-                .main-history {
+                .main-admin {
                     width: 100%;
                     left: 0;
                 }
-                .main-history.active {
+                .main-admin.active {
                     left: 300px;
                 }
             }
@@ -347,13 +341,13 @@
                 .toggle {
                     z-index: 10001;
                 }
-                .main-history.active .toggle {
+                .main-admin.active .toggle {
                     color: #fff;
                     position: fixed;
                     right: 0;
                     left: initial;
                 }
-                .topbar-history .logo {
+                .topbar-admin .Logo {
                     font-size: 20px;
                 }
             }
@@ -366,7 +360,7 @@
                 <ul>
                     <li class="logo">
                         <a href="index.jsp">
-                            <div class="topbar-history">
+                            <div class="topbar-admin">
                                 <h3 class="logo-text">QTALD</h3>
                             </div>
                         </a>
@@ -404,7 +398,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="LogoutServlet">    <!-- Logout -->
+                        <a onclick="logout();">    <!-- Logout -->
                             <span class="icon">
                                 <img src="img/admin/logout.png" alt="Messages">
                             </span>
@@ -415,8 +409,8 @@
             </div>
 
             <!-- ========================= Main ==================== -->
-            <div class="main-history">
-                <div class="topbar-history">
+            <div class="main-admin">
+                <div class="topbar-admin">
                     <div class="burger">
                         <div class="line1"></div>
                         <div class="line2"></div>
@@ -424,79 +418,49 @@
                     </div>
                 </div>
 
-                <!-- ========================= Processed Order History ==================== -->
-                <div class="table-history">
-                    <div class="top-table-history">
-                        <h2>Processed Orders</h2>
+                <div clas="top-table">
+                    <p>Transaction ID: ${param.transactionId}</p>
+                </div>
+                <div class="table-order">
+                    <div class="top-table-order">
+                        <h2>Hotel Bookings</h2>
                     </div>
-                    <div class="bot-table-history">
-                        <table>
-                            <thead>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hotel Name</th>
+                                <th>Hotel Address</th>
+                                <th>Room Number</th>
+                                <th>Room Type</th>
+                                <th>Price</th>
+                                <th>Date From</th>
+                                <th>Date To</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="booking" items="${hotelBookings}">
                                 <tr>
-                                    <th>Transaction ID</th>
-                                    <th>User ID</th>
-                                    <th>Room Booking ID</th>
-                                    <th>Ticket Booking ID</th>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <td>${booking.hotelName}</td>
+                                    <td>${booking.hotelAddress}</td>
+                                    <td>${booking.roomNumber}</td>
+                                    <td>${booking.roomType}</td>
+                                    <td>${booking.price}</td>
+                                    <td>${booking.dateFrom}</td>
+                                    <td>${booking.dateTo}</td>
+                                    <td>${booking.status}</td>
                                 </tr>
-                            </thead>
-                            <%
-                    TransactionDB transactionDB = new TransactionDB();
-                    List<Transaction> transactions = transactionDB.getApprovedTransactions();
-                    request.setAttribute("transactions", transactions);
-                            %>
-                            <tbody>
-                                <%-- Retrieve transactions from the request attribute --%>
-                                <c:forEach var="order" items="${transactions}">
-                                    <tr>
-                                        <td>${order.transactionId}</td>
-                                        <td>${order.userId}</td>
-                                        <td>${order.roomBookingId}</td>
-                                        <td>${order.ticketBookingId}</td>
-                                        <td>${order.transactionDate}</td>
-                                        <td>${order.amount}</td>
-                                        <td class="status">${order.status}</td>
-                                        <td>
-                                            <div class="action-buttons">
-
-                                                <form action="AdminRemoveOrderHistoryServlet" method="post">
-                                                    <input type="hidden" name="transactionId" value="${order.transactionId}">
-                                                    <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
-                                                    <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
-
-                                                    <button type="submit" style="border:none; background:none; padding:0;">
-                                                        <img src="img/admin/decline.png" value="room" alt="Remove" title="Remove" width="20px" height="20px" style="cursor:pointer;">
-                                                    </button>
-                                                </form>
-
-                                                <form action="AdminOrderActionServlet" method="post">
-                                                    <input type="hidden" name="transactionId" value="${order.transactionId}">
-                                                    <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
-                                                    <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
-
-                                                    <button type="submit" name="action" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
-                                                        <img src="img/admin/view.png" alt="View" title="View Details" width="20px" height="20px" style="cursor:pointer;">
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const burger = document.querySelector('.burger');
                 const navigation = document.querySelector('.navigation-admin');
-                const main = document.querySelector('.main-history');
+                const main = document.querySelector('.main-admin');
 
                 burger.addEventListener('click', function () {
                     navigation.classList.toggle('active');

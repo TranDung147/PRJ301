@@ -125,6 +125,7 @@
                                                     <th>Date From</th>
                                                     <th>Date To</th>
                                                     <th>Status</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -138,6 +139,9 @@
                                                         <td><c:out value="${booking.dateFrom}" /></td>
                                                         <td><c:out value="${booking.dateTo}" /></td>
                                                         <td><c:out value="${booking.status}" /></td>
+                                                        <td>
+                                                            <a href="BookingServlet?action=deleteDetail&roomNumber=<c:out value="${booking.roomNumber}" />">Delete</a>
+                                                        </td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>
@@ -148,7 +152,7 @@
                                 <!-- Plane Bookings Section -->
                                 <c:if test="${not empty ticketDetails}">
                                     <div class="plane-bookings">
-                                        <h1>All booking of RoomBookingID: <c:out value="${ticketBookingID}" /></h1>
+                                        <h1>All booking of TicketBookingID: <c:out value="${ticketBookingID}" /></h1>
                                         <table class="booking-table">
                                             <thead>
                                                 <tr>
@@ -160,6 +164,7 @@
                                                     <th>Seat Type</th>
                                                     <th>Price</th>
                                                     <th>Status</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -173,6 +178,9 @@
                                                         <td><c:out value="${booking.seatType}" /></td>
                                                         <td><c:out value="${booking.price}" /></td>
                                                         <td><c:out value="${booking.status}" /></td>
+                                                        <td>
+                                                            <a href="BookingServlet?action=deleteDetail&seatNumber=<c:out value="${booking.seatNumber}" />">Delete</a>
+                                                        </td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>

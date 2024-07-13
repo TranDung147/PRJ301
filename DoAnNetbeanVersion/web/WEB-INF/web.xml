@@ -63,6 +63,18 @@
         <servlet-name>BookingServlet</servlet-name>
         <servlet-class>Controller.BookingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddServlet</servlet-name>
+        <servlet-class>Controller.AddServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CRUD</servlet-name>
+        <servlet-class>Controller.CRUD</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TransactionActionServlet</servlet-name>
+        <servlet-class>Controller.TransactionActionServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
@@ -139,6 +151,18 @@
     <servlet-mapping>
         <servlet-name>BookingServlet</servlet-name>
         <url-pattern>/BookingServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddServlet</servlet-name>
+        <url-pattern>/AddServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CRUD</servlet-name>
+        <url-pattern>/CRUD</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransactionActionServlet</servlet-name>
+        <url-pattern>/TransactionActionServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -8,9 +8,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import="DAO.*" %>
-<%@ page import="Model.BookingRoomDetail" %>
-<%@ page import="Model.BookingTicketDetail" %>
+
+<%@ page import="DAO.TransactionDB" %>
+<%@ page import="Model.Transaction" %>
 <%@ page import="java.util.List" %>
 
 <!DOCTYPE html>
@@ -19,6 +19,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Admin Order History Page</title>
         <style>
+            /* =============== CHANGED IN THIS FILE ============== */
+            .action-buttons {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px; /* Adjust the gap between buttons */
+            }
+
+            .action-buttons form {
+                margin: 0; /* Remove default form margins */
+            }
+
+            .action-buttons button {
+                border: none;
+                background: none;
+                padding: 0;
+                cursor: pointer;
+            }
+
+            .action-buttons button img {
+                vertical-align: middle; /* Align image vertically within the button */
+            }
+
             /* =============== Globals ============== */
             * {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -410,80 +433,55 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Room ID</th>
-                                    <th>Price</th>
-                                    <th>Date From</th>
-                                    <th>Date To</th>
+                                    <th>Transaction ID</th>
+                                    <th>User ID</th>
+                                    <th>Room Booking ID</th>
+                                    <th>Ticket Booking ID</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            <%
+                    TransactionDB transactionDB = new TransactionDB();
+                    List<Transaction> transactions = transactionDB.getApprovedTransactions();
+                    request.setAttribute("transactions", transactions);
+                            %>
                             <tbody>
-                                <%
-                        AllBookingDB a = new AllBookingDB();
-                        List<BookingRoomDetail> bookingRooms = a.getAllProcessedBookingRoomDetails();
-                        request.setAttribute("bookingRooms", bookingRooms);
-                                %>
-                                <c:forEach var="order" items="${bookingRooms}">
+                                <%-- Retrieve transactions from the request attribute --%>
+                                <c:forEach var="order" items="${transactions}">
                                     <tr>
-                                        <td>${order.roomBookingID}</td>
-                                        <td>${order.roomID}</td>
-                                        <td>${order.price}</td>
-                                        <td>${order.dateFrom}</td>
-                                        <td>${order.dateTo}</td>
-                                        <td>${order.status}</td>
+                                        <td>${order.transactionId}</td>
+                                        <td>${order.userId}</td>
+                                        <td>${order.roomBookingId}</td>
+                                        <td>${order.ticketBookingId}</td>
+                                        <td>${order.transactionDate}</td>
+                                        <td>${order.amount}</td>
+                                        <td class="status">${order.status}</td>
                                         <td>
-                                            <form action="AdminRemoveOrderHistoryServlet" method="post">
-                                                <input type="hidden" name="bookingId" value="${order.roomBookingID}">
-                                                <input type="hidden" name="bookingType" value="room">
-                                                <button type="submit" style="border:none; background:none; padding:0;">
-                                                    <img src="img/admin/decline.png" alt="Remove" title="Remove" width="20px" height="20px" style="cursor:pointer;">
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                            <div class="action-buttons">
 
-                <div class="table-history">
-                    <div class="top-table-history">
-                        <h2>Ticket Orders</h2>
-                    </div>
-                    <div class="bot-table-history">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Seat ID</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%
-                        AllBookingDB d = new AllBookingDB();
-                        List<BookingTicketDetail> bookingTicketDetails = d.getAllProcessedBookingTicketDetails();
-                        request.setAttribute("bookingTicketDetails", bookingTicketDetails);
-                                %>
-                                <c:forEach var="order" items="${bookingTicketDetails}">
-                                    <tr>
-                                        <td>${order.bookingTicketID}</td>
-                                        <td>${order.seatID}</td>
-                                        <td>${order.price}</td>
-                                        <td>${order.status}</td>
-                                        <td>
-                                            <form action="AdminRemoveOrderHistoryServlet" method="post">
-                                                <input type="hidden" name="bookingId" value="${order.bookingTicketID}">
-                                                <input type="hidden" name="bookingType" value="ticket">
-                                                <button type="submit" style="border:none; background:none; padding:0;">
-                                                    <img src="img/admin/decline.png" alt="Remove" title="Remove" width="20px" height="20px" style="cursor:pointer;">
-                                                </button>
-                                            </form>
+                                                <form action="AdminRemoveOrderHistoryServlet" method="post">
+                                                    <input type="hidden" name="transactionId" value="${order.transactionId}">
+                                                    <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
+                                                    <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
+
+                                                    <button type="submit" style="border:none; background:none; padding:0;">
+                                                        <img src="img/admin/decline.png" value="room" alt="Remove" title="Remove" width="20px" height="20px" style="cursor:pointer;">
+                                                    </button>
+                                                </form>
+
+                                                <form action="AdminOrderActionServlet" method="post">
+                                                    <input type="hidden" name="transactionId" value="${order.transactionId}">
+                                                    <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
+                                                    <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
+
+                                                    <button type="submit" name="action" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
+                                                        <img src="img/admin/view.png" alt="View" title="View Details" width="20px" height="20px" style="cursor:pointer;">
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>

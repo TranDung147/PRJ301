@@ -138,7 +138,8 @@
                                                         <td><c:out value="${tran.amount}" /></td>
                                                         <td><c:out value="${tran.status}" /></td>
                                                         <td>
-                                                            <a href="updateHotel.jsp?id=${tran.transactionId}">View</a>
+                                                            <a href="TransactionActionServlet?action=delete&transactionId=<c:out value="${tran.transactionId}" />&roomBookingID=<c:out value='${tran.roomBookingId}' />&ticketBookingID=<c:out value='${tran.ticketBookingId}' />">Delete</a>
+                                                            <a href="TransactionActionServlet?action=view&roomBookingID=<c:out value='${tran.roomBookingId}' />&ticketBookingID=<c:out value='${tran.ticketBookingId}' />">View</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

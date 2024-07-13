@@ -69,11 +69,32 @@ public class BookingTicketDB implements DatabaseInfo {
         return null;
     }
 
+    public BookingTicket getBookingTicketByBookingTicketID(String bookingTicketID) {
+        BookingTicket bookingTicket = null;
+        String query = "SELECT TicketBookingID, UserID, TotalPrice, CreatedDate, Status "
+                + "FROM Booking_Ticket "
+                + "WHERE TicketBookingID = ?";
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, bookingTicketID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                bookingTicket = new BookingTicket();
+                bookingTicket.setTicketBookingID(rs.getString("TicketBookingID"));
+                bookingTicket.setUserID(rs.getString("UserID"));
+                bookingTicket.setTotalPrice(rs.getString("TotalPrice"));
+                bookingTicket.setCreatedDate(rs.getString("CreatedDate"));
+                bookingTicket.setStatus(rs.getString("Status"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Xử lý ngoại lệ SQL
+        }
+        return bookingTicket;
+    }
 
     //--------------------------------------------------------------------------------------------------------
     public static String getTodayBookingSeatID(String userID) {
         String seatBookingID = null;
-        String getBookingSeatIDSQL = "SELECT TicketBookingID FROM Booking_Ticket WHERE UserID = ? AND CreatedDate = CAST(GETDATE() AS DATE)";
+        String getBookingSeatIDSQL = "SELECT TicketBookingID FROM Booking_Ticket WHERE UserID = ? AND Status = 'None' AND CreatedDate = CAST(GETDATE() AS DATE)";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(getBookingSeatIDSQL)) {
             pstmt.setString(1, userID);
@@ -85,6 +106,28 @@ public class BookingTicketDB implements DatabaseInfo {
             e.printStackTrace(); // Xử lý ngoại lệ SQL
         }
         return seatBookingID;
+    }
+
+    public BookingTicket getTodayAvailableBookingSeat(String id) {
+        BookingTicket bt = new BookingTicket();
+
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT TOP 1 * FROM Booking_Ticket WHERE status != 'None' and UserID = ? order by TicketBookingID DESC");
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                bt = new BookingTicket(
+                        rs.getString("TicketBookingID"), // or rs.getString(1)
+                        rs.getString("UserID"), // or rs.getString(2)
+                        rs.getString("TotalPrice"), // or rs.getString(3)
+                        rs.getString("CreatedDate"), // or rs.getString(4)
+                        rs.getString("Status") // or rs.getString(5)
+                );
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BookingTicketDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bt;
     }
 
     public static boolean updateSeatTotalPrice(String bookingSeatID, String additionalPrice) {

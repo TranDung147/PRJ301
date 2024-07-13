@@ -9,6 +9,8 @@ import Model.Room;
 import Model.Seat;
 import DAO.RoomDB;
 import DAO.SeatDB;
+import Model.BookingRoom;
+import Model.BookingTicket;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,7 +74,7 @@ public class CartServlet extends HttpServlet {
 
         //Room bookedRoom = RoomDB.bookRoom(roomID);
         Room bookedRoom = RoomDB.getRoom(roomID);
-        
+
         BookingRoomDB br = new BookingRoomDB();
         BookingRoomDetailDB brd = new BookingRoomDetailDB();
 
@@ -84,8 +86,14 @@ public class CartServlet extends HttpServlet {
                 // Nếu không có, tạo mới với giá cố định
                 roomBookingID = br.insertBookingRoom(userID, price);
             } else {
-                // Nếu có, cập nhật tổng giá với giá cố định
-                br.updateTotalPrice(roomBookingID, price);
+                BookingRoom b = br.getTodayAvailableBookingRoom(userID);
+                if (b == null) {
+                    // Nếu có mà status = None, cập nhật tổng giá với giá cố định
+                    br.updateTotalPrice(roomBookingID, price);
+                } else {
+                    // Nếu có mà status != None, add mới
+                    roomBookingID = br.insertBookingRoom(userID, price);
+                }
             }
 
             // Thêm chi tiết booking cho roomBookingID hiện có hoặc mới tạo với giá cố định
@@ -100,10 +108,10 @@ public class CartServlet extends HttpServlet {
         //Seat bookedSeat = SeatDB.bookSeat(seatID);
         Seat bookedSeat = SeatDB.getSeat(seatID);
         String price = "50.00";
-        
+
         BookingTicketDB bt = new BookingTicketDB();
         BookingTicketDetailDB btd = new BookingTicketDetailDB();
-        
+
         if (bookedSeat != null) {
             try {
                 // Kiểm tra nếu đã có seatBookingID cho ngày hôm nay
@@ -115,6 +123,15 @@ public class CartServlet extends HttpServlet {
                 } else {
                     // Nếu có, cập nhật tổng giá
                     bt.updateSeatTotalPrice(seatBookingID, price);
+
+                    BookingTicket t = bt.getTodayAvailableBookingSeat(userID);
+                    if (t == null) {
+                        // Nếu có mà status = None, cập nhật tổng giá với giá cố định
+                        bt.updateSeatTotalPrice(seatBookingID, price);
+                    } else {
+                        // Nếu có mà status != None, add mới
+                        seatBookingID = bt.insertBookingSeat(userID, price);
+                    }
                 }
 
                 // Thêm chi tiết booking cho seatBookingID hiện có hoặc mới tạo

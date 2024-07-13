@@ -10,8 +10,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="Model.BookingRoomDetail" %>
 <%@ page import="Model.BookingTicketDetail" %>
-<%@ page import="DAO.*" %>
+
 <%@ page import="java.util.List" %>
+<%@ page import="DAO.TransactionDB" %>
+<%@ page import="Model.Transaction" %>
 <!DOCTYPE html>
 <html lang="vn">
     <head>
@@ -56,7 +58,7 @@
         }
 
         /* =============== Navigation ================ */
-        .topbar-order {
+        .topbar-admin {
             width: 100%;
             height: 60px;
             display: flex;
@@ -65,7 +67,7 @@
             margin: 0 10px;
         }
 
-        .topbar-order h3 {
+        .topbar-admin h3 {
             color: #fffdfde7;
             text-transform: uppercase;
             letter-spacing: 5px;
@@ -204,7 +206,7 @@
         }
 
         /* ===================== Main ===================== */
-        .main-order {
+        .main-admin {
             position: relative;
             width: calc(100% - 300px);
             left: 300px;
@@ -213,7 +215,7 @@
             transition: 0.5s;
             overflow: hidden;
         }
-        .main-order.active {
+        .main-admin.active {
             width: 95%;
             left: 10px;
         }
@@ -241,7 +243,7 @@
             left: 0; /* Ensure the navigation bar slides in from the left */
         }
 
-        .main-order.active {
+        .main-admin.active {
             margin-left: 80px; /* Adjust based on the width of the navigation bar */
         }
 
@@ -312,11 +314,11 @@
                 width: 300px;
                 left: 0;
             }
-            .main-order {
+            .main-admin {
                 width: 100%;
                 left: 0;
             }
-            .main-order.active {
+            .main-admin.active {
                 left: 300px;
             }
         }
@@ -334,13 +336,13 @@
             .toggle {
                 z-index: 10001;
             }
-            .main-order.active .toggle {
+            .main-admin.active .toggle {
                 color: #fff;
                 position: fixed;
                 right: 0;
                 left: initial;
             }
-            .topbar-order .Logo {
+            .topbar-admin .Logo {
                 font-size: 20px;
             }
         }
@@ -402,8 +404,8 @@
             </div>
 
             <!-- ========================= Main ==================== -->
-            <div class="main-order">
-                <div class="topbar-order">
+            <div class="main-admin">
+                <div class="topbar-admin">
                     <div class="burger">
                         <div class="line1"></div>
                         <div class="line2"></div>
@@ -413,92 +415,51 @@
 
                 <div class="table-order">
                     <div class="top-table-order">
-                        <h2>Room Orders</h2>
+                        <h2>Pending Transactions</h2>
                     </div>
                     <div class="bot-table-order">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Room ID</th>
-                                    <th>Price</th>
-                                    <th>Date From</th>
-                                    <th>Date To</th>
+                                    <th>Transaction ID</th>
+                                    <th>User ID</th>
+                                    <th>Room Booking ID</th>
+                                    <th>Ticket Booking ID</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            <%
+    TransactionDB transactionDB = new TransactionDB();
+    List<Transaction> transactions = transactionDB.getAllTransactions();
+    request.setAttribute("transactions", transactions);
+                            %>
                             <tbody>
-                                <%
-                        AllBookingDB a = new AllBookingDB();
-                        List<BookingRoomDetail> bookingRooms = a.getAllOrderBRD();
-                        request.setAttribute("bookingRooms", bookingRooms);
-                                %>
-                                <c:forEach var="order" items="${bookingRooms}">
+                                <c:forEach var="order" items="${transactions}">
                                     <tr>
-                                        <td>${order.roomBookingID}</td>
-                                        <td>${order.roomID}</td>
-                                        <td>${order.price}</td>
-                                        <td>${order.dateFrom}</td>
-                                        <td>${order.dateTo}</td>
+                                        <td>${order.transactionId}</td>
+                                        <td>${order.userId}</td>
+                                        <td>${order.roomBookingId}</td>
+                                        <td>${order.ticketBookingId}</td>
+                                        <td>${order.transactionDate}</td>
+                                        <td>${order.amount}</td>
                                         <td class="status">${order.status}</td>
                                         <td>
-                                            <c:if test="${order.status == 'Pending'}">
-                                                <form action="AdminOrderActionServlet" method="POST" style="display: inline;">
-                                                    <input type="hidden" name="orderId" value="${order.roomBookingID}">
-                                                    <input type="hidden" name="type" value="room">
-                                                    <input type="hidden" name="action" value="approve">
-                                                    <button type="submit" style="border:none; background:none; padding:0;">
-                                                        <img src="img/admin/approve.png" alt="Approve" title="Approve" width="20px" height="20px" style="cursor:pointer;">
-                                                    </button>
-                                                </form>
-                                            </c:if>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                            <form action="AdminOrderActionServlet" method="post">
+                                                <input type="hidden" name="transactionId" value="${order.transactionId}">
+                                                <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
+                                                <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
 
-                <div class="table-order">
-                    <div class="top-table-order">
-                        <h2>Ticket Orders</h2>
-                    </div>
-                    <div class="bot-table-order">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Seat ID</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%
-                        AllBookingDB d = new AllBookingDB();
-                        List<BookingTicketDetail> bookingTicketDetails = d.getAllOrderBTD();
-                        request.setAttribute("bookingTicketDetails", bookingTicketDetails);
-                                %>
-                                <c:forEach var="order" items="${bookingTicketDetails}">
-                                    <tr>
-                                        <td>${order.bookingTicketID}</td>
-                                        <td>${order.seatID}</td>
-                                        <td>${order.price}</td>
-                                        <td class="status">${order.status}</td>
-                                        <td>
-                                            <c:if test="${order.status == 'Pending'}">
-                                                <form action="AdminOrderActionServlet" method="POST" style="display: inline;">
-                                                    <input type="hidden" name="orderId" value="${order.bookingTicketID}">
-                                                    <input type="hidden" name="type" value="ticket">
-                                                    <input type="hidden" name="action" value="approve">
-                                                    <button type="submit" style="border:none; background:none; padding:0;">
-                                                        <img src="img/admin/approve.png" alt="Approve" title="Approve" width="20px" height="20px" style="cursor:pointer;">
-                                                    </button>
-                                                </form>
-                                            </c:if>
+                                                <button type="submit" name="action" value="approve" style="border:none; background:none; padding:0;">
+                                                    <img src="img/admin/approve.png" alt="Approve" title="Approve" width="20px" height="20px" style="cursor:pointer;">
+                                                </button>
+
+                                                <button type="submit" name="action" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
+                                                    <img src="img/admin/view.png" alt="View" title="View Details" width="20px" height="20px" style="cursor:pointer;">
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -511,7 +472,7 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     const burger = document.querySelector('.burger');
                     const navigation = document.querySelector('.navigation-admin');
-                    const main = document.querySelector('.main-order');
+                    const main = document.querySelector('.main-admin');
 
                     burger.addEventListener('click', function () {
                         navigation.classList.toggle('active');

@@ -147,7 +147,7 @@ public class RoomDB implements DatabaseInfo {
         return price;
     }
 
-    private static String calculatePrice(String roomType, int capacity) {
+    public static String calculatePrice(String roomType, int capacity) {
         String price = null;
         if (roomType.equalsIgnoreCase("Standard")) {
             if (capacity == 1) {
@@ -203,5 +203,127 @@ public class RoomDB implements DatabaseInfo {
         }
     }
 
+    public static void insert(Room r) {
+        String sql = "INSERT INTO Room (roomID, hotelID, roomNumber, roomType, capacity, isAvailable) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, r.getRoomID());
+            stmt.setString(2, r.getHotelID());
+            stmt.setInt(3, r.getRoomNumber());
+            stmt.setString(4, r.getRoomType());
+            stmt.setInt(5, r.getCapacity());
+            stmt.setInt(6, r.getIsAvailable());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "SQL Error: " + ex.getMessage(), ex);
+        } catch (Exception ex) {
+            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error: " + ex.getMessage(), ex);
+        }
+    }
 
+    public static boolean deleteRoom(String roomId) {
+        boolean deleted = false;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = getConnect();
+            String deleteBookingRoomDetailSql = "DELETE FROM Booking_Room_Detail WHERE RoomID = ?";
+            stmt = conn.prepareStatement(deleteBookingRoomDetailSql);
+            stmt.setString(1, roomId);
+            stmt.executeUpdate();
+            String sql = "DELETE FROM Room WHERE RoomID = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, roomId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            if (rowsDeleted > 0) {
+                deleted = true;
+            }
+        } catch (SQLException e) {
+
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+
+        return deleted;
+    }
+
+    public static boolean updateRoom(String roomID, String hotelID, int roomNumber, String roomType, int capacity, int isAvailable) {
+        boolean success = false;
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(
+                "UPDATE Room SET HotelID=?, RoomNumber=?, RoomType=?, Capacity=?, IsAvailable=? WHERE RoomID=?")) {
+
+            stmt.setString(1, hotelID);
+            stmt.setInt(2, roomNumber);
+            stmt.setString(3, roomType);
+            stmt.setInt(4, capacity);
+            stmt.setInt(5, isAvailable);
+            stmt.setString(6, roomID);
+            int rowsAffected = stmt.executeUpdate();
+            success = (rowsAffected > 0);
+
+        } catch (SQLException e) {
+        }
+        return success;
+    }
+
+    public static Room getRoomById(String id) {
+        Room room = null;
+        String query = "SELECT * FROM Room WHERE RoomID = ?";
+
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                room = new Room();
+                room.setRoomID(rs.getString("RoomID"));
+                room.setRoomNumber(rs.getInt("RoomNumber"));
+                room.setRoomType(rs.getString("RoomType"));
+                room.setHotelID(rs.getString("HotelID"));
+                room.setCapacity(rs.getInt("Capacity"));
+                room.setIsAvailable(rs.getInt("IsAvailable"));
+            }
+        } catch (SQLException e) {
+        }
+
+        return room;
+    }
+
+    public Room getRoomByRoomBookingID(String roomBookingID) {
+        Room room = null;
+        String query = "SELECT r.RoomID, r.HotelID, r.RoomNumber, r.RoomType, r.Capacity, r.IsAvailable "
+                + "FROM Room r "
+                + "JOIN Booking_Room_Detail brd ON r.RoomID = brd.RoomID "
+                + "WHERE brd.RoomBookingID = ?";
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, roomBookingID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                room = new Room();
+                room.setRoomID(rs.getString("RoomID"));
+                room.setRoomNumber(rs.getInt("RoomNumber"));
+                room.setRoomType(rs.getString("RoomType"));
+                room.setHotelID(rs.getString("HotelID"));
+                room.setCapacity(rs.getInt("Capacity"));
+                room.setIsAvailable(rs.getInt("IsAvailable"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Xử lý ngoại lệ SQL
+        }
+        return room;
+    }
 }

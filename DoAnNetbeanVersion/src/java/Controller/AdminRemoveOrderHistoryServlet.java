@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.BookingRoomDetailDB;
 import DAO.BookingTicketDetailDB;
+import DAO.TransactionDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,21 +31,20 @@ public class AdminRemoveOrderHistoryServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String bookingId = request.getParameter("bookingId");
-        String bookingType = request.getParameter("bookingType");
+        String action = request.getParameter("action");
+        String transactionId = request.getParameter("transactionId");
+        String roomBookingId = request.getParameter("roomBookingId");
+        String ticketBookingId = request.getParameter("ticketBookingId");
 
-        BookingRoomDetailDB brd = new BookingRoomDetailDB();
-        BookingTicketDetailDB btd = new BookingTicketDetailDB();
-
-        // Determine the type of booking and perform the removal
-        if ("room".equals(bookingType)) {
-            brd.removeBookingRoom(bookingId);
-        } else if ("ticket".equals(bookingType)) {
-            btd.removeBookingTicket(bookingId);
+        if ("viewDetails".equals(action)) {
+            if (roomBookingId != null && !roomBookingId.isEmpty() && ticketBookingId != null && !ticketBookingId.isEmpty()) {
+                response.sendRedirect("viewBothDetailsFragment.jsp?transactionId=" + transactionId + "&roomBookingId=" + roomBookingId + "&ticketBookingId=" + ticketBookingId);
+            } else if (roomBookingId != null && !roomBookingId.isEmpty()) {
+                response.sendRedirect("viewRoomDetailsFragment.jsp?transactionId=" + transactionId + "&roomBookingId=" + roomBookingId);
+            } else if (ticketBookingId != null && !ticketBookingId.isEmpty()) {
+                response.sendRedirect("viewTicketDetailsFragment.jsp?transactionId=" + transactionId + "&ticketBookingId=" + ticketBookingId);
+            }
         }
-
-        // Redirect back to adminOrderHistory.jsp or any other appropriate page
-        response.sendRedirect("adminOrderHistory.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,7 +73,15 @@ public class AdminRemoveOrderHistoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         String transactionId = request.getParameter("transactionId");
+        String roomBookingId = request.getParameter("roomBookingId");
+        String ticketBookingId = request.getParameter("ticketBookingId");
+        
+        // Gọi hàm removeTransaction từ TransactionDB
+        TransactionDB transactionDB = new TransactionDB();
+        transactionDB.removeTransaction(transactionId, roomBookingId, ticketBookingId);
+
+        response.sendRedirect("adminOrderHistory.jsp");
     }
 
     /**

@@ -69,9 +69,53 @@ public class BookingRoomDB implements DatabaseInfo {
         return null;
     }
 
+    public BookingRoom getBookingRoomByRoomBookingID(String roomBookingID) {
+        BookingRoom bookingRoom = null;
+        String query = "SELECT RoomBookingID, UserID, TotalPrice, CreatedDate, Status "
+                + "FROM Booking_Room "
+                + "WHERE RoomBookingID = ?";
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, roomBookingID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                bookingRoom = new BookingRoom();
+                bookingRoom.setRoomBookingID(rs.getString("RoomBookingID"));
+                bookingRoom.setUserID(rs.getString("UserID"));
+                bookingRoom.setTotalPrice(rs.getString("TotalPrice"));
+                bookingRoom.setCreatedDate(rs.getString("CreatedDate"));
+                bookingRoom.setStatus(rs.getString("Status"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Xử lý ngoại lệ SQL
+        }
+        return bookingRoom;
+    }
+
+    public BookingRoom getTodayAvailableBookingRoom(String id) {
+        BookingRoom br = new BookingRoom();
+
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT TOP 1 * FROM Booking_Room WHERE status != 'None' and UserID = ? order by RoomBookingID DESC");
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                br = new BookingRoom(
+                        rs.getString("RoomBookingID"), // or rs.getString(1)
+                        rs.getString("UserID"), // or rs.getString(2)
+                        rs.getString("TotalPrice"), // or rs.getString(3)
+                        rs.getString("CreatedDate"), // or rs.getString(4)
+                        rs.getString("Status") // or rs.getString(5)
+                );
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BookingRoomDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return br;
+    }
+
     public static String getTodayBookingRoomID(String userID) {
         String bookingRoomID = null;
-        String getBookingRoomIDSQL = "SELECT RoomBookingID FROM Booking_Room WHERE UserID = ? AND CreatedDate = CAST(GETDATE() AS DATE)";
+        String getBookingRoomIDSQL = "SELECT RoomBookingID FROM Booking_Room WHERE UserID = ? AND Status = 'None' AND CreatedDate = CAST(GETDATE() AS DATE)";
 
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(getBookingRoomIDSQL)) {
             pstmt.setString(1, userID);

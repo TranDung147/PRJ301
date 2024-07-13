@@ -331,31 +331,25 @@ VALUES
     ('ST0018', 'FL0009', 2, 'Standard', 1);
 
 -- Thêm dữ liệu vào bảng Booking_Room
-INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate)
+INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate, Status)
 VALUES 
-('BR0001', 'US0001', 150.00, '2024-06-25'),
-('BR0002', 'US0002', 200.00, '2024-06-26');
+('BR0002', 'US0002', 100.00, '2024-06-26', 'None');
 
 -- Thêm dữ liệu vào bảng Booking_Room_Detail
 INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status)
 VALUES 
-('BR0001', 'RM0001', 75.00, '2024-07-01', '2024-07-01', 'Confirmed'),
-('BR0001', 'RM0002', 75.00, '2024-07-01', '2024-07-01', 'Confirmed'),
 ('BR0002', 'RM0003', 100.00, '2024-07-02', '2024-07-02', 'Pending');
 
 -- Thêm dữ liệu vào bảng Booking_Ticket
-INSERT INTO Booking_Ticket (TicketBookingID, UserID, TotalPrice, CreatedDate)
+INSERT INTO Booking_Ticket (TicketBookingID, UserID, TotalPrice, CreatedDate, Status)
 VALUES 
-('BT0001', 'US0001', 50.00, '2024-06-25'),
-('BT0002', 'US0002', 100.00, '2024-06-26');
+('BT0002', 'US0002', 125.00, '2024-06-26', 'None');
 
 -- Thêm dữ liệu vào bảng Booking_Ticket_Detail
 INSERT INTO Booking_Ticket_Detail (BookingTicketID, SeatID, Price, Status)
 VALUES 
-('BT0001', 'ST0001', 25.00, 'Confirmed'),
-('BT0001', 'ST0002', 25.00, 'Confirmed'),
 ('BT0002', 'ST0003', 50.00, 'Pending'),
-('BT0002', 'ST0004', 50.00, 'Pending');
+('BT0002', 'ST0004', 75.00, 'Pending');
 
 -- Insert sample data into Transactions table
 INSERT INTO Transactions (TransactionID, UserID, RoomBookingID, TicketBookingID, TransactionDate, Amount, Status)
@@ -364,17 +358,5 @@ VALUES
 ('TR0002', 'US0002', NULL, 'BT0002', '2024-07-07', 500.00, 'Pending'),
 ('TR0003', 'US0002', 'BR0001', 'BT0001', '2024-07-07', 700.00, 'Completed');
 
-
-SELECT br.RoomBookingID, u.Username, h.HotelName, h.HotelAddress, r.RoomNumber, r.RoomType, brd.Price, brd.DateFrom, brd.DateTo, brd.Status 
-FROM Transactions t 
-join Booking_Room br on t.RoomBookingID = br.RoomBookingID
-JOIN Booking_Room_Detail brd ON br.RoomBookingID = brd.RoomBookingID
-JOIN Room r ON brd.RoomID = r.RoomID
-JOIN Hotel h ON r.HotelID = h.HotelID
-JOIN Users u ON br.UserID = u.UserID
-WHERE TransactionID = 'TR0002'
-
-UPDATE Users SET pass='4', email='asmith@example.com', fName='Alice', lName='Smith', address='456 Oak St, Othertown', phone='2345678901', sex='Male', DateOfBirth='1985-02-15', username='user' WHERE userID='US0002'
-
-
-SELECT * FROM Transactions WHERE UserID = 'US0002' and status='Pending'
+select * from Booking_Ticket
+select * from Booking_Ticket_Detail

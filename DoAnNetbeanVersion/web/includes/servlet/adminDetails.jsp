@@ -36,9 +36,9 @@
             box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             display: flex;
-            flex-direction: column; /* Sắp xếp các phần tử theo hàng dọc */
-            justify-content: flex-start; /* Căn chỉnh phần tử từ đầu */
-            align-items: flex-start; /* Căn chỉnh các phần tử theo chiều dọc */
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
         }
 
         .table-details .addsearch {
@@ -49,18 +49,51 @@
         }
 
         .table-details .addsearch button{
-            background-color: #4CAF50; /* Màu xanh */
-            color: white; /* Màu chữ trắng */
-            padding: 10px 20px; /* Đệm nút */
-            border: none; /* Loại bỏ viền */
-            text-decoration: none; /* Loại bỏ gạch chân */
-            border-radius: 5px; /* Đường viền cong */
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .table-details table td, .table-details table th {
+            text-align: center;
+            vertical-align: middle;
         }
 
         .table-details .addsearch button:hover {
             background-color: #45a049; /* Đổi màu nền khi di chuột qua */
         }
+        .addsearch .btn {
+            background-color: #007bff; /* Màu nền */
+            margin-right: 5px;
+            color: white; /* Màu chữ */
+            padding: 10px 20px; /* Khoảng cách bên trong */
+            text-decoration: none; /* Loại bỏ gạch chân */
+            border-radius: 5px; /* Bo góc */
+            border: none; /* Loại bỏ viền */
+            font-size: 16px; /* Cỡ chữ */
+            transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+        }
 
+        .addsearch .btn:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+        }
+
+        /* Định kiểu cho form tìm kiếm */
+        .addsearch form {
+            display: flex;
+            align-items: center;
+        }
+
+        .addsearch input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 16px;
+            width:300px;
+        }
         .table-details table {
             width: 100%;
             border-collapse: collapse;
@@ -87,6 +120,34 @@
 
         .table-details table tr td {
             padding: 10px;
+        }
+        .table-details table tr td a {
+            display: inline-block;
+            padding: 5px 15px;
+            margin: 2px 5px;
+
+            border-radius: 3px;
+            text-decoration: none;
+            font-size: 14px;
+            width: 80px;
+        }
+
+        .table-details table tr td a.update-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table-details table tr td a.update-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .table-details table tr td a.delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .table-details table tr td a.delete-btn:hover {
+            background-color: #c82333;
         }
 
         /* ====================== Responsive Design ========================== */
@@ -216,13 +277,12 @@
                     <c:choose>
                         <c:when test="${param.detailType == 'Hotel'}">
                             <div class="addsearch">
-                                <a href="adminAddHotel.jsp" class="btn">Add Hotel</a>
+                                <a href="AddServlet?object=hotel" class="btn">Add Hotel</a>
                                 <form action="searchHotelServlet" method="GET">
-                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
-                                    <button type="submit">Search</button>
+                                    <input type="text" id="searchHotel" placeholder="Search..." oninput="performSearch('Hotel')">
                                 </form>
                             </div>
-                            <table>
+                            <table data-type="Hotel">
                                 <thead>
                                     <tr>
                                         <th>Hotel ID</th>
@@ -235,7 +295,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="hotelTableBody">
                                     <c:forEach var="hotel" items="${hotels}">
                                         <tr>
                                             <td>${hotel.hotelId}</td>
@@ -246,8 +306,8 @@
                                             <td>${hotel.country}</td>
                                             <td>${hotel.productImage}</td>
                                             <td>
-                                                <a href="updateHotel.jsp?id=${hotel.hotelId}">Update</a>
-                                                <a href="deleteHotel?id=${hotel.hotelId}">Delete</a>
+                                                <a href="CRUD?id=${hotel.hotelId}&detailType=Hotel&action=update" class="update-btn">Update</a>
+                                                <a href="CRUD?id=${hotel.hotelId}&detailType=Hotel&action=delete" class="delete-btn">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -258,13 +318,12 @@
 
                         <c:when test="${param.detailType == 'Plane'}">
                             <div class="addsearch">
-                                <a href="adminAddPlane.jsp" class="btn">Add Plane</a>
+                                <a href="AddServlet?object=plane" class="btn">Add Plane</a>
                                 <form action="searchPlaneServlet" method="GET">
-                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
-                                    <button type="submit">Search</button>
+                                    <input type="text" id="searchPlane" placeholder="Search..." oninput="performSearch('Plane')">
                                 </form>
                             </div>
-                            <table>
+                            <table data-type="Plane">
                                 <thead>
                                     <tr>
                                         <th>Plane ID</th>
@@ -275,7 +334,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="planeTableBody">
                                     <c:forEach var="plane" items="${planes}">
                                         <tr>
                                             <td>${plane.planeID}</td>
@@ -284,8 +343,8 @@
                                             <td>${plane.planeImg}</td>
                                             <td>${plane.noSeat}</td>
                                             <td>
-                                                <a href="updatePlane.jsp?id=${plane.planeID}">Update</a>
-                                                <a href="deletePlane?id=${plane.planeID}">Delete</a>
+                                                <a href="CRUD?id=${plane.planeID}&detailType=Plane&action=update" class="update-btn">Update</a>
+                                                <a href="CRUD?id=${plane.planeID}&detailType=Plane&action=delete" class="delete-btn">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -295,13 +354,12 @@
                         </c:when>
                         <c:when test="${param.detailType == 'Flight'}">
                             <div class="addsearch">
-                                <a href="adminAddFlight.jsp" class="btn">Add Flight</a>
+                                <a href="AddServlet?object=flight" class="btn">Add Flight</a>
                                 <form action="searchFlightServlet" method="GET">
-                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
-                                    <button type="submit">Search</button>
+                                    <input type="text" id="searchFlight" placeholder="Search..." oninput="performSearch('Flight')">                                  
                                 </form>
                             </div>
-                            <table>
+                            <table data-type="Flight">
                                 <thead>
                                     <tr>
                                         <th>Flight ID</th>
@@ -314,7 +372,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="flightTableBody">
                                     <c:forEach var="flight" items="${flights}">
                                         <tr>
                                             <td>${flight.flightID}</td>
@@ -325,8 +383,8 @@
                                             <td>${flight.arrivalCity}</td>
                                             <td>${flight.noSeatLeft}</td>
                                             <td>
-                                                <a href="updateFlight.jsp?id=${flight.flightID}">Update</a>
-                                                <a href="deleteFlight?id=${flight.flightID}">Delete</a>
+                                                <a href="CRUD?id=${flight.flightID}&planeId=${flight.planeID}&detailType=Flight&action=update" class="update-btn">Update</a>
+                                                <a href="CRUD?id=${flight.flightID}&detailType=Flight&action=delete" class="delete-btn">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -335,13 +393,12 @@
                         </c:when>
                         <c:when test="${param.detailType == 'Room'}">
                             <div class="addsearch">
-                                <a href="adminAddRoom.jsp" class="btn">Add Room</a>
+                                <a href="AddServlet?object=room" class="btn">Add Room</a>
                                 <form action="searchRoomServlet" method="GET">
-                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
-                                    <button type="submit">Search</button>
+                                    <input type="text" id="searchRoom" placeholder="Search..." oninput="performSearch('Room')">                                  
                                 </form>
                             </div>
-                            <table>
+                            <table data-type="Room">
                                 <thead>
                                     <tr>
                                         <th>Room ID</th>
@@ -353,7 +410,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="roomTableBody">
                                     <c:forEach var="room" items="${rooms}">
                                         <tr>
                                             <td>${room.roomID}</td>
@@ -363,8 +420,8 @@
                                             <td>${room.capacity}</td>
                                             <td>${room.isAvailable}</td>
                                             <td>
-                                                <a href="updateRoom.jsp?id=${room.roomID}">Update</a>
-                                                <a href="deleteRoom?id=${room.roomID}">Delete</a>
+                                                <a href="CRUD?id=${room.roomID}&hotelID=${room.hotelID}&detailType=Room&action=update" class="update-btn">Update</a>
+                                                <a href="CRUD?id=${room.roomID}&detailType=Room&action=delete" class="delete-btn">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -373,13 +430,12 @@
                         </c:when>
                         <c:when test="${param.detailType == 'Seat'}">
                             <div class="addsearch">
-                                <a href="adminAddSeat.jsp" class="btn">Add Seat</a>
+                                <a href="AddServlet?object=seat" class="btn">Add Seat</a>
                                 <form action="searchSeatServlet" method="GET">
-                                    <input type="text" name="searchKeyword" placeholder="Enter keyword...">
-                                    <button type="submit">Search</button>
+                                    <input type="text" id="searchSeat" placeholder="Search..." oninput="performSearch('Seat')">                                 
                                 </form>
                             </div>
-                            <table>
+                            <table data-type="Seat">
                                 <thead>
                                     <tr>
                                         <th>Seat ID</th>
@@ -390,7 +446,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="seatTableBody">
                                     <c:forEach var="seat" items="${seats}">
                                         <tr>
                                             <td>${seat.seatID}</td>
@@ -399,8 +455,8 @@
                                             <td>${seat.seatType}</td>
                                             <td>${seat.isAvailable}</td>
                                             <td>
-                                                <a href="updateSeat.jsp?id=${seat.seatID}">Update</a>
-                                                <a href="deleteSeat?id=${seat.seatID}">Delete</a>
+                                                <a href="CRUD?id=${seat.seatID}&flightID=${seat.flightID}&detailType=Seat&action=update" class="update-btn">Update</a>
+                                                <a href="CRUD?id=${seat.seatID}&detailType=Seat&action=delete" class="delete-btn">Delete</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -413,6 +469,41 @@
         </div>
 
         <script>
+
+            function performSearch(type) {
+                let valueSearchInput;
+                let tableBody;
+
+                switch (type) {
+                    case 'Hotel':
+                        valueSearchInput = document.getElementById("searchHotel").value.trim().toUpperCase();
+                        tableBody = document.getElementById("hotelTableBody");
+                        break;
+                    case 'Plane':
+                        valueSearchInput = document.getElementById("searchPlane").value.trim().toUpperCase();
+                        tableBody = document.getElementById("planeTableBody");
+                        break;
+                    case 'Flight':
+                        valueSearchInput = document.getElementById("searchFlight").value.trim().toUpperCase();
+                        tableBody = document.getElementById("flightTableBody");
+                        break;
+                    case 'Room':
+                        valueSearchInput = document.getElementById("searchRoom").value.trim().toUpperCase();
+                        tableBody = document.getElementById("roomTableBody");
+                        break;
+                    case 'Seat':
+                        valueSearchInput = document.getElementById("searchSeat").value.trim().toUpperCase();
+                        tableBody = document.getElementById("seatTableBody");
+                        break;
+                }
+
+                let rows = tableBody.querySelectorAll("tr");
+                rows.forEach(row => {
+                    let cellText = row.cells[1].textContent.toUpperCase();
+                    row.style.display = cellText.includes(valueSearchInput) ? "" : "none";
+                });
+            }
+
             document.addEventListener('DOMContentLoaded', function () {
                 const burger = document.querySelector('.burger');
                 const navigation = document.querySelector('.navigation-admin');
@@ -424,12 +515,18 @@
                 });
             });
             function logout() {
-                                // Tạo một URL để gửi yêu cầu đăng xuất
-                                const url = "<%=response.encodeURL(request.getContextPath() + "/UserServlet?action=Log Out")%>";
+                // Tạo một URL để gửi yêu cầu đăng xuất
+                const url = "<%=response.encodeURL(request.getContextPath() + "/UserServlet?action=Log Out")%>";
 
-                                // Tạo một yêu cầu GET để đăng xuất
-                                window.location.href = url;
-                            }
+                // Tạo một yêu cầu GET để đăng xuất
+                window.location.href = url;
+            }
+
+            document.getElementById("addLink").addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the default action of the link
+                var servletUrl = this.getAttribute("data-servlet");
+                window.location.href = servletUrl; // Redirect to the servlet URL
+            }
         </script>
     </body>
 </html>

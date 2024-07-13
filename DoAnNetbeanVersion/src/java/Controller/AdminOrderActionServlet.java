@@ -18,39 +18,26 @@ import java.io.PrintWriter;
  * @author NOMNOM
  */
 public class AdminOrderActionServlet extends HttpServlet {
+    
+    private static final long serialVersionUID = 1L;
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String orderId = request.getParameter("orderId");
-        String type = request.getParameter("type");
-        String action = request.getParameter("action"); // "approve" hoặc "decline"
+       String action = request.getParameter("action");
+        String transactionId = request.getParameter("transactionId");
+        String roomBookingId = request.getParameter("roomBookingId");
+        String ticketBookingId = request.getParameter("ticketBookingId");
 
-        BookingRoomDetailDB brd = new BookingRoomDetailDB();
-        BookingTicketDetailDB btd = new BookingTicketDetailDB();
-        boolean success = false;
-        try {
-            String status = null;
-            if ("approve".equals(action)) {
-                status = "Approved";
-            } else if ("decline".equals(action)) {
-                status = "Declined";
+        if ("viewDetails".equals(action)) {
+            if (roomBookingId != null && !roomBookingId.isEmpty() && ticketBookingId != null && !ticketBookingId.isEmpty()) {
+                response.sendRedirect("viewBothDetailsFragment.jsp?transactionId=" + transactionId + "&roomBookingId=" + roomBookingId + "&ticketBookingId=" + ticketBookingId);
+            } else if (roomBookingId != null && !roomBookingId.isEmpty()) {
+                response.sendRedirect("viewRoomDetailsFragment.jsp?transactionId=" + transactionId + "&roomBookingId=" + roomBookingId);
+            } else if (ticketBookingId != null && !ticketBookingId.isEmpty()) {
+                response.sendRedirect("viewTicketDetailsFragment.jsp?transactionId=" + transactionId + "&ticketBookingId=" + ticketBookingId);
             }
-
-            if (status != null) {
-                if ("room".equals(type)) {
-                    success = brd.updateRoomOrderStatus(orderId, status);
-                } else if ("ticket".equals(type)) {
-                    success = btd.updateTicketOrderStatus(orderId, status);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        response.setContentType("application/json");
-        response.getWriter().write("{\"success\":" + success + "}");
-        response.sendRedirect(request.getContextPath() + "/adminOrder.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

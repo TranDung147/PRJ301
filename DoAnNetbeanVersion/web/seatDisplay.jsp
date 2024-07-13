@@ -75,21 +75,25 @@
                             %>
                             <div class="col-md-2 mb-3">
                                 <div class="room <%= seatClass %>" onclick="openModal('seatModal<%= seat.getSeatID() %>')" data-room-type="<%= seat.getSeatType() %>" data-room-id="<%= seat.getSeatID() %>">
-                                    <%= seat.getSeatNumber() %>
+                                    <%= seat.getSeatNumber() %> 
                                 </div>
                             </div>
 
                             <!-- Modal for seat details -->
+
                             <div id="seatModal<%= seat.getSeatID() %>" class="modal">
                                 <div class="modal-content">
                                     <span class="close" onclick="closeModal('seatModal<%= seat.getSeatID() %>')">&times;</span>
-                                    <h5>Seat Details - <%= seat.getSeatNumber() %></h5>
+                                    <h5 class="change">Seat Details - <%= seat.getSeatNumber() %></h5>
                                     <p>Type: <%= seat.getSeatType() %></p>
                                     <p>Availability: <%= (seat.getIsAvailable() == 1) ? "Available" : "Not Available" %></p>
+                                    <div id="bookingMessage<%= seat.getSeatID() %>" style="display:none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb;">
+                                        Booking successful.
+                                    </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn-secondary" onclick="closeModal('seatModal<%= seat.getSeatID() %>')">Close</button>
+                                        <button type="button" id="closeButton<%= seat.getSeatID() %>" class="btn-secondary" onclick="closeModal('seatModal<%= seat.getSeatID() %>')">Close</button>
                                         <% if (seat.getIsAvailable() == 1) { %>
-                                        <button type="button" class="btn-book" onclick="bookSeat('<%= seat.getSeatID() %>', '<%= seat.getFlightID() %>')">Book</button>
+                                        <button type="button" id="bookButton<%= seat.getSeatID() %>" class="btn-book" onclick="bookSeat('<%= seat.getSeatID() %>', '<%= seat.getFlightID() %>')">Book</button>
                                         <% } %>
                                     </div>
                                 </div>
@@ -129,6 +133,10 @@
                 }
             }
 
+            function reloadPage() {
+                window.location.href = 'SeatServlet?flightID=${flightID}';
+            }
+
             function bookSeat(seatID, flightID) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "CartServlet", true);
@@ -137,19 +145,28 @@
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
                             var response = JSON.parse(xhr.responseText);
+                            var bookingMessageDiv = document.getElementById("bookingMessage" + seatID);
+                            var bookButton = document.getElementById("bookButton" + seatID);
+                            var closeButton = document.getElementById("closeButton" + seatID);
                             if (response.success) {
-                                alert("Ticket booked successfully.");
+                                bookingMessageDiv.innerText = "Booking successful.";
+                                bookingMessageDiv.style.display = "block";
+                                bookButton.style.display = "none";
+                                closeButton.innerText = "OK";
+                                closeButton.onclick = reloadPage;
                                 var seatElement = document.querySelector(`[data-room-id='${seatID}']`);
                                 if (seatElement) {
                                     seatElement.classList.remove("room-available");
                                     seatElement.classList.add("room-not-available");
                                 }
-                                closeModal('seatModal' + seatID);
                             } else {
-                                alert("Booking failed. Please try again.");
+                                bookingMessageDiv.innerText = "Booking failed. Please try again.";
+                                bookingMessageDiv.style.display = "block";
                             }
                         } else {
-                            alert('Failed to book ticket. Please try again.');
+                            var bookingMessageDiv = document.getElementById("bookingMessage" + seatID);
+                            bookingMessageDiv.innerText = "Failed to book ticket. Please try again.";
+                            bookingMessageDiv.style.display = "block";
                         }
                     }
                 };
@@ -159,6 +176,28 @@
             window.openModal = openModal;
             window.closeModal = closeModal;
             window.bookSeat = bookSeat;
+
+            function filterRooms() {
+                var singleChecked = document.getElementById('checkboxStandard').checked;
+                var doubleChecked = document.getElementById('checkboxVIP').checked;
+                var rooms = document.querySelectorAll('.room');
+                rooms.forEach(function (room) {
+                    var roomType = room.getAttribute('data-room-type');
+                    var roomAvailable = room.classList.contains('room-available');
+
+                    if ((singleChecked && doubleChecked) && roomAvailable) {
+                        room.style.display = 'flex';
+
+                    } else if ((singleChecked && roomType === 'VIP') || (doubleChecked && roomType === 'Standard')) {
+                        room.style.display = 'none';
+                    } else if (!roomAvailable) {
+                        room.style.display = 'none';
+                    } else {
+                        room.style.display = 'flex';
+
+                    }
+                });
+            }
         </script>
     </body>
 </html>

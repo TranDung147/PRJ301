@@ -166,5 +166,144 @@ public class SeatDB implements DatabaseInfo {
         }
     }
 
-//---------------------------------------------------------------------------
+    public static void insert(Seat s) {
+        String sql = "INSERT INTO Seat (seatID, flightID, seatNumber, seatType, isAvailable) VALUES (?, ?, ?, ?, ?)";
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, s.getSeatID());
+            stmt.setString(2, s.getFlightID());
+            stmt.setInt(3, s.getSeatNumber());
+            stmt.setString(4, s.getSeatType());
+            stmt.setInt(5, s.getIsAvailable());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, "SQL Error: " + ex.getMessage(), ex);
+        } catch (Exception ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, "Error: " + ex.getMessage(), ex);
+        }
+    }
+
+    public static boolean deleteSeat(String seatId) {
+        boolean deleted = false;
+        Connection conn = null;
+        PreparedStatement deleteBookingStmt = null;
+        PreparedStatement deleteSeatStmt = null;
+
+        try {
+            conn = getConnect();
+            conn.setAutoCommit(false);
+
+            String deleteBookingSQL = "DELETE FROM Booking_Ticket_Detail WHERE SeatID = ?";
+            deleteBookingStmt = conn.prepareStatement(deleteBookingSQL);
+            deleteBookingStmt.setString(1, seatId);
+            deleteBookingStmt.executeUpdate();
+
+            String deleteSeatSQL = "DELETE FROM Seat WHERE SeatID = ?";
+            deleteSeatStmt = conn.prepareStatement(deleteSeatSQL);
+            deleteSeatStmt.setString(1, seatId);
+            int rowsDeleted = deleteSeatStmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                deleted = true;
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                }
+            }
+        } finally {
+
+            if (deleteBookingStmt != null) {
+                try {
+                    deleteBookingStmt.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (deleteSeatStmt != null) {
+                try {
+                    deleteSeatStmt.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        return deleted;
+    }
+
+    public static boolean updateSeat(String seatID, String flightID, int seatNumber, String seatType, int isAvailable) {
+        boolean success = false;
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(
+                "UPDATE Seat SET FlightID=?, SeatNumber=?, SeatType=?, IsAvailable=? WHERE SeatID=?")) {
+
+            stmt.setString(1, flightID);
+            stmt.setInt(2, seatNumber);
+            stmt.setString(3, seatType);
+            stmt.setInt(4, isAvailable);
+            stmt.setString(5, seatID);
+
+            int rowsAffected = stmt.executeUpdate();
+            success = (rowsAffected > 0);
+
+        } catch (SQLException e) {
+        }
+        return success;
+    }
+
+    public static Seat getSeatById(String id) {
+        Seat seat = null;
+        String query = "SELECT * FROM Seat WHERE SeatID = ?";
+
+        try (Connection conn = getConnect(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                seat = new Seat();
+                seat.setSeatID(rs.getString("SeatID"));
+                seat.setFlightID(rs.getString("FlightID"));
+                seat.setSeatNumber(rs.getInt("SeatNumber"));
+                seat.setSeatType(rs.getString("seatType"));
+                seat.setIsAvailable(rs.getInt("IsAvailable"));
+            }
+        } catch (SQLException e) {
+        }
+
+        return seat;
+    }
+
+    public Seat getSeatByBookingTicketID(String bookingTicketID) {
+        Seat seat = null;
+        String query = "SELECT s.SeatID, s.SeatNumber, s.IsAvailable "
+                + "FROM Seat s "
+                + "JOIN Booking_Ticket_Detail btd ON s.SeatID = btd.SeatID "
+                + "WHERE btd.BookingTicketID = ?";
+        try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, bookingTicketID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                seat = new Seat();
+                seat.setSeatID(rs.getString("SeatID"));
+                seat.setFlightID(rs.getString("FlightID"));
+                seat.setSeatNumber(rs.getInt("SeatNumber"));
+                seat.setSeatType(rs.getString("seatType"));
+                seat.setIsAvailable(rs.getInt("IsAvailable"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Xử lý ngoại lệ SQL
+        }
+        return seat;
+    }
+
 }

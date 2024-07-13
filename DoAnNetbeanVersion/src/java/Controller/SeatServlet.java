@@ -58,7 +58,10 @@ public class SeatServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String flightID = request.getParameter("flightID");
+        List<Seat> seatList = SeatDB.getSeatByFlight(flightID);
+        request.setAttribute("seatList", seatList);
+        request.getRequestDispatcher("/seatDisplay.jsp").forward(request, response);
     }
 
     /**
@@ -75,6 +78,7 @@ public class SeatServlet extends HttpServlet {
         String flightID = request.getParameter("flightID");
         List<Seat> seatList = SeatDB.getSeatByFlight(flightID);
         request.setAttribute("seatList", seatList);
+        request.setAttribute("flightID", flightID);
         request.getRequestDispatcher("/seatDisplay.jsp").forward(request, response);
     }
 
