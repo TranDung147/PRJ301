@@ -41,6 +41,28 @@
             font-size: 24px;
             margin-bottom: 10px;
         }
+        
+        .warning{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: #c82333;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .primary{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            margin: 20px 0;
+        }
+        
+        .primary:hover,.warning:hover{
+            padding: 10px 25px;
+            transition: 0.5s ease-out;
+        }
     </style>
     <body>
         <!-- =============== Navigation ================ -->
@@ -138,8 +160,8 @@
                                                         <td><c:out value="${tran.amount}" /></td>
                                                         <td><c:out value="${tran.status}" /></td>
                                                         <td>
-                                                            <a href="TransactionActionServlet?action=delete&transactionId=<c:out value="${tran.transactionId}" />&roomBookingID=<c:out value='${tran.roomBookingId}' />&ticketBookingID=<c:out value='${tran.ticketBookingId}' />">Delete</a>
-                                                            <a href="TransactionActionServlet?action=view&roomBookingID=<c:out value='${tran.roomBookingId}' />&ticketBookingID=<c:out value='${tran.ticketBookingId}' />">View</a>
+                                                            <a class="warning" href="TransactionActionServlet?action=delete&transactionId=<c:out value="${tran.transactionId}" />&roomBookingID=<c:out value='${tran.roomBookingId}' />&ticketBookingID=<c:out value='${tran.ticketBookingId}' />">Delete</a>
+                                                            <a class="primary" href="TransactionActionServlet?action=view&roomBookingID=<c:out value='${tran.roomBookingId}' />&ticketBookingID=<c:out value='${tran.ticketBookingId}' />">View</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

@@ -279,7 +279,7 @@
                             <div class="addsearch">
                                 <a href="AddServlet?object=hotel" class="btn">Add Hotel</a>
                                 <form action="searchHotelServlet" method="GET">
-                                    <input type="text" id="searchHotel" placeholder="Search..." oninput="performSearch('Hotel')">
+                                    <input type="text" id="searchHotel" placeholder="Search..." oninput="performSearch('Hotel')">                              
                                 </form>
                             </div>
                             <table data-type="Hotel">
@@ -307,10 +307,13 @@
                                             <td>${hotel.productImage}</td>
                                             <td>
                                                 <a href="CRUD?id=${hotel.hotelId}&detailType=Hotel&action=update" class="update-btn">Update</a>
+
                                                 <a href="CRUD?id=${hotel.hotelId}&detailType=Hotel&action=delete" class="delete-btn">Delete</a>
+
                                             </td>
                                         </tr>
                                     </c:forEach>
+
                                 </tbody>
                             </table>
 
@@ -320,10 +323,10 @@
                             <div class="addsearch">
                                 <a href="AddServlet?object=plane" class="btn">Add Plane</a>
                                 <form action="searchPlaneServlet" method="GET">
-                                    <input type="text" id="searchPlane" placeholder="Search..." oninput="performSearch('Plane')">
+                                    <input type="text" id="searchPlane" placeholder="Search..." oninput="performSearch('Plane')">                                
                                 </form>
                             </div>
-                            <table data-type="Plane">
+                            <table  data-type="Plane">
                                 <thead>
                                     <tr>
                                         <th>Plane ID</th>
@@ -470,6 +473,8 @@
 
         <script>
 
+
+
             function performSearch(type) {
                 let valueSearchInput;
                 let tableBody;
@@ -497,13 +502,24 @@
                         break;
                 }
 
-                let rows = tableBody.querySelectorAll("tr");
-                rows.forEach(row => {
-                    let cellText = row.cells[1].textContent.toUpperCase();
-                    row.style.display = cellText.includes(valueSearchInput) ? "" : "none";
-                });
+                let rows = tableBody.getElementsByTagName("tr");
+                for (let i = 0; i < rows.length; i++) {
+                    let cells = rows[i].getElementsByTagName("td");
+                    let rowContainsSearchTerm = false;
+                    for (let j = 0; j < cells.length; j++) {
+                        let cellText = cells[j].textContent || cells[j].innerText;
+                        if (cellText.toUpperCase().indexOf(valueSearchInput) > -1) {
+                            rowContainsSearchTerm = true;
+                            break;
+                        }
+                    }
+                    if (rowContainsSearchTerm) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
             }
-
             document.addEventListener('DOMContentLoaded', function () {
                 const burger = document.querySelector('.burger');
                 const navigation = document.querySelector('.navigation-admin');
@@ -520,12 +536,6 @@
 
                 // Tạo một yêu cầu GET để đăng xuất
                 window.location.href = url;
-            }
-
-            document.getElementById("addLink").addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent the default action of the link
-                var servletUrl = this.getAttribute("data-servlet");
-                window.location.href = servletUrl; // Redirect to the servlet URL
             }
         </script>
     </body>

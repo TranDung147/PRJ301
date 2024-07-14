@@ -77,19 +77,15 @@ public class CartServlet extends HttpServlet {
         BookingRoomDetailDB brd = new BookingRoomDetailDB();
 
         if (bookedRoom != null) {
-            // Kiểm tra nếu đã có bookingRoomID cho ngày hôm nay
             String roomBookingID = br.getTodayBookingRoomID(userID);
 
             if (roomBookingID == null) {
-                // Nếu không có, tạo mới với giá cố định
                 roomBookingID = br.insertBookingRoom(userID, price);
             } else {
                 BookingRoom b = br.getTodayAvailableBookingRoom(userID);
-                if (b == null) {
-                    // Nếu có mà status = None, cập nhật tổng giá với giá cố định
+                if (b != null) {
                     br.updateTotalPrice(roomBookingID, price);
                 } else {
-                    // Nếu có mà status != None, add mới
                     roomBookingID = br.insertBookingRoom(userID, price);
                 }
             }
@@ -106,8 +102,7 @@ public class CartServlet extends HttpServlet {
         Seat bookedSeat = SeatDB.getSeat(seatID);
 
         BookingTicketDB bt = new BookingTicketDB();
-        String price = SeatDB.BookingTicketDetail(seatID);
-        System.out.println(price);
+        String price = SeatDB.calculatePrice(bookedSeat.getSeatType());
 
         if (bookedSeat != null) {
             try {
@@ -122,7 +117,7 @@ public class CartServlet extends HttpServlet {
                     BookingTicketDB.updateSeatTotalPrice(seatBookingID, price);
 
                     BookingTicket t = bt.getTodayAvailableBookingSeat(userID);
-                    if (t == null) {
+                    if (t != null) {
                         // Nếu có mà status = None, cập nhật tổng giá với giá cố định
                         BookingTicketDB.updateSeatTotalPrice(seatBookingID, price);
                     } else {

@@ -375,14 +375,5 @@ SELECT MAX(TransactionID) AS maxID FROM Transactions
 SELECT TicketBookingID FROM Transactions WHERE TransactionID = 'TR0001' AND TicketBookingID = 'BT0001'
 
 SELECT MAX(TransactionID) AS maxID FROM Transactions
+select * from Seat
 
-SELECT r.RoomID, r.HotelID, r.RoomNumber, r.RoomType, r.Capacity, r.IsAvailable 
-               FROM Room r 
-                JOIN Booking_Room_Detail brd ON r.RoomID = brd.RoomID 
-               WHERE brd.RoomBookingID = 'BR0002'
-
-			   select * from Booking_Room
-
-			   select s.SeatType from Booking_Ticket_Detail btd
-                    inner join Seat s on btd.SeatID = s.SeatID
-                    where s.SeatID = 'ST0003'

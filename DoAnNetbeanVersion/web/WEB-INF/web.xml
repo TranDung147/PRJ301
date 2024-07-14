@@ -44,18 +44,6 @@
         <servlet-class>Controller.AdminOrderServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AdminDetailsServlet</servlet-name>
-        <servlet-class>Controller.AdminDetailsServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminOrderActionServlet</servlet-name>
-        <servlet-class>Controller.AdminOrderActionServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminRemoveOrderHistoryServlet</servlet-name>
-        <servlet-class>Controller.AdminRemoveOrderHistoryServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>BookingServlet</servlet-name>
         <servlet-class>Controller.BookingServlet</servlet-class>
     </servlet>
@@ -70,6 +58,14 @@
     <servlet>
         <servlet-name>TransactionActionServlet</servlet-name>
         <servlet-class>Controller.TransactionActionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetDataServlet</servlet-name>
+        <servlet-class>Controller.GetDataServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>Controller.AdminServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
@@ -121,18 +117,6 @@
         <url-pattern>/AdminOrderServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AdminDetailsServlet</servlet-name>
-        <url-pattern>/adminDetails</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminOrderActionServlet</servlet-name>
-        <url-pattern>/AdminOrderActionServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminRemoveOrderHistoryServlet</servlet-name>
-        <url-pattern>/AdminRemoveOrderHistoryServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>BookingServlet</servlet-name>
         <url-pattern>/BookingServlet</url-pattern>
     </servlet-mapping>
@@ -147,6 +131,14 @@
     <servlet-mapping>
         <servlet-name>TransactionActionServlet</servlet-name>
         <url-pattern>/TransactionActionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetDataServlet</servlet-name>
+        <url-pattern>/GetDataServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/AdminServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

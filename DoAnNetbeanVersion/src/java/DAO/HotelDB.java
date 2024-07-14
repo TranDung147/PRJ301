@@ -320,8 +320,8 @@ public class HotelDB implements DatabaseInfo {
         }
         return deleted;
     }
-
-    public static boolean updateHotel(String id, String name, String address, String description, String city, String country, String imageURL) {
+    
+    public static boolean updateHotel(String id, String name, String address, String description, String city, String country, String ProductImage) {
         Connection conn = null;
         PreparedStatement ps = null;
         boolean success = false;
@@ -335,7 +335,7 @@ public class HotelDB implements DatabaseInfo {
             ps.setString(3, description);
             ps.setString(4, city);
             ps.setString(5, country);
-            ps.setString(6, imageURL);
+            ps.setString(6, ProductImage);
             ps.setString(7, id);
 
             int rowsUpdated = ps.executeUpdate();
@@ -353,7 +353,31 @@ public class HotelDB implements DatabaseInfo {
                 }
             } catch (SQLException ex) {
             }
-        }
+        }       
         return success;
+    }
+ public static Hotel getHotelByIds(String id) {
+        String sql = "select * from Hotel where HotelID = ?";
+        try (Connection con = getConnect()) {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Assuming Hotel constructor can take these parameters
+                Hotel c = new Hotel(
+                        rs.getString("HotelID"),
+                        rs.getString("HotelName"),
+                        rs.getString("HotelAddress"),
+                        rs.getString("Description"),
+                        rs.getString("City"),
+                        rs.getString("Country"),
+                        rs.getString("ProductImage")
+                );
+                return c;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(HotelDB.class.getName()).log(Level.SEVERE, "Error fetching hotel by ID", ex);
+        }
+        return null;
     }
 }

@@ -33,7 +33,7 @@
                         <h1>Rooms for Hotel: ${hotelName}</h1>
                     </div>
                     <div class="row date-roomtype-container">
-                        <div class="col-6">
+                        <div class="col-5">
                             <div class="form-inline">
                                 <label class="sr-only">Room Type: </label><br>
                                 <!--Checkbox example-->
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-7">
                             <div class="form-inline">
                                 <form class="form-inline float-left" onsubmit="hideRoomsBeforeDate(event)">
                                     <div class="date-container mx-sm-3 mb-2">
@@ -130,10 +130,10 @@
                 </div>
 
                 <div id="bookingModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeModal('bookingModal')">&times;</span>
+                    <div class="modal-content-after">
+                        <span class="close2" onclick="closeModal('bookingModal')">&times;</span>
                         <h5>Booking Details</h5>
-                        <form id="bookingForm" onsubmit="submitBooking(event)">
+                        <form class="form-inline-2" id="bookingForm" onsubmit="submitBooking(event)">
                             <input type="hidden" id="bookingRoomID" name="roomID">
                             <div class="form-group">
                                 <label for="checkInDate">Check-in Date:</label>
@@ -145,7 +145,7 @@
                             </div>
                             <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
                             <button type="button" id="okButton" class="btn btn-primary" style="display: none;" onclick="reloadPage()">OK</button>
-                            <div id="bookingMessage" style="display:none; background-color: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border: 1px solid #c3e6cb;">
+                            <div id="bookingMessage">
                                 Booking successful.
                             </div>
                         </form>

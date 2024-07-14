@@ -86,6 +86,10 @@
     .dropdown-content a:hover {
         background-color: #ddd;
     }
+    
+    .logout:hover{
+        background-color: #ddd;
+    }
 
     .show {
         display: block;
@@ -119,24 +123,25 @@
                     <div id="dropdown" class="dropdown-content">
                         <div class="menu-header">
                             <a href="customer.jsp">
-                                <img src="img/avtvodanh.png" alt="User Avatar">
+                                <img src="img/avtvodanh.png" alt="User Avatar"> Xem tất cả trang cá nhân
                             </a>
+                            <a href="#" id="settings-privacy">
+                                <img src="img/settings_privacy.png" alt="Settings & Privacy"> Cài đặt & quyền riêng tư
+                            </a>
+                            <a href="#" id="help-support">
+                                <img src="img/help_support.jpg" alt="Help & Support"> Trợ giúp & hỗ trợ
+                            </a>
+                            <a href="#" id="display-accessibility">
+                                <img src="img/display-accessibility.jpg" alt="Display & Accessibility"> Màn hình & trợ năng
+                            </a>
+                            <a href="#" id="feedback">
+                                <img src="img/feedback.png" alt="Feedback"> Đóng góp ý kiến
+                            </a>
+                            <form action="<%=response.encodeURL("UserServlet") %>" method="get">
+                                <input type="submit" name="action" value="Log Out" class="logout">
+                            </form>
                         </div>
-                        <a href="#" id="settings-privacy">
-                            <img src="img/settings_privacy.png" alt="Settings & Privacy"> Cài đặt & quyền riêng tư
-                        </a>
-                        <a href="#" id="help-support">
-                            <img src="img/help_support.jpg" alt="Help & Support"> Trợ giúp & hỗ trợ
-                        </a>
-                        <a href="#" id="display-accessibility">
-                            <img src="img/display-accessibility.jpg" alt="Display & Accessibility"> Màn hình & trợ năng
-                        </a>
-                        <a href="#" id="feedback">
-                            <img src="img/feedback.png" alt="Feedback"> Đóng góp ý kiến
-                        </a>
-                        <form action="<%=response.encodeURL("UserServlet") %>" method="get">
-                            <input type="submit" name="action" value="Log Out" class="logout">
-                        </form>
+
                     </div>
                 </div>
             </div>

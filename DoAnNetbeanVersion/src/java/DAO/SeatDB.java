@@ -13,7 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,30 +113,40 @@ public class SeatDB implements DatabaseInfo {
     }
 
     public static String BookingTicketDetail(String seatID) {
-    System.out.println(seatID);
-    String price = null;
-    try (Connection con = getConnect()) {
-        String updateQuery = "SELECT s.SeatType FROM Booking_Ticket_Detail btd " +
-                             "INNER JOIN Seat s ON btd.SeatID = s.SeatID " +
-                             "WHERE s.SeatID = ?";
-        try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
-            updateStmt.setString(1, seatID);
-            ResultSet rs = updateStmt.executeQuery();
-            if (rs.next()) {
-                String seatType = rs.getString("SeatType"); // Đảm bảo phân biệt chữ hoa chữ thường ở đây
-                if (seatType.equalsIgnoreCase("Standard")) {
-                    price = "99.99";
-                } else if (seatType.equalsIgnoreCase("VIP")) {
-                    price = "199.99";
+        System.out.println(seatID);
+        String price = null;
+        try (Connection con = getConnect()) {
+            String updateQuery = "SELECT s.SeatType FROM Booking_Ticket_Detail btd "
+                    + "INNER JOIN Seat s ON btd.SeatID = s.SeatID "
+                    + "WHERE s.SeatID = ?";
+            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+                updateStmt.setString(1, seatID);
+                ResultSet rs = updateStmt.executeQuery();
+                if (rs.next()) {
+                    String seatType = rs.getString("SeatType"); // Đảm bảo phân biệt chữ hoa chữ thường ở đây
+                    if (seatType.equalsIgnoreCase("Standard")) {
+                        price = "99.99";
+                    } else if (seatType.equalsIgnoreCase("VIP")) {
+                        price = "199.99";
+                    }
                 }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, "Lỗi khi đặt vé với ID: " + seatID, ex);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, "Lỗi khi đặt vé với ID: " + seatID, ex);
+        System.out.println(price);
+        return price;
     }
-    System.out.println(price);
-    return price;
-}
+
+    public static String calculatePrice(String seatType) {
+        String price = null;
+        if (seatType.equalsIgnoreCase("Standard")) {
+            price = "99.99";
+        } else if (seatType.equalsIgnoreCase("VIP")) {
+            price = "199.99";
+        }
+        return price;
+    }
 
     public static List<BookingTicketDetail> getBookingTicketDetail() {
         List<BookingTicketDetail> List = new ArrayList<>();
@@ -307,5 +319,58 @@ public class SeatDB implements DatabaseInfo {
         }
         return seat;
     }
+
+    //----------------------------------------------------------------------------
+    public Map<String, Integer> countBookingTicketsBySeatType(String year) {
+    Map<String, Integer> counts = new HashMap<>();
+    String query = "SELECT s.SeatType, COUNT(DISTINCT bt.TicketBookingID) AS Count " +
+                   "FROM Booking_Ticket_Detail btd " +
+                   "JOIN Seat s ON btd.SeatID = s.SeatID " +
+                   "JOIN Booking_Ticket bt ON btd.BookingTicketID = bt.TicketBookingID " +
+                   "WHERE YEAR(bt.CreatedDate) = ? AND btd.Status = 'Confirmed' " +
+                   "GROUP BY s.SeatType";
+
+    try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+        stmt.setString(1, year);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String seatType = rs.getString("SeatType");
+            int count = rs.getInt("Count");
+            counts.put(seatType, count);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return counts;
+}
+
+    public static Map<Integer, Map<String, Double>> getTotalPriceBySeatType(String year) {
+    Map<Integer, Map<String, Double>> totalPriceBySeatTypeAndMonth = new HashMap<>();
+    String query = "SELECT s.SeatType, MONTH(bt.CreatedDate) AS Month, SUM(btd.Price) AS TotalPrice " +
+                   "FROM Booking_Ticket_Detail btd " +
+                   "JOIN Seat s ON btd.SeatID = s.SeatID " +
+                   "JOIN Booking_Ticket bt ON btd.BookingTicketID = bt.TicketBookingID " +
+                   "WHERE YEAR(bt.CreatedDate) = ? AND btd.Status = 'Confirmed' " +
+                   "GROUP BY s.SeatType, MONTH(bt.CreatedDate)";
+
+    try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+        stmt.setString(1, year);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String seatType = rs.getString("SeatType");
+            int month = rs.getInt("Month");
+            double totalPrice = rs.getDouble("TotalPrice");
+
+            totalPriceBySeatTypeAndMonth
+                .computeIfAbsent(month, k -> new HashMap<>())
+                .put(seatType, totalPrice);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return totalPriceBySeatTypeAndMonth;
+}
 
 }

@@ -60,7 +60,7 @@ public class TransactionActionServlet extends HttpServlet {
             boolean successc = b.deleteTicketBookingDetailByID(ticketBookingID);
             boolean successd = b.deleteTicketBookingByID(ticketBookingID);
 
-            if (((successa && successb) || (successd && successe && successf)) && successc) {
+            if ((successa && successb && successe) || (successc && successd && successe && successf)) {
                 response.sendRedirect("thanhtoan");
             } else {
                 response.sendRedirect("error.jsp");

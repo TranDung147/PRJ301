@@ -173,6 +173,6 @@ public class BookingTicketDB implements DatabaseInfo {
                 }
             }
         }
-        return "TR0001";
+        return "BT0001";
     }
 }

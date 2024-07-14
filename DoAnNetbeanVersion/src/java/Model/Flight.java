@@ -104,5 +104,10 @@ public class Flight implements Serializable{
     public void setArrivalCity(String arrivalCity) {
         this.arrivalCity = arrivalCity;
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" + "flightID=" + flightID + ", planeID=" + planeID + ", dateStart=" + dateStart + ", dateEnd=" + dateEnd + ", departureCity=" + departureCity + ", arrivalCity=" + arrivalCity + ", noSeatLeft=" + noSeatLeft + '}';
+    }
     
 }

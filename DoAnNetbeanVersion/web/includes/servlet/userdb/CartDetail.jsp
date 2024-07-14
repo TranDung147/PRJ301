@@ -40,6 +40,26 @@
             font-size: 24px;
             margin-bottom: 10px;
         }
+        .warning{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: #c82333;
+            color: white;
+            text-decoration: none;
+        }
+        .primary{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            margin: 20px 0;
+        }
+        
+        .primary:hover,.warning:hover{
+            padding: 10px 25px;
+            transition: 0.5s ease-out;
+        }
     </style>
     <body>
         <!-- =============== Navigation ================ -->
@@ -140,7 +160,7 @@
                                                         <td><c:out value="${booking.dateTo}" /></td>
                                                         <td><c:out value="${booking.status}" /></td>
                                                         <td>
-                                                            <a href="BookingServlet?action=deleteDetail&roomNumber=<c:out value="${booking.roomNumber}" />">Delete</a>
+                                                            <a class="warning" href="BookingServlet?action=deleteDetail&roomNumber=<c:out value="${booking.roomNumber}" />">Delete</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -179,7 +199,7 @@
                                                         <td><c:out value="${booking.price}" /></td>
                                                         <td><c:out value="${booking.status}" /></td>
                                                         <td>
-                                                            <a href="BookingServlet?action=deleteDetail&seatNumber=<c:out value="${booking.seatNumber}" />">Delete</a>
+                                                            <a class="warning" href="BookingServlet?action=deleteDetail&seatNumber=<c:out value="${booking.seatNumber}" />">Delete</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -187,7 +207,8 @@
                                         </table>
                                     </div>
                                 </c:if>
-                                <a href="UserServlet?action=booking">Return to page previous</a>
+                                <br>
+                                <a class="primary" href="UserServlet?action=booking">Return to page previous</a>
                             </div>
                             
                         </c:otherwise>

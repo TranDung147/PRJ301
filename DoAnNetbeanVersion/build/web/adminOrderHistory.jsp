@@ -396,7 +396,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails?detailType=Hotel">
+                        <a href="AdminServlet?action=fetchDetails&detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>
@@ -463,7 +463,8 @@
                                         <td>
                                             <div class="action-buttons">
 
-                                                <form action="AdminRemoveOrderHistoryServlet" method="post">
+                                                <form action="AdminServlet?action=removeOrderHistory" method="post">
+
                                                     <input type="hidden" name="transactionId" value="${order.transactionId}">
                                                     <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
                                                     <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
@@ -473,12 +474,12 @@
                                                     </button>
                                                 </form>
 
-                                                <form action="AdminOrderActionServlet" method="post">
+                                                <form action="AdminServlet?action=orderAction" method="post">
                                                     <input type="hidden" name="transactionId" value="${order.transactionId}">
                                                     <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
                                                     <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
 
-                                                    <button type="submit" name="action" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
+                                                    <button type="submit" name="subAction" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
                                                         <img src="img/admin/view.png" alt="View" title="View Details" width="20px" height="20px" style="cursor:pointer;">
                                                     </button>
                                                 </form>

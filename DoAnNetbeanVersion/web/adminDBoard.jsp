@@ -17,7 +17,56 @@
             .navigation-admin ul li.logo.hovered a::after {
                 content: none; /* Remove the curve motion effect for the QTALD logo */
             }
+            .charts-container {
+                display: flex;
+                flex-direction: column; /* Đặt nút chọn năm nằm trên cùng */
+                align-items: center; /* Căn giữa nội dung */
+                margin-bottom: 20px;
+                padding-top: 10px;
+            }
+
+            #yearSelect {
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+                font-size: 14px;
+                color: #333;
+                cursor: pointer;
+                transition: border-color 0.3s;
+                width: 100px;
+                height: 50px;
+                margin-bottom: 20px; /* Khoảng cách dưới để phân tách với các biểu đồ */
+            }
+
+            .chartsBx {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            #myPieChart, #plots {
+                max-width: 49%;
+                max-height: 400px;
+                margin-bottom: 0;
+            }
+
+
+
+
+            #yearSelect:hover {
+                border-color: #007BFF;
+            }
+
+            #yearSelect:focus {
+                outline: none;
+                border-color: #007BFF;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
         </style>
+
     </head>
     <body>
         <!-- =============== Navigation ================ -->
@@ -56,7 +105,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails?detailType=Hotel">
+                        <a href="AdminServlet?action=fetchDetails&detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>
@@ -94,7 +143,7 @@
 
                     <div class="card">
                         <div>
-                            <div class="numbers">80</div>
+                            <div class="numbers" id="totalOrders">${totalOrders!= null ? totalOrders : 0}</div>
                             <div class="cardName">Orders</div>
                         </div>
                     </div>
@@ -108,17 +157,28 @@
 
                     <div class="card">
                         <div>
-                            <div class="numbers">$7,842</div>
+                            <div class="numbers" id="totalPricesDisplay">
+                                ${totalPrices != null ? totalPrices : 0.0}
+                            </div>
                             <div class="cardName">Earning</div>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- ================ Add Charts JS ================= -->
-                <div class="chartsBx">
-                    <div class="chart"><canvas id="chart-1"></canvas></div>
-                    <div class="chart"><canvas id="chart-2"></canvas></div>
+                <div class="charts-container">
+                    <select id="yearSelect">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+
+                    <div class="chartsBx">
+                        <canvas id="myPieChart" width="400px" height="400px"></canvas>
+                        <canvas id="plots" width="400px" height="400px"></canvas>
+                    </div>
                 </div>
+
 
                 <!-- ================ Order Details List ================= -->
                 <div class="details-admin">
@@ -269,27 +329,192 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-        <script src="assets/js/chartsJS.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 
         <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const burger = document.querySelector('.burger');
-                                const navigation = document.querySelector('.navigation-admin');
-                                const main = document.querySelector('.main-admin');
+                                  document.addEventListener('DOMContentLoaded', function () {
+                                      const ctxPie = document.getElementById("myPieChart").getContext('2d');
+                                      const ctxBar = document.getElementById("plots").getContext('2d');
+                                      const yearSelect = document.getElementById("yearSelect");
 
-                                burger.addEventListener('click', function () {
-                                    navigation.classList.toggle('active');
-                                    main.classList.toggle('active');
-                                });
-                            });
+                                      let chartPie = null;
+                                      let chartBar = null;
 
-                            function logout() {
-                                // Tạo một URL để gửi yêu cầu đăng xuất
-                                const url = "<%=response.encodeURL(request.getContextPath() + "/UserServlet?action=Log Out")%>";
+                                      function fetchData() {
+                                          const selectedYear = yearSelect.value;
+                                          const url = `GetDataServlet`;
 
-                                // Tạo một yêu cầu GET để đăng xuất
-                                window.location.href = url;
-                            }
+                                          fetch(url, {
+                                              method: 'POST',
+                                              headers: {
+                                                  'Content-Type': 'application/json'
+                                              },
+                                              body: JSON.stringify({year: selectedYear})
+                                          })
+                                                  .then(response => response.json())
+                                                  .then(data => {
+                                                      console.log('Dữ liệu JSON nhận được:', data);
+                                                      const totalPrices = data.totalPrices || 0.0;
+                                                      const totalOrders = data.totalOrders || 0;
+                                                      document.getElementById('totalOrders').textContent = totalOrders;
+                                                      document.getElementById('totalPricesDisplay').textContent = totalPrices;
+                                                      const roomBookingCounts = data.roomBookingCounts || {};
+                                                      const ticketBookingCounts = data.ticketBookingCounts || {};
+                                                      const roomPrices = data.roomPrices || {};
+                                                      const ticketPrices = data.ticketPrices || {};
+                                                      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+
+
+                                                      // Cập nhật biểu đồ pie
+                                                      if (chartPie) {
+                                                          chartPie.destroy();
+                                                      }
+
+                                                      chartPie = new Chart(ctxPie, {
+                                                          type: 'pie',
+                                                          data: {
+                                                              labels: ['Room VIP', 'Room Standard', 'Seat VIP', 'Seat Standard'],
+                                                              datasets: [{
+                                                                      data: [
+                                                                          roomBookingCounts['VIP'] || 0,
+                                                                          roomBookingCounts['Standard'] || 0,
+                                                                          ticketBookingCounts['VIP'] || 0,
+                                                                          ticketBookingCounts['Standard'] || 0
+                                                                      ],
+                                                                      backgroundColor: ['#ff6384', '#ff9f40', '#36a2eb', '#4bc0c0'],
+                                                                      borderColor: '#fff',
+                                                                      borderWidth: 1
+                                                                  }]
+                                                          },
+                                                          options: {
+                                                              responsive: true,
+                                                              maintainAspectRatio: false,
+                                                              layout: {
+                                                                  padding: {
+                                                                      left: 10,
+                                                                      right: 10,
+                                                                      top: 10,
+                                                                      bottom: 10
+                                                                  }
+                                                              },
+                                                              plugins: {
+                                                                  legend: {
+                                                                      position: 'top'
+                                                                  },
+                                                                  tooltip: {
+                                                                      callbacks: {
+                                                                          label: function (tooltipItem) {
+                                                                              return tooltipItem.label + ': ' + tooltipItem.raw;
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              }
+                                                          }
+                                                      });
+
+                                                      // Cập nhật biểu đồ bar
+                                                      if (chartBar) {
+                                                          chartBar.destroy();
+                                                      }
+
+                                                      chartBar = new Chart(ctxBar, {
+                                                          type: 'bar',
+                                                          data: {
+                                                              labels: months,
+                                                              datasets: [
+                                                                  {
+                                                                      label: 'Room VIP Earning',
+                                                                      data: roomPrices[0] || [],
+                                                                      backgroundColor: '#ff6384',
+                                                                      borderColor: '#fff',
+                                                                      borderWidth: 1
+                                                                  },
+                                                                  {
+                                                                      label: 'Room Standard Earning',
+                                                                      data: roomPrices[1] || [],
+                                                                      backgroundColor: '#ff9f40',
+                                                                      borderColor: '#fff',
+                                                                      borderWidth: 1
+                                                                  },
+                                                                  {
+                                                                      label: 'Seat VIP Earning',
+                                                                      data: ticketPrices[0] || [],
+                                                                      backgroundColor: '#36a2eb',
+                                                                      borderColor: '#fff',
+                                                                      borderWidth: 1
+                                                                  },
+                                                                  {
+                                                                      label: 'Seat Standard Earning',
+                                                                      data: ticketPrices[1] || [],
+                                                                      backgroundColor: '#4bc0c0',
+                                                                      borderColor: '#fff',
+                                                                      borderWidth: 1
+                                                                  }
+                                                              ]
+                                                          },
+                                                          options: {
+                                                              responsive: true,
+                                                              maintainAspectRatio: false,
+                                                              indexAxis: 'x',
+                                                              scales: {
+                                                                  x: {
+                                                                      stacked: true,
+                                                                      beginAtZero: true
+                                                                  },
+                                                                  y: {
+                                                                      stacked: true,
+                                                                      beginAtZero: true
+                                                                  }
+                                                              },
+                                                              layout: {
+                                                                  padding: {
+                                                                      left: 10,
+                                                                      right: 10,
+                                                                      top: 10,
+                                                                      bottom: 10
+                                                                  }
+                                                              },
+                                                              plugins: {
+                                                                  legend: {
+                                                                      position: 'top'
+                                                                  },
+                                                                  tooltip: {
+                                                                      callbacks: {
+                                                                          label: function (tooltipItem) {
+                                                                              return tooltipItem.label + ': ' + tooltipItem.raw;
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              }
+                                                          }
+                                                      });
+                                                  })
+                                                  .catch(error => console.error('Error fetching data:', error));
+                                      }
+
+                                      yearSelect.addEventListener('change', fetchData);
+                                      fetchData();
+
+                                      const burger = document.querySelector('.burger');
+                                      const navigation = document.querySelector('.navigation-admin');
+                                      const main = document.querySelector('.main-admin');
+
+                                      burger.addEventListener('click', function () {
+                                          navigation.classList.toggle('active');
+                                          main.classList.toggle('active');
+                                      });
+
+                                      function logout() {
+                                          const url = "<%=response.encodeURL(request.getContextPath() + "/UserServlet?action=Log Out")%>";
+                                          window.location.href = url;
+                                      }
+                                  });
+
+
         </script>
     </body>
 </html>

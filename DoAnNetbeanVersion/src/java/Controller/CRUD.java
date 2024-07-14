@@ -91,7 +91,7 @@ public class CRUD extends HttpServlet {
         } else {
             switch (detailType) {
                 case "Hotel":
-                    detail = HotelDB.getHotelById(id);
+                    detail = HotelDB.getHotelByIds(id);
                     break;
                 case "Plane":
                     detail = PlaneDB.getPlaneById(id);

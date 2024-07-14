@@ -60,5 +60,12 @@ public class Seat implements Serializable {
     public void setIsAvailable(int isAvailable) {
         this.isAvailable = isAvailable;
     }
+
+    @Override
+    public String toString() {
+        return "Seat{" + "seatID=" + seatID + ", flightID=" + flightID + ", seatNumber=" + seatNumber + ", seatType=" + seatType + ", isAvailable=" + isAvailable + '}';
+    }
+    
+    
     
 }

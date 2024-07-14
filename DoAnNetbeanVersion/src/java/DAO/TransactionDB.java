@@ -25,8 +25,8 @@ import java.util.logging.Logger;
  *
  * @author NOMNOM
  */
-public class TransactionDB implements DatabaseInfo{
-    
+public class TransactionDB implements DatabaseInfo {
+
     public static Connection getConnect() {
         try {
             Class.forName(DRIVERNAME);
@@ -41,7 +41,7 @@ public class TransactionDB implements DatabaseInfo{
         }
         return null;
     }
-    
+
     public List<Transaction> getAllUserTransactions(String id) {
         List<Transaction> list = new ArrayList<>();
 
@@ -51,17 +51,17 @@ public class TransactionDB implements DatabaseInfo{
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(new Transaction(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                rs.getString(6),rs.getString(7)));
+                        rs.getString(6), rs.getString(7)));
             }
             con.close();
             return list;
-            
+
         } catch (Exception ex) {
-            
+
         }
         return null;
     }
-    
+
     public boolean insertTransaction(String transactionID, String userID, String roomBookingID, String amount, String status) {
         String query = "INSERT INTO Transactions (TransactionID, UserID, RoomBookingID, TransactionDate, Amount, Status) "
                 + "VALUES (?, ?, ?, GETDATE(), ?, ?)";
@@ -81,7 +81,7 @@ public class TransactionDB implements DatabaseInfo{
         }
         return false;
     }
-    
+
     public boolean deleteTransactionByID(String tranID) {
         boolean success = false;
 
@@ -99,7 +99,7 @@ public class TransactionDB implements DatabaseInfo{
 
         return success;
     }
-    
+
     //---------------
     // In ra tất cả các Transactions ở status Pending trong adminOders.jsp - nauQ
     public List<Transaction> getAllTransactions() {
@@ -241,7 +241,7 @@ public class TransactionDB implements DatabaseInfo{
         TransactionDB a = new TransactionDB();
 
         String transactionId = "TR0003";
-        
+
         List<HotelBooking> hotelBookingsByTransaction = a.getHotelBookingsByTransactionId(transactionId);
         System.out.println("Hotel Bookings by Transaction ID:");
         for (HotelBooking booking : hotelBookingsByTransaction) {
@@ -271,5 +271,26 @@ public class TransactionDB implements DatabaseInfo{
             System.out.println();
         }
     }
-    
+
+    public int getTotalOrdersForYear(String year) {
+        int totalOrders = 0;
+        String sql = "SELECT COUNT(*) AS totalOrders FROM Transactions WHERE YEAR(TransactionDate) = ?";
+
+        try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, year);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                totalOrders = rs.getInt("totalOrders");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalOrders;
+    }
+
 }

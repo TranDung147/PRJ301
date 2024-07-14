@@ -41,6 +41,34 @@
             font-size: 24px;
             margin-bottom: 10px;
         }
+        .primary{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .green{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .warning{
+            padding: 5px 20px;
+            border-radius: 5px;
+            background-color: #c82333;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .primary:hover, .green:hover, .warning:hover{
+            padding: 10px 25px;
+            transition: 0.5s ease-out;
+        }
     </style>
     <body>
         <!-- =============== Navigation ================ -->
@@ -133,9 +161,9 @@
                                                         <td><c:out value="${booking.totalPrice}" /></td>
                                                         <td><c:out value="${booking.createdDate}" /></td>
                                                         <td>
-                                                            <a href="BookingServlet?action=view&roomBookingID=<c:out value='${booking.roomBookingID}' />">View</a>
-                                                            <a href="BookingServlet?action=order&roomBookingID=<c:out value='${booking.roomBookingID}' />">Order</a>
-                                                            <a href="BookingServlet?action=delete&roomBookingID=<c:out value="${booking.roomBookingID}" />">Delete</a>
+                                                            <a class="primary" href="BookingServlet?action=view&roomBookingID=<c:out value='${booking.roomBookingID}' />">View</a>
+                                                            <a class="green" href="BookingServlet?action=order&roomBookingID=<c:out value='${booking.roomBookingID}' />">Order</a>
+                                                            <a class="warning" href="BookingServlet?action=delete&roomBookingID=<c:out value="${booking.roomBookingID}" />">Delete</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -161,10 +189,10 @@
                                                         <td><c:out value="${booking.ticketBookingID}" /></td>
                                                         <td><c:out value="${booking.totalPrice}" /></td>
                                                         <td><c:out value="${booking.createdDate}" /></td>
-                                                        <td>
-                                                            <a href="BookingServlet?action=viewTicket&ticketBookingID=<c:out value='${booking.ticketBookingID}' />">View</a>
-                                                            <a href="BookingServlet?action=orderTicket&ticketBookingID=<c:out value='${booking.ticketBookingID}' />">Order</a>
-                                                            <a href="BookingServlet?action=deleteTicket&ticketBookingID=<c:out value="${booking.ticketBookingID}" />">Delete</a>
+                                                        <td class="buttons">
+                                                            <a class="primary" href="BookingServlet?action=viewTicket&ticketBookingID=<c:out value='${booking.ticketBookingID}' />">View</a>
+                                                            <a class="green" href="BookingServlet?action=orderTicket&ticketBookingID=<c:out value='${booking.ticketBookingID}' />">Order</a>
+                                                            <a class="warning" href="BookingServlet?action=deleteTicket&ticketBookingID=<c:out value="${booking.ticketBookingID}" />">Delete</a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>

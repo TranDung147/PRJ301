@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    justify-content: center;
     flex-direction: column;
     min-height: 100vh;
 }
@@ -91,6 +92,22 @@ main {
     max-width: 600px;
     border-radius: 10px;
     position: relative;
+    height: 35%;
+}
+
+.modal-content-after{
+    padding-top: 60px;
+    padding: 52px;
+    padding-bottom: 15%;
+    background-color: #fefefe;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    margin: 5% auto;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    height: 35%;
 }
 
 .close {
@@ -109,6 +126,15 @@ main {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.btn-primary {
+    margin-top: 10px;
+}
+
+.btn-primary-2{
+    display: flex;
+    justify-content: center;
 }
 
 .btn-book {
@@ -143,11 +169,52 @@ main {
 
 .form-inline {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-inline-2 {
     align-items: center;
 }
 
 .form-inline label {
     margin-right: 10px;
+}
+
+.form-group {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+}
+
+.form-inline .form-control {
+    width: auto;
+    flex: 1;
+    min-width: 150px;
+}
+.form-inline button {
+    flex-shrink: 0;
 }
 
 .checkbox-wrapper-30 {
@@ -253,4 +320,53 @@ main {
     width: 100%;
 }
 
+#bookingMessage {
+    display: none;
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+}
 
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+}
+
+.close2 {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close2:hover,
+.close2:focus {
+    color: black;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .btn-primary {
+        width: 100%;
+    }
+}

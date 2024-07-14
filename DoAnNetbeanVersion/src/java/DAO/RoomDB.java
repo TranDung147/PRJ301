@@ -9,7 +9,9 @@ import static DAO.DatabaseInfo.USERDB;
 import java.sql.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,12 +37,12 @@ public class RoomDB implements DatabaseInfo {
     public static Room getRoom(String roomID) {
         Room room = null;
         try (Connection con = getConnect()) {
-            String query = "SELECT RoomID, RoomNumber, RoomType, IsAvailable FROM Room WHERE RoomID=?";
+            String query = "SELECT * FROM Room WHERE RoomID=?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, roomID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                room = new Room(rs.getString("RoomID"), rs.getInt("RoomNumber"), rs.getString("RoomType"), rs.getInt("IsAvailable"));
+                room = new Room(rs.getString("RoomID"), rs.getString("HotelID"), rs.getInt("RoomNumber"), rs.getString("RoomType"), rs.getInt("Capacity"), rs.getInt("IsAvailable"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -326,4 +328,57 @@ public class RoomDB implements DatabaseInfo {
         }
         return room;
     }
+
+    //----------------------------------------------------------------------
+    public Map<String, Integer> countBookingRoomDetailsByRoomType(String year) {
+    Map<String, Integer> counts = new HashMap<>();
+    String query = "SELECT r.RoomType, COUNT(DISTINCT br.RoomBookingID) AS Count " +
+                   "FROM Booking_Room_Detail brd " +
+                   "JOIN Room r ON brd.RoomID = r.RoomID " +
+                   "JOIN Booking_Room br ON brd.RoomBookingID = br.RoomBookingID " +
+                   "WHERE YEAR(brd.DateFrom) = ? AND brd.Status = 'Confirmed' " +
+                   "GROUP BY r.RoomType";
+
+    try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+        stmt.setString(1, year);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String roomType = rs.getString("RoomType");
+            int count = rs.getInt("Count");
+            counts.put(roomType, count);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return counts;
+}
+
+    public static Map<Integer, Map<String, Double>> getTotalPriceByRoomType(String year) {
+    Map<Integer, Map<String, Double>> totalPriceByRoomTypeAndMonth = new HashMap<>();
+    String query = "SELECT r.RoomType, MONTH(br.CreatedDate) AS Month, SUM(brd.Price) AS TotalPrice " +
+                   "FROM Booking_Room_Detail brd " +
+                   "JOIN Room r ON brd.RoomID = r.RoomID " +
+                   "JOIN Booking_Room br ON brd.RoomBookingID = br.RoomBookingID " +
+                   "WHERE YEAR(br.CreatedDate) = ? AND brd.Status = 'Confirmed' " +
+                   "GROUP BY r.RoomType, MONTH(br.CreatedDate)";
+
+    try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
+        stmt.setString(1, year);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String roomType = rs.getString("RoomType");
+            int month = rs.getInt("Month");
+            double totalPrice = rs.getDouble("TotalPrice");
+
+            totalPriceByRoomTypeAndMonth
+                .computeIfAbsent(month, k -> new HashMap<>())
+                .put(roomType, totalPrice);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return totalPriceByRoomTypeAndMonth;
+}
 }

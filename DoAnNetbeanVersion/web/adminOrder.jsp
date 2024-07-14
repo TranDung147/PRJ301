@@ -385,7 +385,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails?detailType=Hotel">
+                        <a href="AdminServlet?action=fetchDetails&detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>
@@ -432,9 +432,9 @@
                                 </tr>
                             </thead>
                             <%
-    TransactionDB transactionDB = new TransactionDB();
-    List<Transaction> transactions = transactionDB.getAllTransactions();
-    request.setAttribute("transactions", transactions);
+                                TransactionDB transactionDB = new TransactionDB();
+                                List<Transaction> transactions = transactionDB.getAllTransactions();
+                                request.setAttribute("transactions", transactions);
                             %>
                             <tbody>
                                 <c:forEach var="order" items="${transactions}">
@@ -447,19 +447,20 @@
                                         <td>${order.amount}</td>
                                         <td class="status">${order.status}</td>
                                         <td>
-                                            <form action="AdminOrderActionServlet" method="post">
+                                            <form action="AdminServlet?action=orderAction" method="post">
                                                 <input type="hidden" name="transactionId" value="${order.transactionId}">
                                                 <input type="hidden" name="roomBookingId" value="${order.roomBookingId}">
                                                 <input type="hidden" name="ticketBookingId" value="${order.ticketBookingId}">
 
-                                                <button type="submit" name="action" value="approve" style="border:none; background:none; padding:0;">
+                                                <button type="submit" name="subAction" value="approve" style="border:none; background:none; padding:0;">
                                                     <img src="img/admin/approve.png" alt="Approve" title="Approve" width="20px" height="20px" style="cursor:pointer;">
                                                 </button>
 
-                                                <button type="submit" name="action" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
+                                                <button type="submit" name="subAction" value="viewDetails" class="view-details" data-transaction-id="${order.transactionId}" data-room-booking-id="${order.roomBookingId}" data-ticket-booking-id="${order.ticketBookingId}" style="border:none; background:none; padding:0;">
                                                     <img src="img/admin/view.png" alt="View" title="View Details" width="20px" height="20px" style="cursor:pointer;">
                                                 </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                 </c:forEach>

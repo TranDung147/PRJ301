@@ -1,6 +1,6 @@
 <%-- 
-    Document   : viewTicketDetailsFragment
-    Created on : Jul 11, 2024, 7:15:18 PM
+    Document   : adminViewDetails
+    Created on : Jul 14, 2024, 4:04:17 PM
     Author     : plmin
 --%>
 
@@ -29,7 +29,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Detail Page</title>
+        <title>View Details Page</title>
         <style>
             /* =============== CHANGES FOR THIS FILE (UNDONE)============== */
             .top-table p {
@@ -390,7 +390,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails.jsp">
+                        <a href="AdminServlet?action=fetchDetails&detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>
@@ -417,11 +417,48 @@
                         <div class="line3"></div>
                     </div>
                 </div>
-                <div class="table-order">
-                    <div class="top-table-order">
-                        <h2>Ticket Booking Details</h3>
+
+                <c:if test="${!hotelBookings.isEmpty()}">
+                    <div class="table-order">
+                        <div class="top-table-order">
+                            <h2>Hotel Bookings</h2>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hotel Name</th>
+                                    <th>Hotel Address</th>
+                                    <th>Room Number</th>
+                                    <th>Room Type</th>
+                                    <th>Price</th>
+                                    <th>Date From</th>
+                                    <th>Date To</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="booking" items="${hotelBookings}">
+                                    <tr>
+                                        <td>${booking.hotelName}</td>
+                                        <td>${booking.hotelAddress}</td>
+                                        <td>${booking.roomNumber}</td>
+                                        <td>${booking.roomType}</td>
+                                        <td>${booking.price}</td>
+                                        <td>${booking.dateFrom}</td>
+                                        <td>${booking.dateTo}</td>
+                                        <td>${booking.status}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="bot-table-order">
+                </c:if>
+
+                <c:if test="${!planeBookings.isEmpty()}">
+                    <div class="table-order">
+                        <div class="top-table-order">
+                            <h2>Ticket Booking</h2>
+                        </div>
                         <table>
                             <thead>
                                 <tr>
@@ -451,21 +488,20 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </c:if>
             </div>
         </div>
-    </table>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const burger = document.querySelector('.burger');
-            const navigation = document.querySelector('.navigation-admin');
-            const main = document.querySelector('.main-admin');
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const burger = document.querySelector('.burger');
+                const navigation = document.querySelector('.navigation-admin');
+                const main = document.querySelector('.main-admin');
 
-            burger.addEventListener('click', function () {
-                navigation.classList.toggle('active');
-                main.classList.toggle('active');
+                burger.addEventListener('click', function () {
+                    navigation.classList.toggle('active');
+                    main.classList.toggle('active');
+                });
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
