@@ -56,10 +56,6 @@
         <servlet-class>Controller.AdminRemoveOrderHistoryServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AdminServlet</servlet-name>
-        <servlet-class>Controller.AdminServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>BookingServlet</servlet-name>
         <servlet-class>Controller.BookingServlet</servlet-class>
     </servlet>
@@ -78,14 +74,6 @@
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>ShowHotelsServlet</servlet-name>
-        <servlet-class>Controller.ShowHotelsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ShowHotelsServlet</servlet-name>
-        <url-pattern>/ShowHotelsServlet</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CartServlet</servlet-name>
@@ -143,10 +131,6 @@
     <servlet-mapping>
         <servlet-name>AdminRemoveOrderHistoryServlet</servlet-name>
         <url-pattern>/AdminRemoveOrderHistoryServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminServlet</servlet-name>
-        <url-pattern>/admin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookingServlet</servlet-name>

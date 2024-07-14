@@ -187,7 +187,9 @@
                                         </table>
                                     </div>
                                 </c:if>
+                                <a href="UserServlet?action=booking">Return to page previous</a>
                             </div>
+                            
                         </c:otherwise>
                     </c:choose>
                 </div>

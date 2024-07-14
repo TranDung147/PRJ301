@@ -17,7 +17,7 @@
                 <div class="information">
                     <h1>Update Your Information</h1>
 
-                    <jsp:useBean id="userDB" class="Model.UserDB" scope="session" />
+                    <jsp:useBean id="userDB" class="DAO.UserDB" scope="session" />
                     <% 
                         // Gọi phương thức getUserFromSession từ UserDB
                         User user = userDB.getUserFromSession(session, request);

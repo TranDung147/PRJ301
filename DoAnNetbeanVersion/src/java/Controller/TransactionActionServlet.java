@@ -46,7 +46,7 @@ public class TransactionActionServlet extends HttpServlet {
     private void deleteTransaction(HttpServletRequest request, HttpServletResponse response, String transactionId) throws IOException {
         String roomBookingID = request.getParameter("roomBookingID");
         String ticketBookingID = request.getParameter("ticketBookingID");
-        if (roomBookingID != null && !roomBookingID.trim().isEmpty() && ticketBookingID != null && !ticketBookingID.trim().isEmpty()) {
+        if ((roomBookingID != null && !roomBookingID.trim().isEmpty()) || (ticketBookingID != null && !ticketBookingID.trim().isEmpty())) {
             
             TransactionDB c = new TransactionDB();
             boolean successe = c.deleteTransactionByID(transactionId);
@@ -60,7 +60,7 @@ public class TransactionActionServlet extends HttpServlet {
             boolean successc = b.deleteTicketBookingDetailByID(ticketBookingID);
             boolean successd = b.deleteTicketBookingByID(ticketBookingID);
 
-            if (successa && successb && successc && successd && successe && successf) {
+            if (((successa && successb) || (successd && successe && successf)) && successc) {
                 response.sendRedirect("thanhtoan");
             } else {
                 response.sendRedirect("error.jsp");
@@ -74,7 +74,7 @@ public class TransactionActionServlet extends HttpServlet {
     private void viewTransaction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String roomBookingID = request.getParameter("roomBookingID");
         String ticketBookingID = request.getParameter("ticketBookingID");
-        if (roomBookingID != null && !roomBookingID.trim().isEmpty() && ticketBookingID != null && !ticketBookingID.trim().isEmpty()) {
+        if ((roomBookingID != null && !roomBookingID.trim().isEmpty()) || (ticketBookingID != null && !ticketBookingID.trim().isEmpty())) {
             UserDashBoardDB a = new UserDashBoardDB();
             List<HotelBooking> hotelBookings = a.getAllHotelBookings(roomBookingID);
 
@@ -85,13 +85,14 @@ public class TransactionActionServlet extends HttpServlet {
             request.setAttribute("roomBookingID", roomBookingID);
             request.setAttribute("ticketDetails", planeBookings);
             request.setAttribute("ticketBookingID", ticketBookingID);
+            
 
             // Chuyển tiếp đến trang JSP hiển thị chi tiết của booking
             request.getRequestDispatcher("includes/servlet/userdb/CartDetail.jsp").forward(request, response);
         } else {
             // Xử lý nếu roomBookingID không hợp lệ
             response.sendRedirect("UserServlet?action=booking");
-        }
+        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

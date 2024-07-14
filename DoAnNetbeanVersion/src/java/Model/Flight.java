@@ -34,6 +34,16 @@ public class Flight implements Serializable{
         this.departureCity = departureCity;
         this.arrivalCity = arrivalCity;
     }
+
+    public Flight(String flightID, String planeID, String departureCity, String arrivalCity, String noSeatLeft) {
+        this.flightID = flightID;
+        this.planeID = planeID;
+        this.departureCity = departureCity;
+        this.arrivalCity = arrivalCity;
+        this.noSeatLeft = noSeatLeft;
+    }
+    
+    
     
     
 

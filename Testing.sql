@@ -354,9 +354,35 @@ VALUES
 -- Insert sample data into Transactions table
 INSERT INTO Transactions (TransactionID, UserID, RoomBookingID, TicketBookingID, TransactionDate, Amount, Status)
 VALUES 
-('TR0001', 'US0002', 'BR0001', NULL, '2024-07-07', 200.00, 'Pending'),
-('TR0002', 'US0002', NULL, 'BT0002', '2024-07-07', 500.00, 'Pending'),
+('TR0001', 'US0002', 'BR0002', NULL, '2024-07-14', 200.00, 'Pending'),
+('TR0002', 'US0002', NULL, 'BT0002', '2024-07-07', 500.00, 'Confirmed'),
 ('TR0003', 'US0002', 'BR0001', 'BT0001', '2024-07-07', 700.00, 'Completed');
 
 select * from Booking_Ticket
 select * from Booking_Ticket_Detail
+
+select * from Booking_Room
+select * from Booking_Room_Detail
+
+select * from Transactions
+
+select * from Flight
+
+SELECT TransactionID FROM Transactions WHERE UserID = 'US0002' AND Status = 'Pending' AND TransactionDate = CONVERT(DATE, GETDATE())
+
+SELECT MAX(TransactionID) AS maxID FROM Transactions
+
+SELECT TicketBookingID FROM Transactions WHERE TransactionID = 'TR0001' AND TicketBookingID = 'BT0001'
+
+SELECT MAX(TransactionID) AS maxID FROM Transactions
+
+SELECT r.RoomID, r.HotelID, r.RoomNumber, r.RoomType, r.Capacity, r.IsAvailable 
+               FROM Room r 
+                JOIN Booking_Room_Detail brd ON r.RoomID = brd.RoomID 
+               WHERE brd.RoomBookingID = 'BR0002'
+
+			   select * from Booking_Room
+
+			   select s.SeatType from Booking_Ticket_Detail btd
+                    inner join Seat s on btd.SeatID = s.SeatID
+                    where s.SeatID = 'ST0003'

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import Model.*;
 import DAO.*;
+import java.sql.Date;
 
 /**
  *
@@ -110,15 +111,14 @@ public class AddServlet extends HttpServlet {
 
         try {
             // Chuyển đổi các giá trị từ String sang đúng kiểu dữ liệu
-            String dateStart = dateStartStr;
-            String dateEnd = dateEndStr;
-            String noSeatLeft = noSeatLeftStr;
+            Date dateStart = Date.valueOf(dateStartStr);
+            Date dateEnd = Date.valueOf(dateEndStr);
 
             // Tạo một đối tượng Flight mới
-            Flight flight = new Flight(flightID, planeID, dateStart, dateEnd, departureCity, arrivalCity, noSeatLeft);
+            Flight flight = new Flight(flightID, planeID, departureCity, arrivalCity, noSeatLeftStr);
 
             // Chèn flight vào cơ sở dữ liệu
-            FlightDB.insert(flight);
+            FlightDB.insert(flight, dateStart, dateEnd);
 
             // Redirect đến trang chi tiết thành công
             response.sendRedirect("adminDetails?detailType=Flight");
@@ -178,7 +178,21 @@ public class AddServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String objectType = request.getParameter("object");
+
+        if ("hotel".equals(objectType)) {
+            response.sendRedirect("add.jsp?object=hotel");
+        } else if ("plane".equals(objectType)) {
+            response.sendRedirect("add.jsp?object=plane");
+        } else if ("flight".equals(objectType)) {
+            response.sendRedirect("add.jsp?object=flight");
+        } else if ("room".equals(objectType)) {
+            response.sendRedirect("add.jsp?object=room");
+        } else if ("seat".equals(objectType)) {
+            response.sendRedirect("add.jsp?object=seat");
+        } else {
+            response.sendRedirect("errorPage.jsp");
+        }
     }
 
     /**
@@ -192,7 +206,21 @@ public class AddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String objectType = request.getParameter("object");
+
+        if ("hotel".equals(objectType)) {
+            addHotel(request, response);
+        } else if ("plane".equals(objectType)) {
+            addPlane(request, response);
+        } else if ("flight".equals(objectType)) {
+            addFlight(request, response);
+        } else if ("room".equals(objectType)) {
+            addRoom(request, response);
+        } else if ("seat".equals(objectType)) {
+            addSeat(request, response);
+        } else {
+            response.sendRedirect("errorPage.jsp");
+        }
     }
 
     /**

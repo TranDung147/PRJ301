@@ -151,19 +151,19 @@ public class RoomDB implements DatabaseInfo {
         String price = null;
         if (roomType.equalsIgnoreCase("Standard")) {
             if (capacity == 1) {
-                price = "32";
+                price = "32.99";
             } else if (capacity == 2) {
-                price = "49";
+                price = "49.9";
             } else if (capacity == 3) {
-                price = "74";
+                price = "74.99";
             }
         } else if (roomType.equalsIgnoreCase("VIP")) {
             if (capacity == 1) {
-                price = "199";
+                price = "199.99";
             } else if (capacity == 2) {
-                price = "299";
+                price = "299.99";
             } else if (capacity == 3) {
-                price = "599";
+                price = "599.99";
             }
         }
         return price;

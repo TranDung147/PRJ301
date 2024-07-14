@@ -144,11 +144,12 @@ public class BookingTicketDB implements DatabaseInfo {
         }
     }
 
-    public static String insertBookingSeat(String userID, String totalPrice) {
+    public String insertBookingSeat(String userID, String totalPrice) {
         String seatBookingID = null;
+        System.out.println(totalPrice);
         String insertBookingSeatSQL = "INSERT INTO Booking_Ticket(TicketBookingID, UserID, TotalPrice, CreatedDate, Status) VALUES (?, ?, ?, GETDATE(), ?)";
         try (Connection conn = getConnect(); PreparedStatement pstmt = conn.prepareStatement(insertBookingSeatSQL)) {
-            seatBookingID = generateUniqueBookingID();
+            seatBookingID = generateNewBTID(conn);
             pstmt.setString(1, seatBookingID);
             pstmt.setString(2, userID);
             pstmt.setString(3, totalPrice);
@@ -159,9 +160,19 @@ public class BookingTicketDB implements DatabaseInfo {
         }
         return seatBookingID;
     }
-
-    private static String generateUniqueBookingID() {
-        String uniqueID = UUID.randomUUID().toString().substring(0, 6);
-        return uniqueID;
+    
+    private String generateNewBTID(Connection con) throws SQLException {
+        String query = "SELECT MAX(TicketBookingID) AS maxID FROM Booking_Ticket";
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String maxID = rs.getString("maxID");
+                if (maxID != null) {
+                    int id = Integer.parseInt(maxID.substring(2)) + 1;
+                    return String.format("BT%04d", id);
+                }
+            }
+        }
+        return "TR0001";
     }
 }

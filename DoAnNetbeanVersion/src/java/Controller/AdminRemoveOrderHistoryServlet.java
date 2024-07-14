@@ -7,6 +7,7 @@ package Controller;
 import DAO.BookingRoomDetailDB;
 import DAO.BookingTicketDetailDB;
 import DAO.TransactionDB;
+import DAO.UserDashBoardDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -73,13 +74,22 @@ public class AdminRemoveOrderHistoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String transactionId = request.getParameter("transactionId");
+        String transactionId = request.getParameter("transactionId");
         String roomBookingId = request.getParameter("roomBookingId");
         String ticketBookingId = request.getParameter("ticketBookingId");
-        
+
         // Gọi hàm removeTransaction từ TransactionDB
         TransactionDB transactionDB = new TransactionDB();
         transactionDB.removeTransaction(transactionId, roomBookingId, ticketBookingId);
+
+        UserDashBoardDB a = new UserDashBoardDB();
+        a.deleteRoomBookingDetailByID(roomBookingId);
+        a.deleteRoomBookingByID(roomBookingId);
+
+        UserDashBoardDB b = new UserDashBoardDB();
+        b.updateSeatAvailabilityToTrue(ticketBookingId);
+        b.deleteTicketBookingDetailByID(ticketBookingId);
+        b.deleteTicketBookingByID(ticketBookingId);
 
         response.sendRedirect("adminOrderHistory.jsp");
     }

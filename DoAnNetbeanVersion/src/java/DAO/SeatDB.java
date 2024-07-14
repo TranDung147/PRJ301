@@ -111,28 +111,30 @@ public class SeatDB implements DatabaseInfo {
     }
 
     public static String BookingTicketDetail(String seatID) {
-        String price = null;
-        try (Connection con = getConnect()) {
-            String updateQuery = "select s.SeatType from Booking_Ticket_Detail btd\n"
-                    + "inner join Seat s on btd.SeatID = s.SeatID\n"
-                    + "where s.SeatID = ?";
-            try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
-                updateStmt.setString(1, seatID);
-                ResultSet rs = updateStmt.executeQuery();
-                if (rs.next()) {
-                    String seatType = rs.getString("seatType");
-                    if (seatType.equalsIgnoreCase("Standard")) {
-                        price = "99";
-                    } else if (seatType.equalsIgnoreCase("VIP")) {
-                        price = "199";
-                    }
+    System.out.println(seatID);
+    String price = null;
+    try (Connection con = getConnect()) {
+        String updateQuery = "SELECT s.SeatType FROM Booking_Ticket_Detail btd " +
+                             "INNER JOIN Seat s ON btd.SeatID = s.SeatID " +
+                             "WHERE s.SeatID = ?";
+        try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
+            updateStmt.setString(1, seatID);
+            ResultSet rs = updateStmt.executeQuery();
+            if (rs.next()) {
+                String seatType = rs.getString("SeatType"); // Đảm bảo phân biệt chữ hoa chữ thường ở đây
+                if (seatType.equalsIgnoreCase("Standard")) {
+                    price = "99.99";
+                } else if (seatType.equalsIgnoreCase("VIP")) {
+                    price = "199.99";
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(RoomDB.class.getName()).log(Level.SEVERE, "Error booking room with ID: " + seatID, ex);
         }
-        return price;
+    } catch (SQLException ex) {
+        Logger.getLogger(SeatDB.class.getName()).log(Level.SEVERE, "Lỗi khi đặt vé với ID: " + seatID, ex);
     }
+    System.out.println(price);
+    return price;
+}
 
     public static List<BookingTicketDetail> getBookingTicketDetail() {
         List<BookingTicketDetail> List = new ArrayList<>();

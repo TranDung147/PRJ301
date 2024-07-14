@@ -194,7 +194,7 @@ public class CRUD extends HttpServlet {
         String id = request.getParameter("id");
         String planeId = request.getParameter("planeId");
         String departureDate = request.getParameter("departureDate");
-        String dateEnd = request.getParameter("DateEnd");
+        String dateEnd = request.getParameter("dateEnd");
         String departureCity = request.getParameter("departureCity");
         String arrivalCity = request.getParameter("arrivalCity");
         String noSeatLeft = request.getParameter("noSeatLeft");

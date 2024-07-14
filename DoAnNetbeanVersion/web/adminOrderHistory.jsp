@@ -69,7 +69,7 @@
             }
 
             /* =============== Navigation ================ */
-            .topbar-history {
+            .topbar-admin {
                 width: 100%;
                 height: 60px;
                 display: flex;
@@ -78,7 +78,7 @@
                 margin: 0 10px;
             }
 
-            .topbar-history h3 {
+            .topbar-admin h3 {
                 color: #fffdfde7;
                 text-transform: uppercase;
                 letter-spacing: 5px;
@@ -366,7 +366,7 @@
                 <ul>
                     <li class="logo">
                         <a href="index.jsp">
-                            <div class="topbar-history">
+                            <div class="topbar-admin">
                                 <h3 class="logo-text">QTALD</h3>
                             </div>
                         </a>
@@ -396,7 +396,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails.jsp">
+                        <a href="adminDetails?detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>
@@ -404,7 +404,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="LogoutServlet">    <!-- Logout -->
+                        <a onclick="logout();">    <!-- Logout -->
                             <span class="icon">
                                 <img src="img/admin/logout.png" alt="Messages">
                             </span>
@@ -413,6 +413,7 @@
                     </li>
                 </ul>
             </div>
+
 
             <!-- ========================= Main ==================== -->
             <div class="main-history">

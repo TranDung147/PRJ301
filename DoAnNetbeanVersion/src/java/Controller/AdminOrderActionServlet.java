@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.BookingRoomDetailDB;
 import DAO.BookingTicketDetailDB;
+import DAO.TransactionDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +38,10 @@ public class AdminOrderActionServlet extends HttpServlet {
             } else if (ticketBookingId != null && !ticketBookingId.isEmpty()) {
                 response.sendRedirect("viewTicketDetailsFragment.jsp?transactionId=" + transactionId + "&ticketBookingId=" + ticketBookingId);
             }
+        } else if("approve".equals(action)){
+            TransactionDB trandb = new TransactionDB();
+            trandb.updateTransactionStatus(transactionId, "Approved");
+            response.sendRedirect("adminOrder.jsp");
         }
     }
 

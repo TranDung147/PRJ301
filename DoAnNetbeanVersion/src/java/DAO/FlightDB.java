@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -85,14 +87,14 @@ public class FlightDB implements DatabaseInfo {
     }
 
     // Method to insert a new flight
-    public static void insert(Flight f) {
+    public static void insert(Flight f, Date DateStart, Date DateEnd) {
         String sql = "INSERT INTO Flight (FlightID, PlaneID, DateStart, DateEnd, DepartureCity, ArrivalCity, NoSeatLeft) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = getConnect()) {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, f.getFlightID());
             stmt.setString(2, f.getPlaneID());
-            stmt.setString(3, f.getDateStart());
-            stmt.setString(4, f.getDateEnd());
+            stmt.setDate(3, DateStart);
+            stmt.setDate(4, DateEnd);
             stmt.setString(5, f.getDepartureCity());
             stmt.setString(6, f.getArrivalCity());
             stmt.setString(7, f.getNoSeatLeft());
