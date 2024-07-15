@@ -9,7 +9,7 @@ sec3 cần phải sửa lại , khó modified media queries được
     margin: 0 auto;
     padding: 20px;
     background-color: #ffffff;
-    box-shadow: 0 0 20Xx rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 
 }
@@ -237,6 +237,11 @@ sec3 cần phải sửa lại , khó modified media queries được
     width: 100%;
 }
 
+.fav-item fl :hover {
+    background-color: #0056b3;
+    color: #f8f9fa;
+}
+
 .fav-link-group a {
     align-items: left;
     text-decoration: none;
@@ -254,8 +259,14 @@ sec3 cần phải sửa lại , khó modified media queries được
     color: #f8f9fa;
 }
 
+.fav-link-group a :active {
+    background-color: #ffffff;
+    color: #f8f9fa;
+}
+
 .fav-item-group {
-    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
     margin: 0;
     padding: 0;
     width: 130%;
@@ -314,6 +325,11 @@ sec3 cần phải sửa lại , khó modified media queries được
 .whytochoose .cont {
     display: flex;
     justify-content: space-between;
+}
+
+.choose  {
+    background-color: #0d6efd;
+    color: #0d6efd;
 }
 
 /*--------------------???--------------------*/

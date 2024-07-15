@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@
     <% } else { %>
     <%@include file="includes/header_user.jsp" %>
     <% } %>
-    
+
     <!-- Body Section -->
     <main>
         <!-- 1 - Carousel Section -->
@@ -310,55 +311,71 @@
                 <h2 class="text-center">Các điểm đến được ưa thích</h2>
                 <div class="fav">
                     <div class="fav-link-group">
-                        <a href="#" id="KV">Khu vực</a>
-                        <a href="#" id="TP">Thành phố</a>
+                        <a href="Home" id="KV" class="active">Khu vực</a>
+                        <a href="Home?favor=City" id="TP">Thành phố</a>
                         <a href="#" id="QT">Được quan tâm nhất</a>
                     </div>
                     <ul class="fav-item-group">
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Hà Nội</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">TP. Hồ Chí Minh</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Đà Nẵng</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item last fl">
-                            <a class="fav-link" href="#">Thừa Thiên Huế</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Quảng Trị</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Quảng Bình</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Quảng Nam</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item last fl">
-                            <a class="fav-link" href="#">Bình Dương</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Quảng Nam</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item last fl">
-                            <a class="fav-link" href="#">Bình Dương</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
-                        <li class="fav-item fl">
-                            <a class="fav-link" href="#">Vũng Tàu</a>
-                            <span class="fav-detail">Detal about it</span>
-                        </li>
+                        <c:if test="${favor == 'City'}">
+                            <c:forEach var="ct" items="${cities}">
+                                <li class="fav-item fl">
+                                    <a class="fav-link" href="#">${ct.city}</a>
+                                    <span class="fav-detail">${ct.hotelDescription}</span>
+                                </li>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${favor == 'KV'}">
+                            <c:forEach var="k" items="${KVs}">
+                                <li class="fav-item fl">
+                                    <a class="fav-link" href="#">${k}</a>
+                                </li>
+                            </c:forEach>
+                        </c:if>
+                        <!--                        <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">Denver</a>
+                                                    <span class="fav-detail">A luxurious resort in the mountains.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">New York</a>
+                                                    <span class="fav-detail">Experience the city life in our modern hotel.</span>
+                                                </li>
+                                                <li class="fav-item last fl">
+                                                    <a class="fav-link" href="#">Honolulu</a>
+                                                    <span class="fav-detail">An oasis in the heart of the city.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">Boston</a>
+                                                    <span class="fav-detail">Stay at a piece of history.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">Los Angeles</a>
+                                                    <span class="fav-detail">A royal experience in the city.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">Austin</a>
+                                                    <span class="fav-detail">Relax in our countryside retreat.</span>
+                                                </li>
+                                                <li class="fav-item last fl">
+                                                    <a class="fav-link" href="#">San Francisco</a>
+                                                    <span class="fav-detail">Escape the hustle and bustle in our serene hotel.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">Phoenix</a>
+                                                    <span class="fav-detail">An oasis in the desert.</span>
+                                                </li>
+                                                <li class="fav-item last fl">
+                                                    <a class="fav-link" href="#">Chicago</a>
+                                                    <span class="fav-detail">Stay by the lake in comfort and style.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">Seattle</a>
+                                                    <span class="fav-detail">Relax by the coast in our comfortable hotel.</span>
+                                                </li>
+                                                <li class="fav-item fl">
+                                                    <a class="fav-link" href="#">New Orleans</a>
+                                                    <span class="fav-detail">Enjoy the charm of the riverfront in our boutique hotel.</span>
+                                                </li>
+                        -->
                     </ul>
                 </div>
             </div>

@@ -4,6 +4,7 @@
     Author     : plmin
 --%>
 
+<%@page import="Model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
@@ -349,6 +350,17 @@
     </style>
 
     <body>
+        <jsp:useBean id="userDB" class="DAO.UserDB" scope="session" />
+        <%
+            // Get the user from the session
+            User user = userDB.getUserFromSession(session, request);
+
+            // Check if the user is logged in and is an admin
+            if (user == null || !"admin".equals(user.getUsername())) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
+        %>
         <!-- =============== Navigation ================ -->
         <div class="container">
             <div class="navigation-admin">

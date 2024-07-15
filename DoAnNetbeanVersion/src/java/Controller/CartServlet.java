@@ -69,6 +69,12 @@ public class CartServlet extends HttpServlet {
     private void handleRoomBooking(HttpServletRequest request, HttpServletResponse response, String userID, String roomID) throws IOException {
         String checkInDate = request.getParameter("checkInDate");
         String checkOutDate = request.getParameter("checkOutDate");
+        boolean isRoomAvailable = BookingRoomDB.isRoomAvailable(roomID, checkInDate, checkOutDate);
+
+        if (!isRoomAvailable) {
+            sendErrorResponse(response, "Room is already booked for the selected dates.");
+            return;
+        }
 
         Room bookedRoom = RoomDB.getRoom(roomID);
 
@@ -78,15 +84,21 @@ public class CartServlet extends HttpServlet {
 
         if (bookedRoom != null) {
             String roomBookingID = br.getTodayBookingRoomID(userID);
+            boolean isRoomIDExists = br.isRoomIDExists(roomBookingID, userID, roomID);
 
-            if (roomBookingID == null) {
+            if (isRoomIDExists) {
+
                 roomBookingID = br.insertBookingRoom(userID, price);
             } else {
-                BookingRoom b = br.getTodayAvailableBookingRoom(userID);
-                if (b != null) {
-                    br.updateTotalPrice(roomBookingID, price);
-                } else {
+                if (roomBookingID == null) {
                     roomBookingID = br.insertBookingRoom(userID, price);
+                } else {
+                    BookingRoom b = br.getTodayAvailableBookingRoom(userID);
+                    if (b != null) {
+                        br.updateTotalPrice(roomBookingID, price);
+                    } else {
+                        roomBookingID = br.insertBookingRoom(userID, price);
+                    }
                 }
             }
 

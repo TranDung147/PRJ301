@@ -3,14 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Controller/BookingServlet.java</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Controller/CRUD.java</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/Update.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/DAO/TransactionDB.java</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/includes/servlet/adminDetails.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/includes/servlet/userdb/transactionUser.jsp</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Controller/TransactionServlet.java</file>
-            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/DAO/UserDashBoardDB.java</file>
+            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/roomDisplay.jsp</file>
+            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/customer.jsp</file>
+            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Controller/AddServlet.java</file>
+            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/Controller/CartServlet.java</file>
+            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/web/adminDBoard.jsp</file>
+            <file>file:/D:/Downloads/FPT/Kì%204/PRJ301/Đồ%20án/PRJ301/DoAnNetbeanVersion/src/java/DAO/HotelDB.java</file>
         </group>
     </open-files>
 </project-private>

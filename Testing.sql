@@ -333,12 +333,17 @@ VALUES
 -- Thêm dữ liệu vào bảng Booking_Room
 INSERT INTO Booking_Room (RoomBookingID, UserID, TotalPrice, CreatedDate, Status)
 VALUES 
-('BR0002', 'US0002', 100.00, '2024-06-26', 'None');
+('BR0001', 'US0002', 100.00, '2024-06-26', 'None');
 
 -- Thêm dữ liệu vào bảng Booking_Room_Detail
 INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status)
 VALUES 
-('BR0002', 'RM0003', 100.00, '2024-07-02', '2024-07-02', 'Pending');
+('BR0001', 'RM0003', 100.00, '2024-07-02', '2024-07-03', 'Pending');
+
+-- Thêm dữ liệu vào bảng Booking_Room_Detail
+INSERT INTO Booking_Room_Detail (RoomBookingID, RoomID, Price, DateFrom, DateTo, Status)
+VALUES 
+('BR0001', 'RM0003', 100.00, '2024-07-04', '2024-07-05', 'Pending');
 
 -- Thêm dữ liệu vào bảng Booking_Ticket
 INSERT INTO Booking_Ticket (TicketBookingID, UserID, TotalPrice, CreatedDate, Status)
@@ -376,4 +381,5 @@ SELECT TicketBookingID FROM Transactions WHERE TransactionID = 'TR0001' AND Tick
 
 SELECT MAX(TransactionID) AS maxID FROM Transactions
 select * from Seat
+
 

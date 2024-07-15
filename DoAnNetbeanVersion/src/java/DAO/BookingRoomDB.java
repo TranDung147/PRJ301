@@ -205,5 +205,54 @@ public class BookingRoomDB implements DatabaseInfo {
         }
         return roomBookingID;
     }
+    
+    public static boolean isRoomAvailable(String roomID, String checkInDate, String checkOutDate) {
+    boolean isAvailable = true;
+    String query = "SELECT * FROM Booking_Room_Detail WHERE RoomID = ? " +
+                   "AND (DateFrom <= ? AND DateTo >= ?)";
+
+    try (Connection conn = getConnect();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+        stmt.setString(1, roomID);
+        stmt.setString(2, checkInDate); 
+        stmt.setString(3, checkOutDate); 
+
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            isAvailable = false; 
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        // Xử lý lỗi
+    }
+
+    return isAvailable;
+}
+
+  public static boolean isRoomIDExists(String roomBookingID, String userID, String roomID) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM Booking_Room_Detail brd " +
+                       "JOIN Booking_Room br ON br.RoomBookingID = brd.RoomBookingID " +
+                       "WHERE br.UserID = ? AND brd.RoomID = ?";
+
+        try (Connection conn = getConnect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, userID);
+            stmt.setString(2, roomID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    exists = count > 0;  // Nếu count > 0, RoomID đã tồn tại
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return exists;
+    }
 
 }

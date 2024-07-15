@@ -96,7 +96,7 @@ public class UserServlet extends HttpServlet {
                 Cookie password = new Cookie("pass", URLEncoder.encode(a.getPassword(), "UTF-8"));
                 response.addCookie(userName);
                 response.addCookie(password);
-                String encodedURL = response.encodeRedirectURL("index.jsp");
+                String encodedURL = response.encodeRedirectURL("Home");
                 response.sendRedirect(encodedURL);
 
             } else {
@@ -105,7 +105,7 @@ public class UserServlet extends HttpServlet {
             }
         } else {
             request.setAttribute("errorMessage", "Wrong username or password. Please try again");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("Home").forward(request, response);
         }
 
     }
@@ -128,7 +128,7 @@ public class UserServlet extends HttpServlet {
         }
 
         // Redirect to index page
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("Home");
     }
 
     private void handleSignUp(HttpServletRequest request, HttpServletResponse response)
@@ -143,7 +143,7 @@ public class UserServlet extends HttpServlet {
             UserDB db = new UserDB();
             User newUser = new User(username, password, role, email, id);
             db.insert(newUser);
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("Home");
         } catch (Exception e) {
             request.setAttribute("error", "Error adding user: " + e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
@@ -210,7 +210,7 @@ public class UserServlet extends HttpServlet {
         String pass = (String) session.getAttribute("pass");
 
         if (userName == null || pass == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("Home");
             return;
         }
 
