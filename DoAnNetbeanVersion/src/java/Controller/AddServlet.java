@@ -66,7 +66,7 @@ public class AddServlet extends HttpServlet {
 
         Hotel hotel = new Hotel(hotelID, hotelName, hotelAddress, hotelDescription, city, country, productImg);
         HotelDB.insert(hotel);
-        response.sendRedirect("adminDetails?detailType=Hotel");
+        response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Hotel");
     }
 
     // Method to add a plane
@@ -89,7 +89,7 @@ public class AddServlet extends HttpServlet {
         PlaneDB.insert(plane);
 
         // Redirect to the success page
-        response.sendRedirect("adminDetails?detailType=Plane");
+        response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Plane");
     }
 
     // Method to add a flight
@@ -121,7 +121,7 @@ public class AddServlet extends HttpServlet {
             FlightDB.insert(flight, dateStart, dateEnd);
 
             // Redirect đến trang chi tiết thành công
-            response.sendRedirect("adminDetails?detailType=Flight");
+            response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Flight");
         } catch (Exception e) {
             response.sendRedirect("errorPage.jsp");
         }
@@ -144,7 +144,7 @@ public class AddServlet extends HttpServlet {
         RoomDB.insert(room);
 
         // Redirect đến trang chi tiết thành công
-        response.sendRedirect("adminDetails?detailType=Room");
+        response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Room");
     }
 
     // Method to add a seat
@@ -163,7 +163,7 @@ public class AddServlet extends HttpServlet {
         SeatDB.insert(seat);
 
         // Redirect đến trang chi tiết thành công
-        response.sendRedirect("adminDetails?detailType=Seat");
+        response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Seat");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

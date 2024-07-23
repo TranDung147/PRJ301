@@ -67,9 +67,12 @@ public class AdminServlet extends HttpServlet {
     private void handleApproveOrder(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String transactionId = request.getParameter("transactionId");
+        String ticketBookingID = request.getParameter("ticketBookingId");
+        UserDashBoardDB udbdb = new UserDashBoardDB();
 
         TransactionDB trandb = new TransactionDB();
         trandb.updateTransactionStatus(transactionId, "Approved");
+        udbdb.updateBookingTicketStatus(ticketBookingID, "Confirmed");
         response.sendRedirect("adminOrder.jsp");
     }
 

@@ -111,7 +111,7 @@ public class BookingServlet extends HttpServlet {
         String ticketBookingID = request.getParameter("ticketBookingID");
         if (ticketBookingID != null && !ticketBookingID.trim().isEmpty()) {
             UserDashBoardDB a = new UserDashBoardDB();
-            boolean successc = a.deleteTicketBookingByID(ticketBookingID);
+            boolean successc = a.updateSeatAvailabilityToTrue(ticketBookingID);
             boolean successa = a.deleteTicketBookingDetailByID(ticketBookingID);
             boolean successb = a.deleteTicketBookingByID(ticketBookingID);
 
@@ -154,7 +154,7 @@ public class BookingServlet extends HttpServlet {
         String userID = (String) request.getSession().getAttribute("id");
         if (ticketBookingID != null && !ticketBookingID.trim().isEmpty()) {
             UserDashBoardDB db = new UserDashBoardDB();
-            boolean a = db.updateBookingTicketStatus(ticketBookingID);
+            boolean a = db.updateBookingTicketStatus(ticketBookingID, "Pending");
             boolean b = db.updateBookingTicketDetailStatus(ticketBookingID);
             boolean c = db.updateSeatAvailability(ticketBookingID);
 

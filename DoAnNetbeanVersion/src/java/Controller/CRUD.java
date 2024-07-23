@@ -84,7 +84,7 @@ public class CRUD extends HttpServlet {
                     break;
             }
             if (success) {
-                response.sendRedirect("adminDetails?detailType=" + detailType);
+                response.sendRedirect("AdminServlet?action=fetchDetails&detailType=" + detailType);
             } else {
                 response.getWriter().println("Delete operation failed!");
             }
@@ -168,7 +168,7 @@ public class CRUD extends HttpServlet {
         boolean success = HotelDB.updateHotel(id, name, address, description, city, country, imageURL);
 
         if (success) {
-            response.sendRedirect("adminDetails?detailType=Hotel");
+            response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Hotel");
         } else {
             response.getWriter().println("Update operation failed!");
         }
@@ -184,7 +184,7 @@ public class CRUD extends HttpServlet {
         boolean success = PlaneDB.updatePlane(id, name, airline, planeImg, noSeat);
 
         if (success) {
-            response.sendRedirect("adminDetails?detailType=Plane");
+            response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Plane");
         } else {
             response.getWriter().println("Update operation failed!");
         }
@@ -200,7 +200,7 @@ public class CRUD extends HttpServlet {
         String noSeatLeft = request.getParameter("noSeatLeft");
         boolean success = FlightDB.updateFlight(id, planeId, departureDate, dateEnd, departureCity, arrivalCity, noSeatLeft);
         if (success) {
-            response.sendRedirect("adminDetails?detailType=Flight");
+            response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Flight");
         } else {
             response.getWriter().println("Update operation failed!");
         }
@@ -218,7 +218,7 @@ public class CRUD extends HttpServlet {
         boolean success = RoomDB.updateRoom(id, hotelID, roomNumber, roomType, capacity, isAvailable);
 
         if (success) {
-            response.sendRedirect("adminDetails?detailType=Room");
+            response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Room");
         } else {
             response.getWriter().println("Update operation failed!");
         }
@@ -234,7 +234,7 @@ public class CRUD extends HttpServlet {
         boolean success = SeatDB.updateSeat(seatID, flightID, seatNumber, seatType, isAvailable);
 
         if (success) {
-            response.sendRedirect("adminDetails?detailType=Seat");
+            response.sendRedirect("AdminServlet?action=fetchDetails&detailType=Seat");
         } else {
             response.getWriter().println("Update operation failed!");
         }

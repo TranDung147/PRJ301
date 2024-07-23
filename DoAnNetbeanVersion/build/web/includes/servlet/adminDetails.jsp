@@ -270,7 +270,7 @@
 
                 <!-- ========================= Type of Table ==================== -->
                 <div class="table-type">
-                    <form id="detailForm" method="post" action="adminDetails">
+                    <form id="detailForm" method="post" action="AdminServlet?action=fetchDetails">
                         <label for="detailType">Select Detail Type:</label>
                         <select id="detailType" name="detailType" onchange="document.getElementById('detailForm').submit();">
                             <option value="Hotel" ${param.detailType == 'Hotel' ? 'selected' : ''}>Hotel</option>
@@ -532,12 +532,6 @@
                 // Tạo một yêu cầu GET để đăng xuất
                 window.location.href = url;
             }
-
-            document.getElementById("addLink").addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent the default action of the link
-                var servletUrl = this.getAttribute("data-servlet");
-                window.location.href = servletUrl; // Redirect to the servlet URL
-            };
         </script>
     </body>
 </html>

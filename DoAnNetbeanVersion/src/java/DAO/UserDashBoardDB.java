@@ -184,7 +184,7 @@ public class UserDashBoardDB implements DatabaseInfo {
 
         return success;
     }
-    
+
     public boolean updateSeatAvailabilityToTrue(String ticketBookingID) {
         boolean success = false;
         String query = "UPDATE Seat SET IsAvailable = 'True' WHERE SeatID IN "
@@ -235,12 +235,13 @@ public class UserDashBoardDB implements DatabaseInfo {
         return success;
     }
 
-    public boolean updateBookingTicketStatus(String ticketBookingID) {
+    public boolean updateBookingTicketStatus(String ticketBookingID, String status) {
         boolean success = false;
-        String query = "UPDATE Booking_Ticket SET Status = 'Pending' WHERE TicketBookingID = ?";
+        String query = "UPDATE Booking_Ticket SET Status = ? WHERE TicketBookingID = ?";
         try (Connection con = getConnect(); PreparedStatement stmt = con.prepareStatement(query)) {
 
-            stmt.setString(1, ticketBookingID);
+            stmt.setString(1, status);
+            stmt.setString(2, ticketBookingID);
 
             int rowsAffected = stmt.executeUpdate();
             success = rowsAffected > 0;
@@ -491,45 +492,59 @@ public class UserDashBoardDB implements DatabaseInfo {
     //Insert Ticket into Transaction-----------------------------------------------------------------------------------------------
     public boolean insertTranTicket(String userID, String bookingTicketID, String price) {
         try (Connection con = getConnect()) {
-            String transactionID = checkPendingTransaction(con, userID);
-            if (transactionID == null) {
-                transactionID = createNewTransaction(con, userID, bookingTicketID, price);
+            List<String> transactionIDs = checkPendingTransactions(con, userID);
+            if (transactionIDs.isEmpty()) {
+                createNewTransaction(con, userID, bookingTicketID, price);
             } else {
-                boolean ticketExists = checkBookingTicketInTransaction(con, transactionID, bookingTicketID);
-                if (ticketExists) {
-                    transactionID = createNewTransaction(con, userID, bookingTicketID, price);
-                } else {
-                    updateTransaction(con, transactionID, bookingTicketID, price);
+                boolean ticketExistsInAnyTransaction = false;
+                for (String transactionID : transactionIDs) {
+                    String ticketExistsID = checkBookingTicketInTransaction(con, transactionID);
+                    if (ticketExistsID == null) {
+                        updateTransaction(con, transactionID, bookingTicketID, price);
+                        ticketExistsInAnyTransaction = true;
+                        break;
+                    }
+                }
+                if (!ticketExistsInAnyTransaction) {
+                    createNewTransaction(con, userID, bookingTicketID, price);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace(); // Xử lý ngoại lệ SQL
+            return false; // Trả về false nếu có lỗi xảy ra
         }
         return true;
     }
 
-    private String checkPendingTransaction(Connection con, String userID) throws SQLException {
+    private List<String> checkPendingTransactions(Connection con, String userID) throws SQLException {
         String query = "SELECT TransactionID FROM Transactions WHERE UserID = ? AND Status = 'Pending' AND TransactionDate = CONVERT(DATE, GETDATE())";
+        List<String> transactionIDs = new ArrayList<>();
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, userID);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                System.out.println("checkPendingTransaction");
-                return rs.getString("TransactionID");
+            while (rs.next()) {
+                transactionIDs.add(rs.getString("TransactionID"));
             }
         }
-        return null;
+        return transactionIDs;
     }
 
-    private boolean checkBookingTicketInTransaction(Connection con, String transactionID, String bookingTicketID) throws SQLException {
-        String query = "SELECT 1 FROM Transactions WHERE TransactionID = ? AND TicketBookingID = ?";
+    private String checkBookingTicketInTransaction(Connection con, String transactionID) throws SQLException {
+        String query = "SELECT TicketBookingID FROM Transactions WHERE TransactionID = ?";
+        String ticketBookingID = null;
+
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, transactionID);
-            stmt.setString(2, bookingTicketID);
             ResultSet rs = stmt.executeQuery();
-            System.out.println("checkBookingTicketInTransaction");
-            return rs.next();
+            if (rs.next()) {
+                ticketBookingID = rs.getString("TicketBookingID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, "Lỗi khi kiểm tra giao dịch với TransactionID: " + transactionID, ex);
+            throw ex; // Rethrow the exception to be handled by the caller
         }
+
+        return ticketBookingID;
     }
 
     private String createNewTransaction(Connection con, String userID, String bookingTicketID, String price) throws SQLException {
@@ -574,32 +589,46 @@ public class UserDashBoardDB implements DatabaseInfo {
     //Insert Room into Transaction-----------------------------------------------------------------------------------------------
     public boolean insertTranRoom(String userID, String roomBookingID, String totalPrice) {
         try (Connection con = getConnect()) {
-            String transactionID = checkPendingTransaction(con, userID);
-            if (transactionID == null) {
-                transactionID = createNewTransaction(con, userID, roomBookingID, totalPrice, "Room");
+            List<String> transactionIDs = checkPendingTransactions(con, userID);
+            if (transactionIDs.isEmpty()) {
+                createNewTransaction(con, userID, roomBookingID, totalPrice, "Room");
             } else {
-                boolean roomExists = checkRoomBookingInTransaction(con, transactionID, roomBookingID);
-                if (roomExists) {
-                    transactionID = createNewTransaction(con, userID, roomBookingID, totalPrice, "Room");
-                } else {
-                    updateTransaction(con, transactionID, roomBookingID, totalPrice, "Room");
+                boolean roomExistsInAnyTransaction = false;
+                for (String transactionID : transactionIDs) {
+                    String roomExistsID = checkRoomBookingInTransaction(con, transactionID);
+                    if (roomExistsID == null) {
+                        updateTransaction(con, transactionID, roomBookingID, totalPrice, "Room");
+                        roomExistsInAnyTransaction = true;
+                        break;
+                    }
+                }
+                if (!roomExistsInAnyTransaction) {
+                    createNewTransaction(con, userID, roomBookingID, totalPrice, "Room");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace(); // Xử lý ngoại lệ SQL
+            return false; // Trả về false nếu có lỗi xảy ra
         }
         return true;
     }
 
-    private boolean checkRoomBookingInTransaction(Connection con, String transactionID, String roomBookingID) throws SQLException {
-        String query = "SELECT 1 FROM Transactions WHERE TransactionID = ? AND RoomBookingID = ?";
+    private String checkRoomBookingInTransaction(Connection con, String transactionID) throws SQLException {
+        String query = "SELECT RoomBookingID FROM Transactions WHERE TransactionID = ?";
+        String roomBookingID = null;
+
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, transactionID);
-            stmt.setString(2, roomBookingID);
             ResultSet rs = stmt.executeQuery();
-            System.out.println("checkRoomBookingInTransaction");
-            return rs.next();
+            if (rs.next()) {
+                roomBookingID = rs.getString("RoomBookingID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDashBoardDB.class.getName()).log(Level.SEVERE, "Lỗi khi kiểm tra giao dịch với TransactionID: " + transactionID, ex);
+            throw ex; // Rethrow the exception to be handled by the caller
         }
+
+        return roomBookingID;
     }
 
     private String createNewTransaction(Connection con, String userID, String bookingID, String totalPrice, String type) throws SQLException {
@@ -629,7 +658,6 @@ public class UserDashBoardDB implements DatabaseInfo {
             stmt.setString(2, price);
             stmt.executeUpdate();
         }
-        System.out.println("updateTransaction");
     }
 
 }

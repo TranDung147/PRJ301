@@ -1,6 +1,5 @@
 ﻿create database DoAnDatabase
 use DoAnDatabase
-
 -- Create the Users table
 CREATE TABLE Users (
     UserID CHAR(6) PRIMARY KEY,

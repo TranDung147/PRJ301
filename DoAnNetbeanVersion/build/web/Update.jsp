@@ -384,7 +384,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="adminDetails?detailType=Hotel">
+                        <a href="AdminServlet?action=fetchDetails&detailType=Hotel">
                             <span class="icon">
                                 <img src="img/admin/details.png" alt="Details">
                             </span>

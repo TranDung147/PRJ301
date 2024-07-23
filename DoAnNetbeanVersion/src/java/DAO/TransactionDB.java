@@ -205,7 +205,7 @@ public class TransactionDB implements DatabaseInfo {
                 + "    s.seatNumber,\n"
                 + "    s.seatType,\n"
                 + "    bt.totalPrice,\n"
-                + "    t.status\n"
+                + "    bt.status\n"
                 + "FROM Transactions t\n"
                 + "JOIN Booking_Ticket bt ON t.TicketBookingID = bt.TicketBookingID\n"
                 + "JOIN Booking_Ticket_Detail btd ON bt.TicketBookingID = btd.BookingTicketID\n"

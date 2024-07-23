@@ -125,6 +125,7 @@ public class CartServlet extends HttpServlet {
                     // Nếu không có, tạo mới
                     seatBookingID = bt.insertBookingSeat(userID, price);
                 } else {
+                    
                     // Nếu có, cập nhật tổng giá
                     BookingTicketDB.updateSeatTotalPrice(seatBookingID, price);
 

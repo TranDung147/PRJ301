@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <style>
@@ -122,9 +123,11 @@
                     </div>
                     <div id="dropdown" class="dropdown-content">
                         <div class="menu-header">
-                            <a href="customer.jsp">
-                                <img src="img/avtvodanh.png" alt="User Avatar"> Xem tất cả trang cá nhân
+                            <a href="<c:if test="${sessionScope.user eq 'admin'}">adminDBoard.jsp</c:if>
+                               <c:if test="${sessionScope.user eq 'user'}">customer.jsp</c:if>">
+                                <img src="img/avtvodanh.png" alt="User Avatar"> Xem tất cả trang cá nhân 
                             </a>
+               
                             <a href="#" id="settings-privacy">
                                 <img src="img/settings_privacy.png" alt="Settings & Privacy"> Cài đặt & quyền riêng tư
                             </a>
